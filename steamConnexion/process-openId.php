@@ -61,6 +61,6 @@ $_SESSION['userData'] = [
     'rname'=>$userData['realname'],
 ];
 
-$redirect_url = "APIBrawlhalla/routes.php";
+$redirect_url = "../APIBrawlhalla/routes.php";
 header("Location: $redirect_url"); 
 exit();
