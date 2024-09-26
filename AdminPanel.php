@@ -30,7 +30,11 @@
         </div>
         <a href="logout.php" class="text-sm mt-5">Logout</a>
     </div>
- 
+        
+    <?php 
+     include "./bddConnexion/notifs.php";
+    ?>
+
             <?php
                     // Fonction pour formater la date depuis un timestamp Unix
                     function formaterDate($timestamp) {
@@ -64,6 +68,8 @@
                     }
                     echo "</tbody>";
                     echo "</table>";
+
+                    
                 ?>
    
                     <a href="http://localhost/OrganizedCrewBattle/askForm.php">askForm</a>
