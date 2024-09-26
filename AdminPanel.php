@@ -8,6 +8,8 @@
      echo $clan_name;
      echo $clan_id;
 
+     include "./bddConnexion/bddConnexion.php";
+
 ?>
 
 <!doctype html>
