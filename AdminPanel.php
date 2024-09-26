@@ -9,6 +9,7 @@
      echo $clan_id;
 
      include "./bddConnexion/bddConnexion.php";
+     include "./bddConnexion/loadData.php";
 
 ?>
 
@@ -65,7 +66,7 @@
                     echo "</table>";
                 ?>
    
-
+                    <a href="http://localhost/OrganizedCrewBattle/askForm.php">askForm</a>
  
 
 

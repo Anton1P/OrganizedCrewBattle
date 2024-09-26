@@ -13,7 +13,5 @@ if ($conn->connect_error) {
 }
 echo "Connexion réussie !";
 
-include "loadData.php";
-
 
 ?>

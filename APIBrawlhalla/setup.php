@@ -1,6 +1,4 @@
 <?php
-// Démarrer la session
-
 
 $username = $_SESSION['userData']['name'];
 $avatar = $_SESSION['userData']['avatar'];
