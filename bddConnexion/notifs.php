@@ -83,35 +83,35 @@ if ($result_demande->num_rows > 0) {
     <!-- Liste des tournois reçus -->
     <button onclick="toggleTournamentList()">Show Tournois Reçus</button>
 
-    <div id="tournament-list" class="tournament-list">
-        <h2>Liste des Tournois Reçus</h2>
-        <ul>
-            <?php
-            if (!empty($tournois_recus)) {
-                foreach ($tournois_recus as $tournoi) {
-                    if($tournoi['accepted'] == 1) {
-                        echo "Tournois deja accepter avec la " . $tournoi['id_clan_demandeur']; 
-                    }
-                    else {
-                        echo "<li>Id du clan demandeur: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . htmlspecialchars($tournoi['format']) . "</li>";
+<div id="tournament-list" class="tournament-list">
+    <h2>Liste des Tournois Reçus</h2>
+    <ul>
+        <?php
+        if (!empty($tournois_recus)) {
+            foreach ($tournois_recus as $tournoi) {
+                if ($tournoi['accepted'] == 1) {
+                    echo "Tournois déjà accepté avec le clan " . htmlspecialchars($tournoi['id_clan_demandeur']); 
+                } else {
+                    echo "<li>Id du clan demandeur: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . htmlspecialchars($tournoi['format']) . "</li>";
                     
-                        echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
-                        echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                        echo "<input type='submit' name='action' value='Accepter' style='color: green;'>";
-                        echo "</form>";
-                        
-                        echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
-                        echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                        echo "<input type='submit' name='action' value='Refuser' style='color: red;'>";
-                        echo "</form>";       
-                    }
+                    // Formulaire pour accepter le tournoi
+                    echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                    echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
+                    echo "<input type='submit' name='action' value='Accepter' style='color: green;' onclick=\"showPlayerSelection(" . $tournoi['id_tournoi'] . ")\">";
+                    echo "</form>";
+                    
+                    echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                    echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
+                    echo "<input type='submit' name='action' value='Refuser' style='color: red;'>";
+                    echo "</form>";       
                 }
-            } else {
-                echo "<li>Aucun tournoi trouvé.</li>";
             }
-            ?>
-        </ul>
-    </div>
+        } else {
+            echo "<li>Aucun tournoi trouvé.</li>";
+        }
+        ?>
+    </ul>
+</div>
 
     <!-- Liste des tournois demandés -->
     <button onclick="toggleDemandedTournamentList()">Show Tournois Demandés</button>

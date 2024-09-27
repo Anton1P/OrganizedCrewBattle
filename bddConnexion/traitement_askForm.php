@@ -12,8 +12,7 @@ $date_rencontre = $_POST['date_rencontre'];
 $accepted = false;
 
 
-//? Programme qui met les infos du formulaire dans la bdd
-
+// Programme qui met les infos du formulaire dans la bdd
 $sql_check = "SELECT * FROM clans WHERE id_clan = $askedClan_id";
 $result = $conn->query($sql_check);
 
@@ -47,7 +46,17 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
 
             // Exécution de la requête et vérification
             if ($stmt_insert->execute()) {
-                header("Location: ../AdminPanel.php"); //! Faire en sorte que ca mette une notif de confirmation 
+                $tournoi_id = $stmt_insert->insert_id; // Récupérer l'ID du tournoi inséré
+                // Insérer chaque joueur sélectionné dans la table player_tournoi
+                foreach ($players as $player_id) {
+                    $sql_insert_player = "INSERT INTO player_tournoi (id_player, id_tournoi) VALUES (?, ?)";
+                    $stmt_insert_player = $conn->prepare($sql_insert_player);
+                    $stmt_insert_player->bind_param("ii", $player_id, $tournoi_id);
+                    $stmt_insert_player->execute();
+                    $stmt_insert_player->close();
+                }
+
+                header("Location: ../AdminPanel.php"); //! Faire en sorte que ça mette une notif de confirmation 
             } else {
                 echo "Erreur lors de la création du tournoi : " . $stmt_insert->error;
             }
@@ -68,6 +77,7 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
 } else {
     echo "Erreur : Les identifiants des clans ne peuvent pas être vides.";
 }
+
 
 
 ?>
