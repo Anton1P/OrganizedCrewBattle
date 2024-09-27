@@ -89,17 +89,22 @@ if ($result_demande->num_rows > 0) {
             <?php
             if (!empty($tournois_recus)) {
                 foreach ($tournois_recus as $tournoi) {
-                    echo "<li>Id du clan demandeur: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . htmlspecialchars($tournoi['format']) . "</li>";
+                    if($tournoi['accepted'] == 1) {
+                        echo "Tournois deja accepter avec la " . $tournoi['id_clan_demandeur']; 
+                    }
+                    else {
+                        echo "<li>Id du clan demandeur: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . htmlspecialchars($tournoi['format']) . "</li>";
                     
-                    echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
-                    echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                    echo "<input type='submit' name='action' value='Accepter' style='color: green;'>";
-                    echo "</form>";
-                    
-                    echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
-                    echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                    echo "<input type='submit' name='action' value='Refuser' style='color: red;'>";
-                    echo "</form>";
+                        echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                        echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
+                        echo "<input type='submit' name='action' value='Accepter' style='color: green;'>";
+                        echo "</form>";
+                        
+                        echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                        echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
+                        echo "<input type='submit' name='action' value='Refuser' style='color: red;'>";
+                        echo "</form>";       
+                    }
                 }
             } else {
                 echo "<li>Aucun tournoi trouvé.</li>";

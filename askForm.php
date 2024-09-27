@@ -1,4 +1,7 @@
 <?php 
+session_start();
+$clan_id = $_SESSION['brawlhalla_data']['clan_id'];
+
 include "./bddConnexion/bddConnexion.php";
 ?>
 
@@ -24,7 +27,7 @@ include "./bddConnexion/bddConnexion.php";
     <select name="clan_id" id="clan_id">
     <?php
         // Récupérer les clans depuis la BDD
-        $query = "SELECT id_clan, nom_clan FROM clans"; 
+        $query = "SELECT id_clan, nom_clan FROM clans WHERE id_clan != $clan_id"; 
         $result = $conn->query($query);
 
         // Si des résultats sont trouvés
@@ -56,7 +59,7 @@ include "./bddConnexion/bddConnexion.php";
     <!-- Liste des cases à cocher avec les joueurs récupérés de la BDD -->
     <label for="joueurs">Sélectionner les joueurs :</label><br>
     <?php 
-    $query = "SELECT id_player, player_name FROM players"; 
+    $query = "SELECT id_player, player_name, id_clan FROM players WHERE id_clan = $clan_id" ; 
     $result = $conn->query($query);
     if ($result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): ?>
