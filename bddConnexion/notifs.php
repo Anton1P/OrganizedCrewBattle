@@ -1,6 +1,12 @@
 <?php
 
 include "bddConnexion.php";
+include "../APIBrawlhalla/security.php";
+if (!isset($_SESSION['brawlhalla_data']['clan_id'])) { 
+    header("Location: ../view/AdminPanel.php");
+    exit(); 
+}
+
 
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 

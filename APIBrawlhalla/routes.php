@@ -15,7 +15,7 @@ if(!$_SESSION['logged_in']){
     }
     else{
 
-        header("Location: ../view/AdminPanel.php"); //!vue des membre  =    header("Location: ../MemberPanel.php"); 
+        header("Location: ../view/MemberPanel.php"); //!vue des membre  =    header("Location: ../MemberPanel.php"); 
         exit;
 
     }

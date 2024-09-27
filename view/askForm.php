@@ -1,7 +1,7 @@
 <?php 
-session_start();
-$clan_id = $_SESSION['brawlhalla_data']['clan_id'];
+include "../APIBrawlhalla/security.php";
 
+$clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 include "../bddConnexion/bddConnexion.php";
 ?>
 

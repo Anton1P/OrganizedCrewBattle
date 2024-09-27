@@ -2,7 +2,7 @@
 
 include "bddConnexion.php";
 
-session_start();
+include "../APIBrawlhalla/security.php";
 
 $askClan_id = $_SESSION['brawlhalla_data']['clan_id']; 
 $askedClan_id = $_POST['clan_id'];

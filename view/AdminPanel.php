@@ -1,7 +1,6 @@
 <?php   
-    session_start();
+include "../APIBrawlhalla/security.php";
 
-     include "../APIBrawlhalla/setup.php";
 
      echo $name;
      echo $brawlhalla_id;

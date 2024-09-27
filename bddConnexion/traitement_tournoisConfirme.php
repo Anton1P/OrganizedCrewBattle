@@ -1,6 +1,7 @@
 <?php
 
 include "bddConnexion.php";
+include "../APIBrawlhalla/security.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_tournoi = $_POST['id_tournoi'];

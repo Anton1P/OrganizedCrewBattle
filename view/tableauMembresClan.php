@@ -1,4 +1,5 @@
 <?php
+
             
                     // Fonction pour formater la date depuis un timestamp Unix
                     function formaterDate($timestamp) {

@@ -1,8 +1,8 @@
 <?php
 
 include "bddConnexion.php";
+include "../APIBrawlhalla/security.php";
 
-session_start();
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 $players = isset($_POST['joueurs']) ? $_POST['joueurs'] : []; // Tableau de joueurs
 

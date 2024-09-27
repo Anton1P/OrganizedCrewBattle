@@ -1,7 +1,8 @@
 <?php   
-    session_start();
+session_start();
+include "../APIBrawlhalla/setup.php";
 
-     include "APIBrawlhalla/setup.php";
+
 
 ?>
 
@@ -10,7 +11,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./styles/output.css" rel="stylesheet">
+  <link href="../styles/output.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
@@ -20,7 +21,7 @@
             <img src='<?php echo $avatar;?>' class="rounded-full w-12 h-12 mr-3"/>
             <?php echo $name;?>   
         </div>
-        <a href="logout.php" class="text-sm mt-5">Logout</a>
+        <a href="../steamConnexion/logout.php" class="text-sm mt-5">Logout</a>
     </div>
  
 
