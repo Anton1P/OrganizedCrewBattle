@@ -9,13 +9,13 @@ if(!$_SESSION['logged_in']){
 
     if($isAdmin){
 
-        header("Location: ../AdminPanel.php"); //vue des Leader
+        header("Location: ../view/AdminPanel.php"); //vue des Leader
         exit;
 
     }
     else{
 
-        header("Location: ../AdminPanel.php"); //vue des membre  =    header("Location: ../MemberPanel.php"); 
+        header("Location: ../view/AdminPanel.php"); //!vue des membre  =    header("Location: ../MemberPanel.php"); 
         exit;
 
     }

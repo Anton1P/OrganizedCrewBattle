@@ -2,7 +2,7 @@
 session_start();
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 
-include "./bddConnexion/bddConnexion.php";
+include "../bddConnexion/bddConnexion.php";
 ?>
 
 
@@ -20,11 +20,11 @@ include "./bddConnexion/bddConnexion.php";
 
 <h2>Remplir le formulaire pour le tournoi</h2>
 
-<form action="bddConnexion/traitement_askForm.php" method="POST">
+<form action="../bddConnexion/traitement_askForm.php" method="POST">
 
     <!-- Liste déroulante (select) -->
     <label for="clan_id">Choisir le clan à affronter:</label>
-    <select name="clan_id" id="clan_id">
+    <select required  name="clan_id" id="clan_id">
     <?php
         // Récupérer les clans depuis la BDD
         $query = "SELECT id_clan, nom_clan FROM clans WHERE id_clan != $clan_id"; 
@@ -45,7 +45,7 @@ include "./bddConnexion/bddConnexion.php";
     <br><br>
 
     <label for="format">Choisir le format de la clan battle:</label>
-    <select name="format" id="format">
+    <select required  name="format" id="format">
         <option value="1">CrewBattle Bo3  </option>
         <option value="2">CrewBattle Bo5</option>
         <option value="3">French CrewBattle</option>
@@ -63,7 +63,7 @@ include "./bddConnexion/bddConnexion.php";
     $result = $conn->query($query);
     if ($result->num_rows > 0): ?>
         <?php while ($row = $result->fetch_assoc()): ?>
-            <input type="checkbox" name="joueurs[]" value="<?php echo $row['id_player']; ?>">
+            <input   type="checkbox" name="joueurs[]" value="<?php echo $row['id_player']; ?>">
             <label for="joueur_<?php echo $row['id_player']; ?>"><?php echo $row['player_name']; ?></label><br>
         <?php endwhile; ?>
     <?php else: ?>
@@ -73,7 +73,7 @@ include "./bddConnexion/bddConnexion.php";
 
     <!-- Date Picker -->
     <label for="date_rencontre">Choisir la date de la rencontre:</label>
-    <input type="text" id="date_rencontre" name="date_rencontre" class="date-picker">
+    <input required type="text" id="date_rencontre" name="date_rencontre" class="date-picker">
     <br><br>
 
     <input type="submit" value="Envoyer">

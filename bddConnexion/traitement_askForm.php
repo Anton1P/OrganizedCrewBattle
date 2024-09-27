@@ -56,7 +56,7 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
                     $stmt_insert_player->close();
                 }
 
-                header("Location: ../AdminPanel.php"); //! Faire en sorte que ça mette une notif de confirmation 
+                header("Location: ../view/AdminPanel.php"); //! Faire en sorte que ça mette une notif de confirmation 
             } else {
                 echo "Erreur lors de la création du tournoi : " . $stmt_insert->error;
             }

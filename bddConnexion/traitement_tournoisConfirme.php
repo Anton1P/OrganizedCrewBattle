@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //? Mettre à jour le statut du tournoi dans la base de données pour "accepté"
         $sql_update = "UPDATE tournoi SET accepted = 1 WHERE id_tournoi = $id_tournoi";
         if ($conn->query($sql_update) === TRUE) {
-            header("Location: ../responseForm.php");
+            header("Location: ../view/responseForm.php");
         } else {
             $_SESSION['notification'] = "Erreur lors de l'acceptation du tournoi.";
         }
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          //? Mettre à jour le statut du player_tournoi dans la base de données pour "refusé"
          $sql_update = "DELETE FROM player_tournoi WHERE id_tournoi = $id_tournoi";
          if ($conn->query($sql_update) === TRUE) {
-            header("Location: ../AdminPanel.php");
+            header("Location: ../view/AdminPanel.php");
          } else {
              $_SESSION['notification'] = "Erreur lors du refus du tournoi.";
          }
