@@ -1,7 +1,7 @@
 <?php
 
 include "bddConnexion.php";
-include "../APIBrawlhalla/security.php";
+//! C'est une sécurité
 if (!isset($_SESSION['brawlhalla_data']['clan_id'])) { 
     header("Location: ../view/AdminPanel.php");
     exit(); 

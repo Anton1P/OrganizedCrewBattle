@@ -1,6 +1,6 @@
 <?php
-
-$isAdmin = false;  // Par défaut, le joueur n'est pas admin
+//! Remettre admin false 
+$isAdmin = true;  // Par défaut, le joueur n'est pas admin
 
 // Parcourir le tableau des membres du clan pour trouver le joueur connecté
 foreach ($clan_members as $joueur) {
@@ -11,7 +11,8 @@ foreach ($clan_members as $joueur) {
             $isAdmin = true;  // Il est admin si son rang est Leader ou Officer
         } else {
             $rank = $joueur['rank'];
-            $isAdmin = false; // Sinon, il n'est pas admin
+            $isAdmin = true; // Sinon, il n'est pas admin//! Remettre admin false 
+
         }
         break;  // On sort de la boucle dès qu'on a trouvé le joueur
     }
