@@ -4,23 +4,26 @@ include "bddConnexion.php";
 
 $clan_id = $_SESSION['brawlhalla_data']['clan_id']; 
 
+
 $sql_check = "SELECT * FROM tournoi WHERE id_clan_receveur = $clan_id";
 $result = $conn->query($sql_check);
 
-$tournois = []; // tableau pour stocker les tournois
+$tournois = []; // Tableau pour stocker les tournois
 
 if ($result->num_rows > 0) {
     $_SESSION['notification'] = "Vous avez des tournois en attente !";
     
     // Récupérer les tournois
     while ($row = $result->fetch_assoc()) {
-        $tournois[] = $row; // ajouter chaque tournoi au tableau
+        $tournois[] = $row; // Ajouter chaque tournoi au tableau
     }
 } 
 ?>
-
+<!DOCTYPE html>
+<html lang="fr">
 <head>
- 
+    <meta charset="UTF-8">
+    <title>Tournois</title>
     <style>
         .tournament-list {
             display: none; /* cacher la liste par défaut */
@@ -62,7 +65,17 @@ if ($result->num_rows > 0) {
             <?php
             if (!empty($tournois)) {
                 foreach ($tournois as $tournoi) {
-                    echo "<li>Nom: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ", Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", Format: " . htmlspecialchars($tournoi['format']) . "</li>";
+                    echo "<li>Id du clan demandeur: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . htmlspecialchars($tournoi['format']) . "</li>";
+                    
+                    echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                    echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
+                    echo "<input type='submit' name='action' value='Accepter' style='color: green;'>";
+                    echo "</form>";
+                    
+                    echo "<form action='./bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                    echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
+                    echo "<input type='submit' name='action' value='Refuser' style='color: red;'>";
+                    echo "</form>";
                 }
             } else {
                 echo "<li>Aucun tournoi trouvé.</li>";

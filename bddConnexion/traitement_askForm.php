@@ -47,7 +47,7 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
 
             // Exécution de la requête et vérification
             if ($stmt_insert->execute()) {
-                echo "Tournoi créé avec succès !";
+                header("Location: ../AdminPanel.php"); //! Faire en sorte que ca mette une notif de confirmation 
             } else {
                 echo "Erreur lors de la création du tournoi : " . $stmt_insert->error;
             }
@@ -68,4 +68,6 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
 } else {
     echo "Erreur : Les identifiants des clans ne peuvent pas être vides.";
 }
+
+
 ?>
