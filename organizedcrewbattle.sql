@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 26 sep. 2024 à 23:27
+-- Généré le : sam. 28 sep. 2024 à 12:32
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -40,7 +40,8 @@ CREATE TABLE `clans` (
 --
 
 INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`) VALUES
-(2161882, 'Asakai', 0, 0, 1200);
+(2161882, 'Asakai', 0, 0, 1200),
+(2430737, 'SmurfLand2', 0, 0, 1200);
 
 -- --------------------------------------------------------
 
@@ -118,7 +119,8 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (98341473, 'ABP | MTH', 2161882),
 (102326446, 'iDrxp!?', 2161882),
 (108499902, 'Sucre', 2161882),
-(117003562, 'Tilen', 2161882);
+(117003562, 'Tilen', 2161882),
+(120712302, 'France Power', 2430737);
 
 -- --------------------------------------------------------
 
@@ -145,13 +147,6 @@ CREATE TABLE `tournoi` (
   `format` int(3) NOT NULL,
   `accepted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `tournoi`
---
-
-INSERT INTO `tournoi` (`id_tournoi`, `id_clan_demandeur`, `id_clan_receveur`, `date_rencontre`, `format`, `accepted`) VALUES
-(2, 2161882, 2161882, '2024-09-30 12:00:00.000000', 3, 0);
 
 --
 -- Index pour les tables déchargées
@@ -206,7 +201,7 @@ ALTER TABLE `match_verif`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=3;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=4;
 
 --
 -- Contraintes pour les tables déchargées
@@ -228,8 +223,8 @@ ALTER TABLE `players`
 -- Contraintes pour la table `player_tournoi`
 --
 ALTER TABLE `player_tournoi`
-  ADD CONSTRAINT `player_tournoi_ibfk_1` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`),
-  ADD CONSTRAINT `player_tournoi_ibfk_2` FOREIGN KEY (`id_player`) REFERENCES `players` (`id_player`);
+  ADD CONSTRAINT `player_tournoi_ibfk_2` FOREIGN KEY (`id_player`) REFERENCES `players` (`id_player`),
+  ADD CONSTRAINT `player_tournoi_ibfk_3` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `tournoi`
