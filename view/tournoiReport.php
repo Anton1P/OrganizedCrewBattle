@@ -4,16 +4,27 @@ include "../bddConnexion/bddConnexion.php";
 session_start();
 
 $tournoi_id = $_SESSION['tournoi_id']; 
+$date_rencontre = new DateTime($_SESSION['date_rencontre']);
+$date_actuelle = new DateTime();
 
 // Vérifier si l'utilisateur vient de la page AdminPanel.php
 if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'AdminPanel.php') !== false) {
     // Si la personne vient bien de AdminPanel.php
     if (isset($tournoi_id)) {
+
+        // Avertissement avec Chronomètre
+        echo "<div style='border: 2px solid red; padding: 10px; margin-top: 20px; background-color: #ffe6e6;'>";
+        echo "<h3>Avertissement</h3>";
+        echo "<p>Si vous quittez cette page 15 minutes après le début du tournoi, alors le tournoi sera supprimé.</p>";
+        echo "<p id='compteur'></p>";  // Conteneur pour le compteur
+        echo "</div>";
+
         echo "<h2>Détails du tournoi</h2>";
         echo "<p>Date de la rencontre : " . $_SESSION['date_rencontre'] . "</p>";
         echo "<p>Format : " . $_SESSION['format'] . "</p>";
         echo "<p>Clan Demandeur ID : " . $_SESSION['id_clan_demandeur'] . "</p>";
         echo "<p>Clan Receveur ID : " . $_SESSION['id_clan_receveur'] . "</p>";
+
     } else {
         echo "Aucun détail de tournoi disponible.";
     }
@@ -32,11 +43,21 @@ if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'AdminPa
 ?>
 
 <script>
-window.addEventListener("beforeunload", function () {
-    // Faire une requête AJAX pour décrémenter la valeur de on_page
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "../bddConnexion/decrement_on_page.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send("tournoi_id=<?php echo $tournoi_id; ?>");
-});
+let timestampRencontre = <?php echo $date_rencontre->getTimestamp(); ?>;  // Timestamp de la rencontre
+let compteurElem = document.getElementById('compteur');
+
+function mettreAJourCompteur() {
+    let maintenant = Math.floor(Date.now() / 1000);  // Timestamp actuel en secondes
+    let secondesRestantes = timestampRencontre - maintenant;  // Secondes restantes jusqu'à la rencontre
+
+    let minutes = Math.floor(Math.abs(secondesRestantes) / 60);
+    let secondes = Math.abs(secondesRestantes) % 60;
+
+    let signe = secondesRestantes > 0 ? '-' : '+';  // Affiche '-' avant le début et '+' après
+    compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + signe + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
+}
+
+// Mettre à jour le compteur chaque seconde
+let intervalle = setInterval(mettreAJourCompteur, 1000);
+mettreAJourCompteur();  // Appel immédiat au chargement de la page
 </script>

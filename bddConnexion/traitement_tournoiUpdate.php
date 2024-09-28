@@ -26,10 +26,6 @@ $formats = [
 
 
 
-
-
-
-
 // SQL pour récupérer les tournois prévus pour le clan connecté le même jour
 $sql_tournois_hier = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND DATE(date_rencontre) = ? AND accepted = 1";
 $stmt_tournois = $conn->prepare($sql_tournois_hier);
