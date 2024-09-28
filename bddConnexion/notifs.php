@@ -10,6 +10,20 @@ if (!isset($_SESSION['brawlhalla_data']['clan_id'])) {
 
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Requête pour vérifier les tournois reçus
 $sql_check_received = "SELECT * FROM tournoi WHERE id_clan_receveur = $clan_id";
 $result_received = $conn->query($sql_check_received);

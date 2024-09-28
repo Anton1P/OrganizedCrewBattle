@@ -25,17 +25,16 @@ include "../APIBrawlhalla/security.php";
         <div class="text-2xl">Welcome <?php echo $clan_name." ".$rank;?> </div>
         <div class="text-4xl mt-3 flex items-center font-medium">
             <img src='<?php echo $avatar;?>' class="rounded-full w-12 h-12 mr-3"/>
-            <?php echo $name;?>   
+            <?php echo $name; ?>   
         </div>
         <a href="../steamConnexion/logout.php" class="text-sm mt-5">Logout</a>
     </div>
         
-    <?php 
-     include "../bddConnexion/notifs.php";
-     include "tableauMembresClan.php";
-    ?>
-
-          
+   
+    
+     <?php include "../bddConnexion/notifs.php";?><br>
+     <?php include "../bddConnexion/traitement_tournoiUpdate.php"; ?><br>
+     <?php include "tableauMembresClan.php";?> <br>    
    
                     <a href="http://localhost/OrganizedCrewBattle/view/askForm.php">askForm</a>
  
