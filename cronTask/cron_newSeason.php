@@ -1,5 +1,5 @@
 <?php
-//! CRON TASK
+//! CRON TASK 1/day
 include "../bddConnexion/bddConnexion.php";
 
 

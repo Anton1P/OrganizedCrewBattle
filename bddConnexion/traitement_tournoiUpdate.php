@@ -82,6 +82,7 @@ if ($result_tournois->num_rows > 0) {
         
         echo "Clan Demandeur : " . $clan_names[$row['id_clan_demandeur']] . "<br>";
         echo "Clan Receveur : " . $clan_names[$row['id_clan_receveur']] . "<br>";
+        echo "Brawlhalla room : #" . $row['brawlhalla_room'] . "<br>";
         echo "</li><br>";
     }
     
@@ -152,6 +153,7 @@ if ($result->num_rows > 0) {
             $_SESSION['format'] = $row['format'];
             $_SESSION['id_clan_demandeur'] = $row['id_clan_demandeur'];
             $_SESSION['id_clan_receveur'] = $row['id_clan_receveur'];
+            $_SESSION['brawlhalla_room'] = $row['brawlhalla_room'];
 
             // Calcul du temps restant ou écoulé pour afficher le compteur
             $secondes_restantes = $date_rencontre->getTimestamp() - $date_actuelle->getTimestamp();

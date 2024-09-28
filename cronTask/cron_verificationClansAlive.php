@@ -1,5 +1,5 @@
 <?php
-//! CRON TASK
+//! CRON TASK 1/day
 include "bddConnexion.php";
 // Requête pour récupérer les clans sans joueurs associés
 $sql = "SELECT c.id_clan 

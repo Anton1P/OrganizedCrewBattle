@@ -1,48 +1,118 @@
 <?php
-// Démarrer la session pour accéder aux données du tournoi
 include "../bddConnexion/bddConnexion.php";
-session_start();
+include "../APIBrawlhalla/security.php";
 
-$tournoi_id = $_SESSION['tournoi_id']; 
-$date_rencontre = new DateTime($_SESSION['date_rencontre']);
-$date_actuelle = new DateTime();
 
-// Vérifier si l'utilisateur vient de la page AdminPanel.php
-if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'AdminPanel.php') !== false) {
-    // Si la personne vient bien de AdminPanel.php
+$id_clan = $_SESSION['brawlhalla_data']['clan_id'];
+
+// SQL pour récupérer les informations du tournoi du clan connecté
+$sql = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND accepted = 1";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo "Erreur dans la préparation de la requête: " . $conn->error;
+    exit();
+}
+
+$stmt->bind_param("ii", $id_clan, $id_clan);
+$stmt->execute();
+$result = $stmt->get_result();
+
+
+
+
+
+
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $tournoi_id = $row['id_tournoi'];
+        $date_rencontre = $row['date_rencontre'];
+        $format = $row['format'];
+        $id_clan_demandeur = $row['id_clan_demandeur'];
+        $id_clan_receveur = $row['id_clan_receveur'];
+        $brawlhalla_room = $row['brawlhalla_room'];
+    }
+  
     if (isset($tournoi_id)) {
+        // Date
+        $date_rencontre = new DateTime($date_rencontre);
+        $date_actuelle = new DateTime();
 
-        // Avertissement avec Chronomètre
-        echo "<div style='border: 2px solid red; padding: 10px; margin-top: 20px; background-color: #ffe6e6;'>";
-        echo "<h3>Avertissement</h3>";
-        echo "<p>Si vous quittez cette page 15 minutes après le début du tournoi, alors le tournoi sera supprimé.</p>";
-        echo "<p id='compteur'></p>";  // Conteneur pour le compteur
-        echo "</div>";
+        // Incrémenter le champ on_page
+        $sql = "UPDATE tournoi SET on_page = on_page + 1 WHERE id_tournoi = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $tournoi_id);
+        $stmt->execute();
+        $stmt->close();
 
-        echo "<h2>Détails du tournoi</h2>";
-        echo "<p>Date de la rencontre : " . $_SESSION['date_rencontre'] . "</p>";
-        echo "<p>Format : " . $_SESSION['format'] . "</p>";
-        echo "<p>Clan Demandeur ID : " . $_SESSION['id_clan_demandeur'] . "</p>";
-        echo "<p>Clan Receveur ID : " . $_SESSION['id_clan_receveur'] . "</p>";
+        //! Securité
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $referer = $_SERVER['HTTP_REFERER'];
+          if (strpos($referer, '/view/AdminPanel.php') !== false || strpos($referer, 'tournoiReport.php') !== false) {
+                // Détails du tournoi
+                echo "<div style='border: 2px solid red; padding: 10px; margin-top: 20px; background-color: #ffe6e6;'>";
+                echo "<h3>Avertissement</h3>";
+                echo "<p>Si vous quittez cette page 15 minutes après le début du tournoi, alors le tournoi sera supprimé.</p>";
+                echo "<p id='compteur'></p>";  // Conteneur pour le compteur
+                echo "</div>";
 
+                echo "<h2>Détails du tournoi</h2>";
+                echo "<p>Date de la rencontre : " . $date_rencontre->format('Y-m-d H:i:s') . "</p>";
+                echo "<p>Format : " . $format . "</p>";
+                echo "<p>Clan Demandeur ID : " . $id_clan_demandeur . "</p>";
+                echo "<p>Clan Receveur ID : " . $id_clan_receveur . "</p>";
+                
+                if ($brawlhalla_room != 0) {
+                    echo "<p>Brawlhalla room : #" . $brawlhalla_room . "</p>";
+                } else {
+                    echo "<p>Brawlhalla room : Room à setup</p>";
+                }
+
+                // Si brawlhalla_room est vide, afficher le formulaire
+                if (empty($brawlhalla_room)) {
+                    echo "<h3>Ajouter la salle Brawlhalla</h3>";
+                    echo '<form action="../view/tournoiReport.php" method="POST">';
+                    echo '<label for="brawlhalla_room">Numéro de salle (6 chiffres) :</label>';
+                    echo '<input type="number" id="brawlhalla_room" name="brawlhalla_room" required min="100000" max="999999" oninput="validateInput(this)">';
+                    echo '<input type="hidden" name="tournoi_id" value="' . $tournoi_id . '">';
+                    echo '<br><br>';
+                    echo '<input type="submit" value="Enregistrer">';
+                    echo '</form>';
+                }
+            }
+        } else {
+            echo "Aucun détail de tournoi disponible.";
+        }
     } else {
-        echo "Aucun détail de tournoi disponible.";
+        echo "Aucun tournoi trouvé.";
+    }
+} else {
+    echo "Aucun tournoi disponible.";
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tournoi_id = $_POST['tournoi_id'];
+    $brawlhalla_room = $_POST['brawlhalla_room'];
+
+    // Mettre à jour la colonne brawlhalla_room dans la base de données
+    $sql = "UPDATE tournoi SET brawlhalla_room = ? WHERE id_tournoi = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $brawlhalla_room, $tournoi_id);
+
+    if ($stmt->execute()) {
+        header("Location: ../view/tournoiReport.php");
+        exit();
+    } else {
+        echo "Erreur lors de la mise à jour de la salle Brawlhalla: " . $stmt->error;
     }
 
-    // Incrémenter le champ on_page
-    $sql = "UPDATE tournoi SET on_page = on_page + 1 WHERE id_tournoi = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $tournoi_id);
-    $stmt->execute();
     $stmt->close();
-} else {
-    // Si la personne ne vient pas de AdminPanel.php, rediriger vers la page AdminPanel.php
-    header("Location: ../view/AdminPanel.php");
-    exit();
 }
 ?>
 
 <script>
+// Initialiser le compte à rebours pour le tournoi
 let timestampRencontre = <?php echo $date_rencontre->getTimestamp(); ?>;  // Timestamp de la rencontre
 let compteurElem = document.getElementById('compteur');
 
@@ -60,4 +130,14 @@ function mettreAJourCompteur() {
 // Mettre à jour le compteur chaque seconde
 let intervalle = setInterval(mettreAJourCompteur, 1000);
 mettreAJourCompteur();  // Appel immédiat au chargement de la page
+
+function validateInput(input) {
+    // Supprimer les caractères non numériques
+    input.value = input.value.replace(/[^0-9]/g, '');
+    
+    // Limiter à 6 chiffres
+    if (input.value.length > 6) {
+        input.value = input.value.slice(0, 6);
+    }
+}
 </script>

@@ -1,5 +1,5 @@
 <?php
-
+//! CRON TASK 1/day
 include "../bddConnexion/bddConnexion.php";
 
 $date_actuelle = new DateTime();

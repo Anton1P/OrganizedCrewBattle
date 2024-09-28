@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 28 sep. 2024 à 20:56
+-- Généré le : dim. 29 sep. 2024 à 01:27
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -20,6 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `organizedcrewbattle`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `checkin`
+--
+
+CREATE TABLE `checkin` (
+  `id_checkin` int(8) NOT NULL,
+  `id_tournoi` int(11) NOT NULL,
+  `id_clan_demandeur` int(8) NOT NULL,
+  `clan_demandeur_checkin` tinyint(1) NOT NULL,
+  `id_clan_receveur` int(8) NOT NULL,
+  `clan_receveur_checkin` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -133,6 +148,21 @@ CREATE TABLE `player_tournoi` (
   `id_player` int(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `player_tournoi`
+--
+
+INSERT INTO `player_tournoi` (`id_tournoi`, `id_player`) VALUES
+(22, 396123),
+(22, 1118423),
+(22, 2863580),
+(22, 3184429),
+(22, 3199258),
+(22, 4164480),
+(22, 4563514),
+(22, 5424846),
+(22, 5609156);
+
 -- --------------------------------------------------------
 
 --
@@ -146,12 +176,29 @@ CREATE TABLE `tournoi` (
   `date_rencontre` datetime(6) NOT NULL COMMENT 'Date prévue pour la rencontre\r\n',
   `format` int(3) NOT NULL,
   `accepted` tinyint(1) NOT NULL,
-  `on_page` smallint(2) NOT NULL
+  `on_page` smallint(2) NOT NULL,
+  `brawlhalla_room` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `tournoi`
+--
+
+INSERT INTO `tournoi` (`id_tournoi`, `id_clan_demandeur`, `id_clan_receveur`, `date_rencontre`, `format`, `accepted`, `on_page`, `brawlhalla_room`) VALUES
+(22, 2161882, 257, '2024-09-29 01:00:00.000000', 4, 1, 43, 0);
 
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `checkin`
+--
+ALTER TABLE `checkin`
+  ADD PRIMARY KEY (`id_checkin`),
+  ADD KEY `id_clan_demandeur` (`id_clan_demandeur`),
+  ADD KEY `id_clan_receveur` (`id_clan_receveur`),
+  ADD KEY `id_tournoi` (`id_tournoi`);
 
 --
 -- Index pour la table `clans`
@@ -193,6 +240,12 @@ ALTER TABLE `tournoi`
 --
 
 --
+-- AUTO_INCREMENT pour la table `checkin`
+--
+ALTER TABLE `checkin`
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `match_verif`
 --
 ALTER TABLE `match_verif`
@@ -202,11 +255,19 @@ ALTER TABLE `match_verif`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=21;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=23;
 
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `checkin`
+--
+ALTER TABLE `checkin`
+  ADD CONSTRAINT `checkin_ibfk_1` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE,
+  ADD CONSTRAINT `checkin_ibfk_2` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `tournoi` (`id_clan_demandeur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `checkin_ibfk_3` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `match_verif`
