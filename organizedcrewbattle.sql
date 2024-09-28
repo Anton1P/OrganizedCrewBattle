@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 28 sep. 2024 à 12:32
+-- Généré le : sam. 28 sep. 2024 à 20:56
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -40,8 +40,8 @@ CREATE TABLE `clans` (
 --
 
 INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`) VALUES
-(2161882, 'Asakai', 0, 0, 1200),
-(2430737, 'SmurfLand2', 0, 0, 1200);
+(257, 'lol', 0, 0, 11111),
+(2161882, 'Asakai', 0, 0, 1200);
 
 -- --------------------------------------------------------
 
@@ -87,17 +87,17 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (8006806, 'lionel mesi oficial', 2161882),
 (8592528, 'MAHÉ FAN CLUB', 2161882),
 (9549831, 'Cereza', 2161882),
-(9558549, 'MYTA FAN CLUB', 2161882),
+(9558549, 'twitch.tv/mahebh', 2161882),
 (9757291, 'zBlackneight Prime', 2161882),
 (10080900, '✮ N-M', 2161882),
 (29757637, 'SpoopyCode <3', 2161882),
-(30072746, 'Volleyball player', 2161882),
+(30072746, 'Maaxis szn', 2161882),
 (32542183, 'Goliath', 2161882),
 (35527409, 'Arthur', 2161882),
 (37524179, 'SwizzleMcDizzle', 2161882),
 (42026463, '4000H On FORNITE', 2161882),
 (43349428, 'scrawny james', 2161882),
-(45750120, 'rain', 2161882),
+(45750120, 'Dr.Love', 2161882),
 (53572692, 'LTPKiller', 2161882),
 (53965041, 'Chigga', 2161882),
 (55347075, 'Azur.', 2161882),
@@ -118,9 +118,9 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (98125910, 'Sekai', 2161882),
 (98341473, 'ABP | MTH', 2161882),
 (102326446, 'iDrxp!?', 2161882),
+(105693481, 'Pizza Hawaïenne', 2161882),
 (108499902, 'Sucre', 2161882),
-(117003562, 'Tilen', 2161882),
-(120712302, 'France Power', 2430737);
+(117003562, 'Tilen', 2161882);
 
 -- --------------------------------------------------------
 
@@ -145,7 +145,8 @@ CREATE TABLE `tournoi` (
   `id_clan_receveur` int(8) NOT NULL COMMENT 'Clan qui reçoit la demande\r\n',
   `date_rencontre` datetime(6) NOT NULL COMMENT 'Date prévue pour la rencontre\r\n',
   `format` int(3) NOT NULL,
-  `accepted` tinyint(1) NOT NULL
+  `accepted` tinyint(1) NOT NULL,
+  `on_page` smallint(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -201,7 +202,7 @@ ALTER TABLE `match_verif`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=4;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=21;
 
 --
 -- Contraintes pour les tables déchargées
