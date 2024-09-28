@@ -20,6 +20,16 @@ $formats = [
     5 => 'Crew Battle 5'
 ];
 
+
+
+
+
+
+
+
+
+
+
 // SQL pour récupérer les tournois prévus pour le clan connecté le même jour
 $sql_tournois_hier = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND DATE(date_rencontre) = ? AND accepted = 1";
 $stmt_tournois = $conn->prepare($sql_tournois_hier);
@@ -97,6 +107,17 @@ if ($result_tournois->num_rows > 0) {
     ";
 } 
 
+
+
+
+
+
+
+
+
+
+
+
 // SQL pour récupérer les informations du tournoi du clan connecté
 $sql = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND accepted = 1";
 $stmt = $conn->prepare($sql);
@@ -116,8 +137,8 @@ if ($result->num_rows > 0) {
         $plage_apres = clone $date_rencontre;
         $plage_apres->modify('+15 minutes');
 
-        // Vérifier si la date actuelle est passée
-        if ($date_actuelle > $plage_apres) {
+        // Vérifier si la date actuelle est passée //! ajouter une condition 
+        if ($date_actuelle > $plage_apres && $row['on_page'] == 0) {
             // Suppression du tournoi de la base de données
             $delete_sql = "DELETE FROM tournoi WHERE id_tournoi = ?";
             $delete_stmt = $conn->prepare($delete_sql);
