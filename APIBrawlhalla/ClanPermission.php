@@ -2,7 +2,6 @@
 //! Remettre admin false 
 $isAdmin = true;  // Par défaut, le joueur n'est pas admin
 
-// Parcourir le tableau des membres du clan pour trouver le joueur connecté
 foreach ($clan_members as $joueur) {
     if ($joueur['brawlhalla_id'] == $brawlhalla_id) {
         // Si le joueur est trouvé, on vérifie son rang

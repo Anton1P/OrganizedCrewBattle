@@ -26,7 +26,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $tournoi_id = $row['id_tournoi'];
+        $id_tournoi = $row['id_tournoi'];
         $date_rencontre = $row['date_rencontre'];
         $format = $row['format'];
         $id_clan_demandeur = $row['id_clan_demandeur'];
@@ -34,7 +34,7 @@ if ($result->num_rows > 0) {
         $brawlhalla_room = $row['brawlhalla_room'];
     }
   
-    if (isset($tournoi_id)) {
+    if (isset($id_tournoi)) {
         // Date
         $date_rencontre = new DateTime($date_rencontre);
         $date_actuelle = new DateTime();
@@ -42,7 +42,7 @@ if ($result->num_rows > 0) {
         // Incrémenter le champ on_page
         $sql = "UPDATE tournoi SET on_page = on_page + 1 WHERE id_tournoi = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $tournoi_id);
+        $stmt->bind_param("i", $id_tournoi);
         $stmt->execute();
         $stmt->close();
 
@@ -63,22 +63,26 @@ if ($result->num_rows > 0) {
                 echo "<p>Clan Demandeur ID : " . $id_clan_demandeur . "</p>";
                 echo "<p>Clan Receveur ID : " . $id_clan_receveur . "</p>";
                 
-                if ($brawlhalla_room != 0) {
-                    echo "<p>Brawlhalla room : #" . $brawlhalla_room . "</p>";
-                } else {
-                    echo "<p>Brawlhalla room : Room à setup</p>";
-                }
+                include "../bddConnexion/traitement_checkin.php";
 
-                // Si brawlhalla_room est vide, afficher le formulaire
-                if (empty($brawlhalla_room)) {
-                    echo "<h3>Ajouter la salle Brawlhalla</h3>";
-                    echo '<form action="../view/tournoiReport.php" method="POST">';
-                    echo '<label for="brawlhalla_room">Numéro de salle (6 chiffres) :</label>';
-                    echo '<input type="number" id="brawlhalla_room" name="brawlhalla_room" required min="100000" max="999999" oninput="validateInput(this)">';
-                    echo '<input type="hidden" name="tournoi_id" value="' . $tournoi_id . '">';
-                    echo '<br><br>';
-                    echo '<input type="submit" value="Enregistrer">';
-                    echo '</form>';
+                if($is_checked_in == 1){
+                    if ($brawlhalla_room != 0) {
+                        echo "<p>Brawlhalla room : #" . $brawlhalla_room . "</p>";
+                    } else {
+                        echo "<p>Brawlhalla room : Room à setup</p>";
+                    }
+
+                    // Si brawlhalla_room est vide, afficher le formulaire
+                    if (empty($brawlhalla_room)) {
+                        echo "<h3>Ajouter la salle Brawlhalla</h3>";
+                        echo '<form action="../view/tournoiReport.php" method="POST">';
+                        echo '<label for="brawlhalla_room">Numéro de salle (6 chiffres) :</label>';
+                        echo '<input type="number" id="brawlhalla_room" name="brawlhalla_room" required min="100000" max="999999" oninput="validateInput(this)">';
+                        echo '<input type="hidden" name="id_tournoi" value="' . $id_tournoi . '">';
+                        echo '<br><br>';
+                        echo '<input type="submit" value="Enregistrer">';
+                        echo '</form>';
+                    }
                 }
             }
         } else {
@@ -91,14 +95,14 @@ if ($result->num_rows > 0) {
     echo "Aucun tournoi disponible.";
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $tournoi_id = $_POST['tournoi_id'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($brawlhalla_room)) {
+    $id_tournoi = $_POST['id_tournoi'];
     $brawlhalla_room = $_POST['brawlhalla_room'];
 
     // Mettre à jour la colonne brawlhalla_room dans la base de données
     $sql = "UPDATE tournoi SET brawlhalla_room = ? WHERE id_tournoi = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $brawlhalla_room, $tournoi_id);
+    $stmt->bind_param("si", $brawlhalla_room, $id_tournoi);
 
     if ($stmt->execute()) {
         header("Location: ../view/tournoiReport.php");
@@ -108,6 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $stmt->close();
+}
+elseif(!empty($brawlhalla_room)){
+    echo "La room Brawlhalla vien juste d'être remplis à l'instant ";
 }
 ?>
 

@@ -3,8 +3,10 @@
 $username = $_SESSION['userData']['name'];
 $avatar = $_SESSION['userData']['avatar'];
 $steam_id = $_SESSION['userData']['steam_id'];
+
 // Vérifier si les informations sont déjà stockées en session
 if (!isset($_SESSION['brawlhalla_data'])) {
+
     // Si les infos ne sont pas en session, on appelle l'API
     $url = "https://brawlhalla.fly.dev/v1/ranked/steamid?steam_id=".$_SESSION['userData']['steam_id'];
     $data = file_get_contents($url);
@@ -12,7 +14,8 @@ if (!isset($_SESSION['brawlhalla_data'])) {
 
     $name = $result["data"]["name"];
     $brawlhalla_id = $result["data"]["brawlhalla_id"];
-
+    echo $name;
+    echo $brawlhalla_id;
     $url = "https://brawlhalla.fly.dev/v1/stats/id?brawlhalla_id=".$brawlhalla_id;
     $data = file_get_contents($url);
     $result = json_decode($data, true);
