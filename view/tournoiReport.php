@@ -92,7 +92,7 @@ if ($result->num_rows > 0) {
         echo "Aucun tournoi trouvé.";
     }
 } else {
-    echo "Aucun tournoi disponible.";
+    header("Location: ../view/AdminPanel.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($brawlhalla_room)) {
