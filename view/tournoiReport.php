@@ -4,7 +4,6 @@ include "../APIBrawlhalla/security.php";
 
 
 $id_clan = $_SESSION['brawlhalla_data']['clan_id'];
-
 // SQL pour récupérer les informations du tournoi du clan connecté
 $sql = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND accepted = 1";
 $stmt = $conn->prepare($sql);
@@ -18,12 +17,6 @@ $stmt->bind_param("ii", $id_clan, $id_clan);
 $stmt->execute();
 $result = $stmt->get_result();
 
-
-
-
-
-
-
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $id_tournoi = $row['id_tournoi'];
@@ -32,6 +25,13 @@ if ($result->num_rows > 0) {
         $id_clan_demandeur = $row['id_clan_demandeur'];
         $id_clan_receveur = $row['id_clan_receveur'];
         $brawlhalla_room = $row['brawlhalla_room'];
+
+        $_SESSION['id_tournoi'] = $id_tournoi;
+        $_SESSION['date_rencontre'] = $date_rencontre;
+        $_SESSION['format'] = $format ;
+        $_SESSION['id_clan_demandeur'] = $id_clan_demandeur;
+        $_SESSION['id_clan_receveur'] = $id_clan_receveur ;
+        $_SESSION['brawlhalla_room'] = $brawlhalla_room ;
     }
   
     if (isset($id_tournoi)) {
@@ -39,24 +39,46 @@ if ($result->num_rows > 0) {
         $date_rencontre = new DateTime($date_rencontre);
         $date_actuelle = new DateTime();
 
-        // Incrémenter le champ on_page
-        $sql = "UPDATE tournoi SET on_page = on_page + 1 WHERE id_tournoi = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $id_tournoi);
-        $stmt->execute();
-        $stmt->close();
 
         //! Securité
         if (isset($_SERVER['HTTP_REFERER'])) {
             $referer = $_SERVER['HTTP_REFERER'];
           if (strpos($referer, '/view/AdminPanel.php') !== false || strpos($referer, 'tournoiReport.php') !== false) {
-                // Détails du tournoi
+       
+            // Vérifier si les deux clans ont fait leur check-in
+            $sql_check = "SELECT clan_demandeur_checkin, clan_receveur_checkin FROM checkin WHERE id_tournoi = ?";
+            $stmt_check = $conn->prepare($sql_check);
+            $stmt_check->bind_param("i", $id_tournoi);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
+
+            if ($result_check->num_rows > 0) {
+                $checkin_data = $result_check->fetch_assoc();     
+                if ($checkin_data['clan_demandeur_checkin'] == 1 && $checkin_data['clan_receveur_checkin'] == 1) {
+                    $tournoi_checkin = true;
+                }
+                else{
+                    $tournoi_checkin = false;
+                    
+                }
+            }
+      
+            // All check message
+            if ($tournoi_checkin == false){
                 echo "<div style='border: 2px solid red; padding: 10px; margin-top: 20px; background-color: #ffe6e6;'>";
                 echo "<h3>Avertissement</h3>";
                 echo "<p>Si vous quittez cette page 15 minutes après le début du tournoi, alors le tournoi sera supprimé.</p>";
-                echo "<p id='compteur'></p>";  // Conteneur pour le compteur
+                echo "<p>Attednez que votre adversaire check-in (DQ in 15m)</p>";
+                echo "<p id='compteur'></p>";  
                 echo "</div>";
-
+            } 
+            else{
+                echo "<div style='border: 2px solid green; padding: 10px; margin-top: 20px; background-color: #2fff2f66  ;'>";
+                echo "Les deux clans ont check-in, le match est prêt.";
+                echo "</div>";
+            }
+         
+                // Détails du tournoi
                 echo "<h2>Détails du tournoi</h2>";
                 echo "<p>Date de la rencontre : " . $date_rencontre->format('Y-m-d H:i:s') . "</p>";
                 echo "<p>Format : " . $format . "</p>";
@@ -83,6 +105,9 @@ if ($result->num_rows > 0) {
                         echo '<input type="submit" value="Enregistrer">';
                         echo '</form>';
                     }
+                    elseif($tournoi_checkin == true){
+                        echo  '<a href="resultReport.php">Report</a> <br>' ;
+                    }
                 }
             }
         } else {
@@ -93,29 +118,29 @@ if ($result->num_rows > 0) {
     }
 } else {
     header("Location: ../view/AdminPanel.php");
+    exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($brawlhalla_room)) {
-    $id_tournoi = $_POST['id_tournoi'];
-    $brawlhalla_room = $_POST['brawlhalla_room'];
-
-    // Mettre à jour la colonne brawlhalla_room dans la base de données
-    $sql = "UPDATE tournoi SET brawlhalla_room = ? WHERE id_tournoi = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("si", $brawlhalla_room, $id_tournoi);
-
-    if ($stmt->execute()) {
-        header("Location: ../view/tournoiReport.php");
-        exit();
-    } else {
-        echo "Erreur lors de la mise à jour de la salle Brawlhalla: " . $stmt->error;
+     // Mettre à jour la colonne brawlhalla_room dans la base de données
+     if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($brawlhalla_room)) {
+        $id_tournoi = $_POST['id_tournoi'];
+        $brawlhalla_room = $_POST['brawlhalla_room'];
+    
+        $sql = "UPDATE tournoi SET brawlhalla_room = ? WHERE id_tournoi = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $brawlhalla_room, $id_tournoi);
+    
+        if ($stmt->execute()) {
+            header("Location: ../view/tournoiReport.php");
+            exit();
+        } else {
+            echo "Erreur lors de la mise à jour de la salle Brawlhalla: " . $stmt->error;
+        }
+    
+        $stmt->close();
     }
 
-    $stmt->close();
-}
-elseif(!empty($brawlhalla_room)){
-    echo "La room Brawlhalla vien juste d'être remplis à l'instant ";
-}
+
 ?>
 
 <script>

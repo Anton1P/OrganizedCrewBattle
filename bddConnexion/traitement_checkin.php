@@ -65,6 +65,7 @@ if ($result->num_rows > 0) {
 $stmt->close();
 ?>
 
+
 <?php
 // Traitement du formulaire de check-in
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkin'])) {
@@ -83,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkin'])) {
 
     if ($stmt->execute()) {
         echo "Check-in réussi!";
-        // Redirection vers la page du tournoi après check-in
+
+        // Redirection vers la page tournoi après check-in pour le clan actuel
         header("Location: tournoiReport.php?id_tournoi=$id_tournoi");
         exit();
     } else {
