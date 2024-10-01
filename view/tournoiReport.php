@@ -1,3 +1,14 @@
+<script>
+    window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        console.log("La page a été chargée via la navigation arrière/avant");
+        location.reload();  
+    } else {
+        console.log("La page a été chargée normalement");
+    }
+});
+</script>
+
 <?php
 include "../bddConnexion/bddConnexion.php";
 include "../APIBrawlhalla/security.php";
@@ -38,7 +49,7 @@ if ($result->num_rows > 0) {
         // Date
         $date_rencontre = new DateTime($date_rencontre);
         $date_actuelle = new DateTime();
-
+        
 
         //! Securité
         if (isset($_SERVER['HTTP_REFERER'])) {
@@ -106,9 +117,19 @@ if ($result->num_rows > 0) {
                         echo '</form>';
                     }
                     elseif($tournoi_checkin == true){
-                        echo  '<a href="resultReport.php">Report</a> <br>' ;
+
+                            echo '<a href="resultReport.php?id_tournoi=' . $id_tournoi .
+                                 '&date_rencontre=' . urlencode($date_rencontre->format('Y-m-d H:i:s')) .
+                                 '&format=' . $format .
+                                 '&id_clan_demandeur=' . $id_clan_demandeur .
+                                 '&id_clan_receveur=' . $id_clan_receveur .
+                                 '&brawlhalla_room=' . $brawlhalla_room .
+                                 '">Report</a> <br>';
                     }
                 }
+            }
+            else{
+                header("Location: ../view/AdminPanel.php");
             }
         } else {
             echo "Aucun détail de tournoi disponible.";
@@ -143,27 +164,9 @@ if ($result->num_rows > 0) {
 
 ?>
 
+
 <script>
-// Initialiser le compte à rebours pour le tournoi
-let timestampRencontre = <?php echo $date_rencontre->getTimestamp(); ?>;  // Timestamp de la rencontre
-let compteurElem = document.getElementById('compteur');
-
-function mettreAJourCompteur() {
-    let maintenant = Math.floor(Date.now() / 1000);  // Timestamp actuel en secondes
-    let secondesRestantes = timestampRencontre - maintenant;  // Secondes restantes jusqu'à la rencontre
-
-    let minutes = Math.floor(Math.abs(secondesRestantes) / 60);
-    let secondes = Math.abs(secondesRestantes) % 60;
-
-    let signe = secondesRestantes > 0 ? '-' : '+';  // Affiche '-' avant le début et '+' après
-    compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + signe + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
-}
-
-// Mettre à jour le compteur chaque seconde
-let intervalle = setInterval(mettreAJourCompteur, 1000);
-mettreAJourCompteur();  // Appel immédiat au chargement de la page
-
-function validateInput(input) {
+    function validateInput(input) {
     // Supprimer les caractères non numériques
     input.value = input.value.replace(/[^0-9]/g, '');
     
@@ -172,4 +175,65 @@ function validateInput(input) {
         input.value = input.value.slice(0, 6);
     }
 }
+// Initialiser le compte à rebours pour le tournoi
+let timestampRencontre = <?php echo $date_rencontre->getTimestamp(); ?>;  // Timestamp de la rencontre
+let compteurElem = document.getElementById('compteur');
+let tournoiID = <?php echo $id_tournoi; ?>;
+
+function mettreAJourCompteur() {
+    if(compteurElem !== null){
+        let maintenant = Math.floor(Date.now() / 1000);  // Timestamp actuel en secondes
+        let secondesRestantes = timestampRencontre - maintenant;  // Secondes restantes jusqu'à la rencontre
+
+        let minutes = Math.floor(Math.abs(secondesRestantes) / 60);
+        let secondes = Math.abs(secondesRestantes) % 60;
+        
+        let signe = secondesRestantes > 0 ? '-' : '+';  // Affiche '-' avant le début et '+' après
+        compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + signe + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
+
+        // Vérification si 15 minutes sont écoulées après le début du tournoi
+        if (secondesRestantes < -900) { // 15 minutes (900 secondes) après la rencontre
+            verifierCheckin(tournoiID);
+            clearInterval(intervalle); // Stopper le compte à rebours
+        }
+    }
+}
+
+// Mettre à jour le compteur chaque seconde
+let intervalle = setInterval(mettreAJourCompteur, 1000);
+mettreAJourCompteur();  
+
+function verifierCheckin(tournoiID) {
+    // Appel AJAX pour vérifier si les deux équipes ont fait leur check-in
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "../bddConnexion/verifier_checkin.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let response = JSON.parse(xhr.responseText);
+            if (response.checkin_demandeur == 0 || response.checkin_receveur == 0) {
+                // Si l'une des équipes n'a pas check-in, supprimer le tournoi
+                supprimerTournoi(tournoiID);
+            }
+        }
+    };
+    xhr.send("id_tournoi=" + tournoiID);
+}
+
+function supprimerTournoi(tournoiID) {
+    // Appel AJAX pour supprimer le tournoi
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "../bddConnexion/delete_tournoi.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            alert("Le tournoi a été supprimé car une équipe n'a pas check-in à temps.");
+            location.reload();  // Recharger la page après la suppression
+        }
+    };
+    xhr.send("id_tournoi=" + tournoiID);
+}
 </script>
+
+
+
