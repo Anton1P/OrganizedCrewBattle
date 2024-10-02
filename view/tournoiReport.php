@@ -164,6 +164,15 @@ if ($result->num_rows > 0) {
 
 ?>
 
+<div id="response-container">Personne n'a encore report.</div>
+
+
+
+
+
+
+
+
 
 <script>
     function validateInput(input) {
@@ -234,6 +243,37 @@ function supprimerTournoi(tournoiID) {
     xhr.send("id_tournoi=" + tournoiID);
 }
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script>
+
+        // Fonction pour mettre à jour le chronomètre et faire une requête AJAX toutes les 20 secondes
+        function updateTimerAndCheckReport() {
+            // Incrémenter le chronomètre chaque seconde
+            setInterval(function() {
+        
+                    $.ajax({
+                        url: '../bddConnexion/chronoVerification.php',  // Fichier qui vérifie le temps écoulé
+                        type: 'POST',
+                        data: {
+                            id_tournoi: <?php echo $id_tournoi; ?>, // Vous devez passer ici l'ID du tournoi
+                            id_clan_demandeur: <?php echo $id_clan_demandeur; ?>, // ID du clan demandeur
+                            id_clan_receveur: <?php echo $id_clan_receveur; ?>  // ID du clan receveur
+                        },
+                        success: function(response) {
+                            // Afficher la réponse dans le conteneur
+                            $('#response-container').html(response);
+                        },
+                        error: function() {
+                            window.location.href = '../view/AdminPanel.php'
+                        }
+                    });
+                
+            }, 10000); // Mettre à jour le chronomètre chaque seconde
+        }
+
+        // Lancer la fonction pour démarrer le chronomètre et les requêtes AJAX
+        updateTimerAndCheckReport();
+    </script>
 
 
