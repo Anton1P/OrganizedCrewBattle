@@ -1,15 +1,34 @@
 <?php
 
 include "bddConnexion.php";
-
 include "../APIBrawlhalla/security.php";
 
 $askClan_id = $_SESSION['brawlhalla_data']['clan_id']; 
 $askedClan_id = $_POST['clan_id'];
 $format = $_POST['format'];
 $players = isset($_POST['joueurs']) ? $_POST['joueurs'] : []; // Tableau de joueurs
-$date_rencontre = $_POST['date_rencontre'];
 $accepted = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $date_rencontre = $_POST['date_rencontre'];
+
+    if (empty($date_rencontre)) {
+        $_SESSION['notification'] = "Erreur : La date de rencontre ne peut pas être vide."; // Correction ici
+        header("Location: ../view/askForm.php");
+        exit(); 
+    } else {
+        // Vérifier que c'est une date valide
+        $timestamp = strtotime($date_rencontre);
+        if ($timestamp === false || $timestamp === 0) {
+            $_SESSION['notification'] = "Erreur : Date de rencontre invalide.";
+            header("Location: ../view/askForm.php");
+            exit(); 
+        } else {
+            // Traiter la date valide ici
+            // Pas besoin de faire un echo ici, juste continuer avec le traitement
+        }
+    }
+}
 
 
 // Programme qui met les infos du formulaire dans la bdd
@@ -27,7 +46,9 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
 
     if ($result_combination->num_rows > 0) {
         // Si la combinaison existe déjà, ne pas insérer le tournoi
-        echo "Erreur : Ces deux clans sont déjà engagés dans un tournoi.";
+        $_SESSION['notification'] = "Erreur : Ces deux clans sont déjà engagés dans un tournoi.";
+        header("Location: ../view/askForm.php");
+        exit(); 
     } else {
         // Vérification de l'existence du clan receveur dans la BDD
         $sql_check_clan = "SELECT * FROM clans WHERE id_clan = ?";
@@ -55,8 +76,9 @@ if (!empty($askClan_id) && !empty($askedClan_id)) {
                     $stmt_insert_player->execute();
                     $stmt_insert_player->close();
                 }
-
-                header("Location: ../view/AdminPanel.php"); //! Faire en sorte que ça mette une notif de confirmation 
+                $_SESSION['notification'] = "Demande de tournois effectué";
+                header("Location: ../view/AdminPanel.php");
+                exit(); 
             } else {
                 echo "Erreur lors de la création du tournoi : " . $stmt_insert->error;
             }

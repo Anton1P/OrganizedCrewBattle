@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-if(isset($_SESSION['brawlhalla_data'])){
+if(isset($_SESSION['userData']['name'])){
     header("Location: view/AdminPanel.php");
 }
 else{

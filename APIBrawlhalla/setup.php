@@ -5,7 +5,7 @@ $avatar = $_SESSION['userData']['avatar'];
 $steam_id = $_SESSION['userData']['steam_id'];
 
 // Vérifier si les informations sont déjà stockées en session
-if (!isset($_SESSION['brawlhalla_data'])) {
+if (!isset($_SESSION['brawlhalla_data']['name'])) {
 
     // Si les infos ne sont pas en session, on appelle l'API
     $url = "https://brawlhalla.fly.dev/v1/ranked/steamid?steam_id=".$_SESSION['userData']['steam_id'];

@@ -38,7 +38,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         echo "<p>Format : " . htmlspecialchars($format) . "</p>";
         echo "<p>Clan Demandeur ID : " . htmlspecialchars($id_clan_demandeur) . "</p>";
         echo "<p>Clan Receveur ID : " . htmlspecialchars($id_clan_receveur) . "</p>";
-        echo "<p>Salle Brawlhalla : " . htmlspecialchars($brawlhalla_room) . "</p>";
+        echo "<p>Salle Brawlhalla : #" . htmlspecialchars($brawlhalla_room) . "</p>";
     }
 } else {
 
@@ -50,18 +50,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
 <h2>Soumettre les résultats du tournoi</h2>
 
-<form id="resultForm" action="traitement_report.php" method="POST">
+<form id="resultForm" action="../bddConnexion/traitement_report.php" method="POST">
     <input type="hidden" name="id_tournoi" value="<?php echo htmlspecialchars($id_tournoi); ?>">
     <input type="hidden" name="date_rencontre" value="<?php echo htmlspecialchars($date_rencontre); ?>">
     <input type="hidden" name="format" value="<?php echo htmlspecialchars($format); ?>">
     <input type="hidden" name="id_clan_demandeur" value="<?php echo htmlspecialchars($id_clan_demandeur); ?>">
     <input type="hidden" name="id_clan_receveur" value="<?php echo htmlspecialchars($id_clan_receveur); ?>">
     <input type="hidden" name="brawlhalla_room" value="<?php echo htmlspecialchars($brawlhalla_room); ?>">
+    <input type="hidden" name="verif_report" value="1">
 
     <label for="resultat">Choisissez le résultat :</label>
     <select name="resultat" id="resultat" required>
-        <option value="victoire">Victoire</option>
-        <option value="défaite">Défaite</option>
+        <option value="1">Victoire</option>
+        <option value="0">Défaite</option>
     </select>
     <br><br>
     

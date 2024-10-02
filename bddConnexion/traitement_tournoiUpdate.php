@@ -112,7 +112,7 @@ if ($result_tournois->num_rows > 0) {
 
 
 
-
+//! pour laisse la notif du match lorsque les 2 ont checkin (admin panel)
 
 
 // SQL pour récupérer les informations du tournoi du clan connecté
@@ -134,19 +134,37 @@ if ($result->num_rows > 0) {
         $plage_apres = clone $date_rencontre;
         $plage_apres->modify('+15 minutes');
 
-        // Vérifier si la date actuelle est passée //! ajouter une condition 
-        if ($date_actuelle > $plage_apres && $row['on_page'] == 0) {
-            // Suppression du tournoi de la base de données
-            $delete_sql = "DELETE FROM tournoi WHERE id_tournoi = ?";
-            $delete_stmt = $conn->prepare($delete_sql);
-            $delete_stmt->bind_param("i", $row['id_tournoi']);
-            $delete_stmt->execute();
-            $delete_stmt->close();
-            continue; // Passer au tournoi suivant
-        }
+        // Vérifier si la date actuelle est passée 
+        if ($date_actuelle > $plage_apres ) {
 
+                // Ajouter une condition pour vérifier si les deux clans ont fait le check-in
+                $checkin_sql = "SELECT id_checkin FROM checkin WHERE id_tournoi = ? AND clan_demandeur_checkin = 1 AND clan_receveur_checkin = 1";
+                $checkin_stmt = $conn->prepare($checkin_sql);
+                $checkin_stmt->bind_param("i", $row['id_tournoi']);
+                $checkin_stmt->execute();
+                $checkin_result = $checkin_stmt->get_result();
+            
+                // Si aucun check-in trouvé pour les deux clans, supprimer le tournoi
+                if ($checkin_result->num_rows == 0) {
+                    // Suppression du tournoi de la base de données
+                    $delete_sql = "DELETE FROM tournoi WHERE id_tournoi = ?";
+                    $delete_stmt = $conn->prepare($delete_sql);
+                    $delete_stmt->bind_param("i", $row['id_tournoi']);
+                    $delete_stmt->execute();
+                    $delete_stmt->close();
+                }
+            
+                $checkin_stmt->close();
+             
+            
+        }
+        $checkin_sql = "SELECT id_checkin FROM checkin WHERE id_tournoi = ? AND clan_demandeur_checkin = 1 AND clan_receveur_checkin = 1";
+        $checkin_stmt = $conn->prepare($checkin_sql);
+        $checkin_stmt->bind_param("i", $row['id_tournoi']);
+        $checkin_stmt->execute();
+        $checkin_result = $checkin_stmt->get_result();
         // Si la date actuelle est dans la plage définie
-        if ($date_actuelle >= $plage_avant && $date_actuelle <= $plage_apres) {
+        if ($date_actuelle >= $plage_avant || $checkin_result->num_rows > 0) {
             // Envoyer les informations du tournoi à la session
             $_SESSION['tournoi_id'] = $row['id_tournoi'];
             $_SESSION['date_rencontre'] = $row['date_rencontre'];
@@ -186,12 +204,8 @@ if ($result->num_rows > 0) {
                     let compteur = (secondesRestantes > 0 ? '-' : '+') + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
                     compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + compteur;
 
-                    // Vérifier si le tournoi est déjà passé de plus de 15 minutes
-                    if (secondesRestantes <= -900) {
-                        clearInterval(intervalle);
-                        // Rafraîchir la page pour supprimer le tournoi
-                        location.reload(); // Rafraîchir la page
-                    }
+
+                  
                 }
 
                 let intervalle = setInterval(mettreAJourCompteur, 1000); // Met à jour chaque seconde
@@ -199,7 +213,7 @@ if ($result->num_rows > 0) {
             </script>
             ";
 
-            exit;
+        
         } 
     }
 } else {

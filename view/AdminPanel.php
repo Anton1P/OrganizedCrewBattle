@@ -30,7 +30,7 @@ include "../APIBrawlhalla/security.php";
         <a href="../steamConnexion/logout.php" class="text-sm mt-5">Logout</a>
     </div>
         
-   
+    <?php include "../bddConnexion/researchNotifications.php";?><br>
     
      <?php include "../bddConnexion/notifs.php";?><br>
      <?php include "../bddConnexion/traitement_tournoiUpdate.php"; ?><br>

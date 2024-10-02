@@ -6,7 +6,15 @@ $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
 
 ?>
-
+<style>
+.notification {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid red;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+</style>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -18,6 +26,13 @@ $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
 </head>
 <body>
+
+    <?php // Vérifier si une notification existe
+    if (isset($_SESSION['notification'])) {
+        echo '<div class="notification">' . $_SESSION['notification'] . '</div>';
+        unset($_SESSION['notification']); // Supprimer la notification après l'affichage
+    }
+    ?>
 
 <h2>Remplir le formulaire pour le tournoi</h2>
 
@@ -74,7 +89,7 @@ $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
 
    
     <label for="date_rencontre">Choisir la date et l'heure de la rencontre :</label>
-    <input required type="datetime-local" id="date_rencontre" name="date_rencontre" class="date-picker"> 
+    <input required type="datetime-local" id="date_rencontre" name="date_rencontre" class="date-picker" >
     <br><br>
 
     <input type="submit" value="Envoyer">
