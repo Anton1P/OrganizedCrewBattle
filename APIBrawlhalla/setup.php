@@ -14,36 +14,53 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
 
     $name = $result["data"]["name"];
     $brawlhalla_id = $result["data"]["brawlhalla_id"];
-    echo $name;
+    echo $steam_id;
     echo $brawlhalla_id;
     $url = "https://brawlhalla.fly.dev/v1/stats/id?brawlhalla_id=".$brawlhalla_id;
     $data = file_get_contents($url);
     $result = json_decode($data, true);
 
-    $clan_name = $result["data"]["clan"]["clan_name"];
-    $clan_id = $result["data"]["clan"]["clan_id"];
+    $name = $result["data"]["name"];
 
-    $url = "https://brawlhalla.fly.dev/v1/utils/clan?clan_id=".$clan_id;
-    $data = file_get_contents($url);
-    $result = json_decode($data, true);
+    if(isset($result["data"]["clan"]["clan_name"]) && isset($result["data"]["clan"]["clan_id"])){
+        $clan_name = $result["data"]["clan"]["clan_name"];
+        $clan_id = $result["data"]["clan"]["clan_id"];
+    
+        $url = "https://brawlhalla.fly.dev/v1/utils/clan?clan_id=".$clan_id;
+        $data = file_get_contents($url);
+        $result = json_decode($data, true);
+    
+        $clan_members = $result["data"]["clan"];
 
-    $clan_members = $result["data"]["clan"];
-
+        // Stocker les infos dans la session pour ne pas recharger l'API à chaque fois
+        $_SESSION['brawlhalla_data'] = [
+            'name' => $name,
+            'brawlhalla_id' => $brawlhalla_id,
+            'clan_name' => $clan_name,
+            'clan_id' => $clan_id,
+            'clan_members' => $clan_members
+        ];
+    }
     // Stocker les infos dans la session pour ne pas recharger l'API à chaque fois
     $_SESSION['brawlhalla_data'] = [
         'name' => $name,
-        'brawlhalla_id' => $brawlhalla_id,
-        'clan_name' => $clan_name,
-        'clan_id' => $clan_id,
-        'clan_members' => $clan_members
+        'brawlhalla_id' => $brawlhalla_id
     ];
-} else {
-    // Récupérer les infos depuis la session
-    $name = $_SESSION['brawlhalla_data']['name'];
-    $brawlhalla_id = $_SESSION['brawlhalla_data']['brawlhalla_id'];
-    $clan_name = $_SESSION['brawlhalla_data']['clan_name'];
-    $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
-    $clan_members = $_SESSION['brawlhalla_data']['clan_members'];
+} 
+else {
+    if(!isset($clan_name) && !isset($clan_id) && !isset($clan_members)){
+        // Récupérer les infos depuis la session
+        $name = $_SESSION['brawlhalla_data']['name'];
+        $brawlhalla_id = $_SESSION['brawlhalla_data']['brawlhalla_id'];
+        $clan_name = $_SESSION['brawlhalla_data']['clan_name'];
+        $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
+        $clan_members = $_SESSION['brawlhalla_data']['clan_members'];
+    }
+    else{
+        // Récupérer les infos depuis la session
+        $name = $_SESSION['brawlhalla_data']['name'];
+        $brawlhalla_id = $_SESSION['brawlhalla_data']['brawlhalla_id'];
+    }
 }
 
 
