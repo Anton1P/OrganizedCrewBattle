@@ -48,7 +48,7 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
     ];
 } 
 else {
-    if(!isset($clan_name) && !isset($clan_id) && !isset($clan_members)){
+    if(isset($clan_name) && isset($clan_id) && isset($clan_members)){
         // Récupérer les infos depuis la session
         $name = $_SESSION['brawlhalla_data']['name'];
         $brawlhalla_id = $_SESSION['brawlhalla_data']['brawlhalla_id'];
