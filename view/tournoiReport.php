@@ -96,6 +96,23 @@ if ($result->num_rows > 0) {
                 echo "<p>Clan Demandeur ID : " . $id_clan_demandeur . "</p>";
                 echo "<p>Clan Receveur ID : " . $id_clan_receveur . "</p>";
                 
+                $sql_joueurs = "SELECT id_player FROM player_tournoi WHERE id_tournoi = ?";
+                $stmt_joueurs = $conn->prepare($sql_joueurs);
+                $stmt_joueurs->bind_param("i", $id_tournoi);
+                $stmt_joueurs->execute();
+                $result_joueurs = $stmt_joueurs->get_result();
+
+                echo "<h3>Joueurs Choisis pour le Tournoi :</h3>";
+                if ($result_joueurs->num_rows > 0) {
+                    echo "<ul>";
+                    while ($joueur = $result_joueurs->fetch_assoc()) {
+                        echo "<li>" . htmlspecialchars($joueur['id_player']) . "</li>";
+                    }
+                    echo "</ul>";
+                } else {
+                    echo "<p>Aucun joueur sélectionné.</p>";
+                }
+
                 include "../bddConnexion/traitement_checkin.php";
 
                 if($is_checked_in == 1){
@@ -132,7 +149,9 @@ if ($result->num_rows > 0) {
                 header("Location: ../view/AdminPanel.php");
             }
         } else {
-            echo "Aucun détail de tournoi disponible.";
+            $_SESSION['notification'] = "Impossible de se rendre sur la page report du tournoi comme cela";
+            header("Location: ../view/AdminPanel.php");
+            exit();
         }
     } else {
         echo "Aucun tournoi trouvé.";

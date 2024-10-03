@@ -142,7 +142,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($verif_data['clan_demandeur_result'] == $verif_data['clan_receveur_result']) {
                     //! Les résultats des deux clans sont identiques
                     $_SESSION['notification'] = "Les deux clans ont confirmé le même résultat. Une vérification manuelle est nécessaire.";
-                    header("Location: ../view/matchVerif.php");
+                   // Créer le formulaire pour la redirection POST
+                    echo '<form id="redirectForm" action="../view/matchVerif.php" method="POST">';
+                    echo '<input type="hidden" name="id_tournoi" value="' . htmlspecialchars($id_tournoi) . '">';
+                    echo '<input type="hidden" name="id_clan_demandeur" value="' . htmlspecialchars($id_clan_demandeur) . '">';
+                    echo '<input type="hidden" name="id_clan_receveur" value="' . htmlspecialchars($id_clan_receveur) . '">';
+                    echo '</form>';
+                    echo '<script type="text/javascript">';
+                    echo 'document.getElementById("redirectForm").submit();';
+                    echo '</script>';
                     exit();
                 } else {
                     // Les résultats des deux clans sont différents

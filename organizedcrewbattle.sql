@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 03 oct. 2024 à 11:42
+-- Généré le : jeu. 03 oct. 2024 à 14:26
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -55,8 +55,8 @@ CREATE TABLE `clans` (
 --
 
 INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`) VALUES
-(257, 'lol', 0, 6, 1326),
-(2161882, 'Asakai', 6, 0, 1474);
+(257, 'lol', 0, 7, 1317),
+(2161882, 'Asakai', 7, 0, 1483);
 
 -- --------------------------------------------------------
 
@@ -165,6 +165,13 @@ CREATE TABLE `tournoi_results` (
   `id_loser` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `tournoi_results`
+--
+
+INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`) VALUES
+(1, 54, 2161882, 257);
+
 -- --------------------------------------------------------
 
 --
@@ -174,7 +181,10 @@ CREATE TABLE `tournoi_results` (
 CREATE TABLE `verif_match` (
   `id_verification` int(8) NOT NULL,
   `id_tournoi` int(8) NOT NULL,
-  `img` varchar(50) NOT NULL
+  `id_clan_demandeur` int(8) NOT NULL,
+  `demandeur_sendproof` tinyint(1) NOT NULL,
+  `id_clan_receveur` int(11) NOT NULL,
+  `receveur_sendproof` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -250,7 +260,9 @@ ALTER TABLE `tournoi_results`
 --
 ALTER TABLE `verif_match`
   ADD PRIMARY KEY (`id_verification`),
-  ADD KEY `id_tournoi` (`id_tournoi`) USING BTREE;
+  ADD KEY `id_tournoi` (`id_tournoi`) USING BTREE,
+  ADD KEY `id_clan_demandeur` (`id_clan_demandeur`),
+  ADD KEY `id_clan_receveur` (`id_clan_receveur`);
 
 --
 -- Index pour la table `verif_report`
@@ -269,19 +281,19 @@ ALTER TABLE `verif_report`
 -- AUTO_INCREMENT pour la table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=52;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi_results`
 --
 ALTER TABLE `tournoi_results`
-  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `verif_match`
@@ -293,7 +305,7 @@ ALTER TABLE `verif_match`
 -- AUTO_INCREMENT pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Contraintes pour les tables déchargées
@@ -338,7 +350,9 @@ ALTER TABLE `tournoi_results`
 -- Contraintes pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  ADD CONSTRAINT `verif_match_ibfk_1` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`);
+  ADD CONSTRAINT `verif_match_ibfk_1` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`),
+  ADD CONSTRAINT `verif_match_ibfk_2` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `tournoi` (`id_clan_demandeur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `verif_match_ibfk_3` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `verif_report`

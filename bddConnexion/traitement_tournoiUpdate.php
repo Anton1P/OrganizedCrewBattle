@@ -156,65 +156,86 @@ if ($result->num_rows > 0) {
             
                 $checkin_stmt->close();
              
-            
         }
-        $checkin_sql = "SELECT id_checkin FROM checkin WHERE id_tournoi = ? AND clan_demandeur_checkin = 1 AND clan_receveur_checkin = 1";
-        $checkin_stmt = $conn->prepare($checkin_sql);
-        $checkin_stmt->bind_param("i", $row['id_tournoi']);
-        $checkin_stmt->execute();
-        $checkin_result = $checkin_stmt->get_result();
-        // Si la date actuelle est dans la plage définie
-        if ($date_actuelle >= $plage_avant || $checkin_result->num_rows > 0) {
-            // Envoyer les informations du tournoi à la session
-            $_SESSION['tournoi_id'] = $row['id_tournoi'];
-            $_SESSION['date_rencontre'] = $row['date_rencontre'];
-            $_SESSION['format'] = $row['format'];
-            $_SESSION['id_clan_demandeur'] = $row['id_clan_demandeur'];
-            $_SESSION['id_clan_receveur'] = $row['id_clan_receveur'];
-            $_SESSION['brawlhalla_room'] = $row['brawlhalla_room'];
 
-            // Calcul du temps restant ou écoulé pour afficher le compteur
-            $secondes_restantes = $date_rencontre->getTimestamp() - $date_actuelle->getTimestamp();
+       
+            // Requête pour vérifier si des preuves ont déjà été envoyées pour ce tournoi
+            $verif_sql = "SELECT demandeur_sendproof, receveur_sendproof 
+            FROM verif_match 
+            WHERE id_tournoi = ?";
+            $verif_stmt = $conn->prepare($verif_sql);
+            $verif_stmt->bind_param("i", $row['id_tournoi']);
+            $verif_stmt->execute();
+            $verif_result = $verif_stmt->get_result();
+            $verif_row = $verif_result->fetch_assoc();
 
-            // Stocker le timestamp de la rencontre dans une variable JS
-            $timestamp_rencontre = $date_rencontre->getTimestamp();
+            // Vérifier si le clan connecté est le demandeur ou le receveur
+            $is_demandeur = ($row['id_clan_demandeur'] == $clan_id);
+            $is_receveur = ($row['id_clan_receveur'] == $clan_id);
 
-            // Affichage du bouton avec le compteur
-            echo "<h2>Un tournoi est disponible !</h2>";
-            echo "<p id='compteur'></p>";
-            echo "<form action='../view/tournoiReport.php' method='post'>";
-            echo "<input type='hidden' name='tournoi_id' value='" . $_SESSION['tournoi_id'] . "'>";
-            echo "<input type='submit' value='Voir les détails du tournoi'>";
-            echo "</form>";
+            // Si le clan connecté n'a pas encore soumis de preuves
+            if (($is_demandeur && $verif_row['demandeur_sendproof'] == 0) || 
+            ($is_receveur && $verif_row['receveur_sendproof'] == 0)) {
 
-            // Script JavaScript pour mettre à jour le compteur
-            echo "
-            <script>
-                let timestampRencontre = $timestamp_rencontre;
-                let dateActuelle = " . $date_actuelle->getTimestamp() . ";
-                let compteurElem = document.getElementById('compteur');
+       
 
-                function mettreAJourCompteur() {
-                    let maintenant = Math.floor(Date.now() / 1000); // timestamp actuel
-                    let secondesRestantes = timestampRencontre - maintenant;
+                $checkin_sql = "SELECT id_checkin FROM checkin WHERE id_tournoi = ? AND clan_demandeur_checkin = 1 AND clan_receveur_checkin = 1";
+                $checkin_stmt = $conn->prepare($checkin_sql);
+                $checkin_stmt->bind_param("i", $row['id_tournoi']);
+                $checkin_stmt->execute();
+                $checkin_result = $checkin_stmt->get_result();
+                // Si la date actuelle est dans la plage définie
+                if ($date_actuelle >= $plage_avant || $checkin_result->num_rows > 0) {
+                    // Envoyer les informations du tournoi à la session
+                    $_SESSION['tournoi_id'] = $row['id_tournoi'];
+                    $_SESSION['date_rencontre'] = $row['date_rencontre'];
+                    $_SESSION['format'] = $row['format'];
+                    $_SESSION['id_clan_demandeur'] = $row['id_clan_demandeur'];
+                    $_SESSION['id_clan_receveur'] = $row['id_clan_receveur'];
+                    $_SESSION['brawlhalla_room'] = $row['brawlhalla_room'];
 
-                    let minutes = Math.floor(Math.abs(secondesRestantes) / 60);
-                    let secondes = Math.abs(secondesRestantes) % 60;
+                    // Calcul du temps restant ou écoulé pour afficher le compteur
+                    $secondes_restantes = $date_rencontre->getTimestamp() - $date_actuelle->getTimestamp();
 
-                    let compteur = (secondesRestantes > 0 ? '-' : '+') + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
-                    compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + compteur;
+                    // Stocker le timestamp de la rencontre dans une variable JS
+                    $timestamp_rencontre = $date_rencontre->getTimestamp();
+
+                    // Affichage du bouton avec le compteur
+                    echo "<h2>Un tournoi est disponible !</h2>";
+                    echo "<p id='compteur'></p>";
+                    echo "<form action='../view/tournoiReport.php' method='post'>";
+                    echo "<input type='hidden' name='tournoi_id' value='" . $_SESSION['tournoi_id'] . "'>";
+                    echo "<input type='submit' value='Voir les détails du tournoi'>";
+                    echo "</form>";
+
+                    // Script JavaScript pour mettre à jour le compteur
+                    echo "
+                    <script>
+                        let timestampRencontre = $timestamp_rencontre;
+                        let dateActuelle = " . $date_actuelle->getTimestamp() . ";
+                        let compteurElem = document.getElementById('compteur');
+
+                        function mettreAJourCompteur() {
+                            let maintenant = Math.floor(Date.now() / 1000); // timestamp actuel
+                            let secondesRestantes = timestampRencontre - maintenant;
+
+                            let minutes = Math.floor(Math.abs(secondesRestantes) / 60);
+                            let secondes = Math.abs(secondesRestantes) % 60;
+
+                            let compteur = (secondesRestantes > 0 ? '-' : '+') + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
+                            compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + compteur;
 
 
-                  
+                        
+                        }
+
+                        let intervalle = setInterval(mettreAJourCompteur, 1000); // Met à jour chaque seconde
+                        mettreAJourCompteur(); // Appelle immédiatement pour un affichage correct au début
+                    </script>
+                    ";
+
                 }
-
-                let intervalle = setInterval(mettreAJourCompteur, 1000); // Met à jour chaque seconde
-                mettreAJourCompteur(); // Appelle immédiatement pour un affichage correct au début
-            </script>
-            ";
-
-        
-        } 
+            } 
     }
 } else {
     echo "Aucun tournoi en attente pour le clan.";
