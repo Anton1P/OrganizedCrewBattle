@@ -12,10 +12,7 @@ $result_received = $conn->query($sql_check_received);
 
 $tournois_recus = []; // Tableau pour stocker les tournois reçus
 
-if ($result_received->num_rows > 0) {
-    $_SESSION['notification'] = "Vous avez des tournois en attente !";
-    
-    // Récupérer les tournois reçus
+if ($result_received->num_rows > 0) {  
     while ($row = $result_received->fetch_assoc()) {
         $tournois_recus[] = $row;
     }
@@ -35,6 +32,9 @@ if (!empty($tournois_recus)) {
             }
         } 
     }
+    $_SESSION['notification'] = "Joueur(s) ajouté(s) !";
+    header("Location: ../view/AdminPanel.php");
+    exit();
 } else {
     echo "<li>Aucun tournoi trouvé.</li>";
 }

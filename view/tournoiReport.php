@@ -269,7 +269,7 @@ function supprimerTournoi(tournoiID) {
                         }
                     });
                 
-            }, 10000); // Mettre à jour le chronomètre chaque seconde
+            }, 1000); // Mettre à jour le chronomètre chaque seconde
         }
 
         // Lancer la fonction pour démarrer le chronomètre et les requêtes AJAX

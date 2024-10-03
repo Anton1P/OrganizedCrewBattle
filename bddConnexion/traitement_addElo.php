@@ -1,8 +1,8 @@
-<?php
+<?php 
 include "../bddConnexion/bddConnexion.php"; // Connexion à la base de données
 
 // Fonction pour calculer les nouveaux points Elo
-function calculateElo($elo_winner, $elo_loser, $k_factor = 32) {
+function calculateElo($elo_winner, $elo_loser, $k_factor = 30) {
     $expected_winner = 1 / (1 + pow(10, ($elo_loser - $elo_winner) / 400));
     $expected_loser = 1 - $expected_winner;
 
@@ -18,10 +18,6 @@ if (!isset($_GET['id_tournoi'])) {
 }
 
 $id_tournoi = $_GET['id_tournoi'];
-
-
-
-
 
 // Récupérer les informations sur le tournoi, y compris les clans et les résultats
 $sql_tournoi = "SELECT id_clan_demandeur, id_clan_receveur, clan_demandeur_result, clan_receveur_result 
@@ -42,15 +38,19 @@ $tournoi_info = $result_tournoi->fetch_assoc();
 $id_clan_demandeur = $tournoi_info['id_clan_demandeur'];
 $id_clan_receveur = $tournoi_info['id_clan_receveur'];
 $resultat_demandeur = $tournoi_info['clan_demandeur_result'];
-if($resultat_demandeur == 1){
+
+// Déterminer le résultat du tournoi
+if ($resultat_demandeur == 1) {
     $resultat_receveur = 0;
-}
-else{
+} elseif ($resultat_demandeur == 0) {
     $resultat_receveur = 1;
+} else {
+    echo "Erreur dans les résultats.";
+    exit();
 }
 
 // Récupérer les points Elo actuels des deux clans
-$sql = "SELECT id_clan, wins, loses, elo_rating  FROM clans WHERE id_clan IN (?, ?)";
+$sql = "SELECT id_clan, wins, loses, elo_rating FROM clans WHERE id_clan IN (?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $id_clan_demandeur, $id_clan_receveur);
 $stmt->execute();
@@ -89,12 +89,35 @@ $stmt_update->execute();
 $stmt_update->bind_param("diii", $new_elo_receveur, $clans[$id_clan_receveur]['wins'], $clans[$id_clan_receveur]['loses'], $id_clan_receveur);
 $stmt_update->execute();
 
+// Suppression du tournoi après mise à jour des scores et Elo
+$sql_delete = "DELETE FROM tournoi WHERE id_tournoi = ?";
+$stmt_delete = $conn->prepare($sql_delete);
+$stmt_delete->bind_param("i", $id_tournoi);
+$stmt_delete->execute();
+
+// Insertion des résultats dans la table tournoi_results
+$sql_insert_result = "INSERT INTO tournoi_results (id_tournoi, id_winner, id_loser) VALUES (?, ?, ?)";
+$stmt_insert_result = $conn->prepare($sql_insert_result);
+
+// Déterminer qui est gagnant et qui est perdant, puis insérer
+if ($resultat_demandeur == 1) {
+    $id_winner = $id_clan_demandeur;
+    $id_loser = $id_clan_receveur;
+} else {
+    $id_winner = $id_clan_receveur;
+    $id_loser = $id_clan_demandeur;
+}
+
+$stmt_insert_result->bind_param("iii", $id_tournoi, $id_winner, $id_loser);
+$stmt_insert_result->execute();
+
 $stmt_update->close();
 $stmt_tournoi->close();
+$stmt_delete->close();
+$stmt_insert_result->close();
 $conn->close();
 
-// Rediriger l'utilisateur après la mise à jour
-header("Location: ../view/ResultatFinal.php");
+$_SESSION['notification'] = "Tournoi traité avec succès. Les résultats ont été enregistrés.";
+header("Location: ../view/AdminPanel.php");
 exit();
-
 ?>

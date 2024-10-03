@@ -2,7 +2,7 @@
 include "../APIBrawlhalla/security.php";
 
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
-include "./bddConnexion/bddConnexion.php";
+include "../bddConnexion/bddConnexion.php";
 ?>
 
 
@@ -20,7 +20,7 @@ include "./bddConnexion/bddConnexion.php";
 
 <h2>Remplir le formulaire pour selectionner les joueur de votre clan qui ferra le tournoi</h2>
 
-<form action="bddConnexion/traitement_responseForm.php" method="POST">
+<form action="../bddConnexion/traitement_responseForm.php" method="POST">
 
 
     <!-- Liste des cases à cocher avec les joueurs récupérés de la BDD -->

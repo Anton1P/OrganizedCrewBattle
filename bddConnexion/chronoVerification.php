@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt_check_time->get_result();
     $data = $result->fetch_assoc();
     
-    if ($data['report_time']) {
+    if (isset($data['report_time'])) {
         // Calcul du temps écoulé depuis le premier report
         $report_time = new DateTime($data['report_time']);
         $now = new DateTime();

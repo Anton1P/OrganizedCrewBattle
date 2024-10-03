@@ -10,11 +10,15 @@ if (isset($_POST['id_tournoi'])) {
     $stmt->bind_param("i", $id_tournoi);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+        $_SESSION['notification'] = "Tournoi supprimé avec succès.";
     } else {
-        echo json_encode(['success' => false, 'message' => $stmt->error]);
+        $_SESSION['notification'] = "Erreur lors de la suppression du tournoi.";
     }
 
     $stmt->close();
 }
+
+// Redirection vers le panneau d'administration
+header("Location: ../view/AdminPanel.php");
+exit();
 ?>

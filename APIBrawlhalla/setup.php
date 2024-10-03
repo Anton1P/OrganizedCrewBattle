@@ -16,18 +16,25 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
     $brawlhalla_id = $result["data"]["brawlhalla_id"];
     echo $name;
     echo $brawlhalla_id;
+    
     $url = "https://brawlhalla.fly.dev/v1/stats/id?brawlhalla_id=".$brawlhalla_id;
     $data = file_get_contents($url);
     $result = json_decode($data, true);
+    
+    $name = $result["data"]["name"];
+    
+    // Vérification si l'utilisateur a un clan
+    $clan_name = isset($result["data"]["clan"]["clan_name"]) ? $result["data"]["clan"]["clan_name"] : null;
+    $clan_id = isset($result["data"]["clan"]["clan_id"]) ? $result["data"]["clan"]["clan_id"] : null;
+    $clan_members = null;
 
-    $clan_name = $result["data"]["clan"]["clan_name"];
-    $clan_id = $result["data"]["clan"]["clan_id"];
-
-    $url = "https://brawlhalla.fly.dev/v1/utils/clan?clan_id=".$clan_id;
-    $data = file_get_contents($url);
-    $result = json_decode($data, true);
-
-    $clan_members = $result["data"]["clan"];
+    // Si l'utilisateur a un clan, récupérer ses membres
+    if ($clan_id) {
+        $url = "https://brawlhalla.fly.dev/v1/utils/clan?clan_id=".$clan_id;
+        $data = file_get_contents($url);
+        $result = json_decode($data, true);
+        $clan_members = isset($result["data"]["clan"]) ? $result["data"]["clan"] : null;
+    }
 
     // Stocker les infos dans la session pour ne pas recharger l'API à chaque fois
     $_SESSION['brawlhalla_data'] = [
