@@ -24,6 +24,7 @@ $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
     <!-- Inclure une bibliothèque de date picker (flatpickr) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -38,12 +39,14 @@ $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
 
 <form action="../bddConnexion/traitement_askForm.php" method="POST">
 
-    <!-- Liste déroulante pour choisir le clan à affronter -->
-    <label for="clan_id">Choisir le clan à affronter:</label>
-    <select required name="clan_id" id="clan_id">
+    <!-- Barre de recherche pour les clans -->
+    <label for="clan_search">Rechercher le clan à affronter*</label>
+    <input type="text" id="clan_search" name="clan_search" placeholder="Nom du clan">
+    <select  name="clan_id" id="clan_id">
+        <option value="">Liste de tous les clans</option>
         <?php
         // Récupérer les clans depuis la base de données
-        $query = "SELECT id_clan, nom_clan FROM clans WHERE id_clan != $clan_id"; 
+        $query = "SELECT id_clan, nom_clan FROM clans WHERE id_clan != $clan_id ORDER BY nom_clan"; 
         $result = $conn->query($query);
 
         // Si des résultats sont trouvés
@@ -57,8 +60,14 @@ $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
         }
         ?>
     </select>
+    <input type="hidden" id="clan_id" name="clan_id"> <!-- Champ caché pour stocker l'ID du clan sélectionné -->
+    <div id="clan_results"></div> <!-- Conteneur pour les résultats -->
+
     <br><br>
 
+
+
+    
     <!-- Choisir le format du tournoi -->
     <label for="format">Choisir le format de la clan battle:</label>
     <select required name="format" id="format">
@@ -102,10 +111,41 @@ $date_actuelle = (new DateTime())->format('Y-m-d\TH:i');
         enableTime: true,        
         dateFormat: "Y-m-d H:i:S", 
         time_24hr: true,       
-        minDate: "<?php echo $date_actuelle; ?>" // Limiter les dates antérieures
+        minDate: "<?php echo $date_actuelle; ?>" 
+    });
+
+    // Fonction pour gérer la recherche de clans
+    $(document).ready(function() {
+        $('#clan_search').on('keyup', function() {
+            var searchQuery = $(this).val();
+            if (searchQuery.length >= 2) { 
+                $.ajax({
+                    url: '../bddConnexion/search_clans.php', 
+                    type: 'POST',
+                    data: { search: searchQuery },
+                    success: function(response) {
+                        $('#clan_results').html(response);
+                    }
+                });
+            } else {
+                $('#clan_results').html(''); 
+            }
+        });
+
+        // Lorsqu'un clan est sélectionné dans la liste des résultats
+        $(document).on('click', '.clan-option', function() {
+            var selectedClanId = $(this).data('id');
+            var selectedClanName = $(this).text();
+
+            // Remplir le champ caché et mettre le nom du clan dans l'input
+            $('#clan_id').val(selectedClanId);
+            $('#clan_search').val(selectedClanName);
+
+            // Vider la liste des résultats
+            $('#clan_results').html('');
+        });
     });
 </script>
-
 </body>
 </html>
 

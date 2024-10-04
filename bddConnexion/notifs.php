@@ -1,16 +1,16 @@
 <?php
 
 include "bddConnexion.php";
+include "../APIBrawlhalla/traductions.php";
+
 //! C'est une sécurité
 if (!isset($_SESSION['brawlhalla_data']['clan_id'])) { 
-    header("Location: ../view/AdminPanel.php");
+    header("Location: ../APIBrawlhalla/routes.php");
     exit(); 
 }
 
 
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
-
-
 
 
 // Requête pour vérifier les tournois reçus
@@ -19,20 +19,22 @@ $result_received = $conn->query($sql_check_received);
 
 $tournois_recus = []; 
 
-if ($result_received->num_rows > 0) {
-    $has_pending_tournaments = false; 
-    // Récupérer les tournois reçus
-    while ($row = $result_received->fetch_assoc()) {
-        if ($row['accepted'] == 1) { 
-            $has_pending_tournaments = true; 
+if (!isset($_SESSION['notification_sent'])) {
+    if ($result_received->num_rows > 0) {
+        $has_pending_tournaments = false; 
+        // Récupérer les tournois reçus
+        while ($row = $result_received->fetch_assoc()) {
+            if ($row['accepted'] == 1) { 
+                $has_pending_tournaments = true; 
+            }
+            $tournois_recus[] = $row; 
         }
-        $tournois_recus[] = $row; 
-    }
-    if ($has_pending_tournaments) {
-        $_SESSION['notification'] = "Vous avez des tournois en attente !"; 
+        if ($has_pending_tournaments) {
+            $_SESSION['notification'] = "Vous avez des tournois en attente !"; 
+            $_SESSION['notification_sent'] = true; 
+        }
     }
 }
-
 
 
 // Requête pour vérifier les tournois demandés
@@ -107,9 +109,9 @@ if (!isset($_SESSION['notification_sent'])) {
         if (!empty($tournois_recus)) {
             foreach ($tournois_recus as $tournoi) {
                 if ($tournoi['accepted'] == 1) {
-                    echo "Tournois déjà accepté avec le clan " . htmlspecialchars($tournoi['id_clan_demandeur']);
+                    echo "Tournois déjà accepté avec le clan " . $clanTranslations[$tournoi['id_clan_demandeur']];
                 } else {
-                    echo "<li>Id du clan demandeur: " . htmlspecialchars($tournoi['id_clan_demandeur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . htmlspecialchars($tournoi['format']) . "</li>";
+                    echo "<li>Id du clan demandeur: " . $clanTranslations[$tournoi['id_clan_demandeur']] . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Format: " . $tournamentFormats[$tournoi['format']]. "</li>";
                     
                     // Formulaire pour accepter le tournoi
                     echo "<form action='../bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
@@ -151,7 +153,7 @@ if (!isset($_SESSION['notification_sent'])) {
         if (!empty($tournois_demandes)) {
             foreach ($tournois_demandes as $tournoi) {
                 $accepted = $tournoi['accepted'] ? "Accepter" : "En attente de confirmation";
-                echo "<li>Id du clan receveur: " . htmlspecialchars($tournoi['id_clan_receveur']) . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Statut: " . $accepted . "</li>";
+                echo "<li>Id du clan receveur: " . $clanTranslations[$tournoi['id_clan_receveur']] . ",<br> Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> Statut: " . $accepted . "</li>";
                 
                 // Vérifier si le tournoi peut être supprimé
                 $date_rencontre = new DateTime($tournoi['date_rencontre']);

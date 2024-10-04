@@ -6,10 +6,13 @@
                 }
             ?>
         }
-    </style>
+</style>
+
 <?php
 
 include "bddConnexion.php";
+
+
 //! C'est une sécurité
 if (!isset($_SESSION['brawlhalla_data']['clan_id'])) { 
     header("Location: ../APIBrawlhalla/routes.php");
@@ -36,32 +39,15 @@ if ($result_tournois->num_rows > 0) {
     echo "<h4>Détails des tournois :</h4>";
     echo "<ul>";
 
-    // Récupérer les noms des clans à partir de leurs ID
-    $clan_names = [];
-    $sql_clan_names = "SELECT id_clan, nom_clan FROM clans WHERE id_clan IN (?, ?)";
-    $stmt_clan_names = $conn->prepare($sql_clan_names);
-    
-    // Remplir le tableau des noms de clans
-    while ($row = $result_tournois->fetch_assoc()) {
-        $stmt_clan_names->bind_param("ii", $row['id_clan_demandeur'], $row['id_clan_receveur']);
-        $stmt_clan_names->execute();
-        $result_clan_names = $stmt_clan_names->get_result();
-        while ($clan_row = $result_clan_names->fetch_assoc()) {
-            $clan_names[$clan_row['id_clan']] = $clan_row['nom_clan'];
-        }
-    }
-    $stmt_clan_names->close();
-
-    // Réinitialiser le pointeur du résultat pour l'affichage
     $result_tournois->data_seek(0);
 
     // Afficher les informations de chaque tournoi prévu aujourd'hui
     while ($row = $result_tournois->fetch_assoc()) {
         echo "<li>";
         
-        // Formater la date de rencontre
         $date_rencontre = new DateTime($row['date_rencontre']);
         $aujourdhui = new DateTime();
+
         if ($date_rencontre->format('Y-m-d') === $aujourdhui->format('Y-m-d')) {
             $formatted_date = "Aujourd'hui à " . $date_rencontre->format('H\hi');
         } else {
@@ -71,12 +57,10 @@ if ($result_tournois->num_rows > 0) {
         echo "ID Tournoi : " . $row['id_tournoi'] . "<br>";
         echo "Date de Rencontre : " . $formatted_date . "<br>";
         
-        // Remplacer le format numérique par son nom
-        $format_nom = isset($formats[$row['format']]) ? $formats[$row['format']] : 'Format inconnu';
-        echo "Format : " . $format_nom . "<br>";
+        echo "Format : " . $tournamentFormats[$row['format']] . "<br>";
         
-        echo "Clan Demandeur : " . $clan_names[$row['id_clan_demandeur']] . "<br>";
-        echo "Clan Receveur : " . $clan_names[$row['id_clan_receveur']] . "<br>";
+        echo "Clan Demandeur : " . $clanTranslations[$row['id_clan_demandeur']] . "<br>";
+        echo "Clan Receveur : " . $clanTranslations[$row['id_clan_receveur']] . "<br>";
         echo "Brawlhalla room : #" . $row['brawlhalla_room'] . "<br>";
         echo "</li><br>";
     }

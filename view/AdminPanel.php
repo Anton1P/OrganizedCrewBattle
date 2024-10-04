@@ -1,15 +1,7 @@
 <?php   
 include "../APIBrawlhalla/security.php";
-
-
-     echo $name;
-     echo $brawlhalla_id;
-     echo $clan_name;
-     echo $clan_id;
-
-     include "../bddConnexion/bddConnexion.php";
-     include "../bddConnexion/loadData.php";
-
+include "../bddConnexion/bddConnexion.php";
+include "../bddConnexion/loadData.php";
 ?>
 
 <!doctype html>

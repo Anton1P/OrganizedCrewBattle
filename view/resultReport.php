@@ -19,6 +19,7 @@
 
 <?php
 include "../bddConnexion/bddConnexion.php";
+include "../APIBrawlhalla/traductions.php";
 
 if (isset($_SERVER['HTTP_REFERER'])) {
     $referer = $_SERVER['HTTP_REFERER'];
@@ -34,10 +35,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
         // Détails du tournoi
         echo "<h2>Détails du tournoi</h2>";
-        echo "<p>Date de la rencontre : " . htmlspecialchars($date_rencontre) . "</p>";
-        echo "<p>Format : " . htmlspecialchars($format) . "</p>";
-        echo "<p>Clan Demandeur ID : " . htmlspecialchars($id_clan_demandeur) . "</p>";
-        echo "<p>Clan Receveur ID : " . htmlspecialchars($id_clan_receveur) . "</p>";
+        echo "<p>Date de la rencontre : " . $tournamentDates[$date_rencontre]. "</p>";
+        echo "<p>Format : " . $tournamentFormats[$format] . "</p>";
+        echo "<p>Clan Demandeur ID : " . $clanTranslations[$id_clan_demandeur] . "</p>";
+        echo "<p>Clan Receveur ID : " . $clanTranslations[$id_clan_receveur] . "</p>";
         echo "<p>Salle Brawlhalla : #" . htmlspecialchars($brawlhalla_room) . "</p>";
     }
 } else {
