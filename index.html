@@ -1,65 +1,18 @@
-<?php   
-include "../APIBrawlhalla/security.php";
-include "../bddConnexion/bddConnexion.php";
-include "../bddConnexion/loadData.php";
-?>
-
-<!doctype html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../styles/output.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body>
-
-        
-    <?php include "../bddConnexion/researchNotifications.php";?><br>
-     <?php include "tableauMembresClan.php";?> <br>    
-   
-    <a href="http://localhost/OrganizedCrewBattle/view/askForm.php">askForm</a>
-
-    <?php
-      include "../bddConnexion/bddConnexion.php";
-    if (isset($_SESSION['userData']['steam_id'])) {
-        $steam_id = $_SESSION['userData']['steam_id'];
-        
-        $query = "SELECT steam_id FROM moderation_access WHERE steam_id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $steam_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            echo "<a href='../bddConnexion/moderation_access.php'>Accéder à la modération</a>";
-        }
-    }   
-    
-    ?>
- 
-
-
-
-</body>
-</html>
 <!DOCTYPE html>
 <html lang="en">
      <head>
           <meta charset="UTF-8" />
           <title>CodePen - juif Management UI</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
-          <link rel="stylesheet" href="../assets/styles/style.css" />
+          <link rel="stylesheet" href="./assets/styles/style.css" />
      </head>
      <body>
           <div class="wrapper">
                <div class="left-side">
-                <a href="../steamConnexion/logout.php" >
                     <svg class="svg-icon" style="width: 1.5em; height: 1.5em; vertical-align: middle; fill: currentColor; overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M768 106V184c97.2 76 160 194.8 160 328 0 229.6-186.4 416-416 416S96 741.6 96 512c0-133.2 62.8-251.6 160-328V106C121.6 190.8 32 341.2 32 512c0 265.2 214.8 480 480 480s480-214.8 480-480c0-170.8-89.6-321.2-224-406z" fill="" />
-                                <path d="M512 32c-17.6 0-32 14.4-32 32v448c0 17.6 14.4 32 32 32s32-14.4 32-32V64c0-17.6-14.4-32-32-32z" fill="" />
-                            </svg>
-                    </a>
+                         <path d="M768 106V184c97.2 76 160 194.8 160 328 0 229.6-186.4 416-416 416S96 741.6 96 512c0-133.2 62.8-251.6 160-328V106C121.6 190.8 32 341.2 32 512c0 265.2 214.8 480 480 480s480-214.8 480-480c0-170.8-89.6-321.2-224-406z" fill="" />
+                         <path d="M512 32c-17.6 0-32 14.4-32 32v448c0 17.6 14.4 32 32 32s32-14.4 32-32V64c0-17.6-14.4-32-32-32z" fill="" />
+                       </svg>
                </div>
                <div class="main-container">
                     <div class="header">
@@ -90,17 +43,46 @@ include "../bddConnexion/loadData.php";
 
                          <div class="account-wrapper" style="--delay: 0.2s;">
                               <div class="account-profile">
-                                   <img src="<?php echo $avatar;?>" alt="" />
+                                   <img src="https://avatars.steamstatic.com/9fc24ad456cb250a4ca84a651ac4d36b43805b14_medium.jpg" alt="" />
 
-                                   <div class="account-name"> <?php echo $name; ?>  </div>
-                                   <div class="account-title"><?php echo $clan_name." ".$rank;?></div>
+                                   <div class="account-name">zBlackneight</div>
+                                   <div class="account-title">Asakai Member</div>
                               </div>
                          </div>
-                         <?php include "../bddConnexion/notifs.php";?>
 
-                         
-                         <div  class="activity card" style="--delay: 0.5s;">
-                             <?php include "../bddConnexion/traitement_tournoiUpdate.php"; ?>
+                         <div class="activity card" style="--delay: 0.5s;">
+                              <div class="card-title">
+                                   <h3>Tournois ask</h3>      
+                                   <button class="rounded-button">Show</button>
+                              </div>
+                              <div style="width: 65%;">
+                                    <p>Information concernant les demande de tournois delete on clique</p>
+                              </div>
+                              <p> Id du clan receveur: 257,<br>
+                                   Date: 2024-09-30 22:50:00.000000,<br>
+                                   Statut: Accepter
+                              </p> 
+                         </div>
+                         <div class="activity card" style="--delay: 0.5s;">
+                              <div class="card-title">
+                                   <h3>Tournois ask</h3>      
+                                   <button class="rounded-button">Show</button>
+                              </div>
+                              <div style="width: 65%;">
+                                    <p>Information concernant les demande de tournois (delete on clique)</p>
+                              </div>
+                              <p> Id du clan receveur: 257,<br>
+                                   Date: 2024-09-30 22:50:00.000000,<br>
+                                   Statut: Accepter
+                              </p> 
+                          
+
+                        
+                         </div>
+                         <div class="activity card" style="--delay: 0.5s;">
+                              <h3>Un tournoi est disponible !</h3>
+                              <p>Temps jusqu'à la rencontre : +10:34</p>
+                              <button class="rounded-button">Check-in</button>
                          </div>
                     </div>
                     <div class="user-box second-box">
@@ -116,7 +98,18 @@ include "../bddConnexion/loadData.php";
                          </div>
 
                          <div class="card transection" style="--delay: 1.2s;">
-                            <?php include "../view/info_tournois.php";?>          
+                         
+                              <h3>Asakai Vs lol </h3>
+                              Battle today at 22h50 UTC+2 <br>
+                              Format : Crew Battle 1  <br>
+                              Brawlhalla room : #0  <br>
+                           
+                              <h3>Asakai Vs Annoying </h3>
+                              Battle today at 22h50 UTC+2 <br>
+                              Format : Crew Battle 1  <br>
+                              Brawlhalla room : #0  <br>
+
+                              
                          </div>
                          
                     </div>
@@ -127,4 +120,3 @@ include "../bddConnexion/loadData.php";
           </div>
      </body>
 </html>
-                           

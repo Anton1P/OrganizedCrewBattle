@@ -1,6 +1,6 @@
 <style>
         .go-report {
-            <?php
+            <?php 
                 if ($hideDiv) {
                     echo 'display: none;';
                 }
@@ -22,72 +22,6 @@ if (!isset($_SESSION['brawlhalla_data']['clan_id'])) {
 $id_clan = $_SESSION['brawlhalla_data']['clan_id'];
 $date_actuelle = new DateTime();
 $date_aujourdhui = $date_actuelle->format('Y-m-d'); // Formater la date actuelle
-
-
-// SQL pour récupérer les tournois prévus pour le clan connecté le même jour
-$sql_tournois_hier = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND DATE(date_rencontre) = ? AND accepted = 1";
-$stmt_tournois = $conn->prepare($sql_tournois_hier);
-$stmt_tournois->bind_param("iis", $id_clan, $id_clan, $date_aujourdhui);
-$stmt_tournois->execute();
-$result_tournois = $stmt_tournois->get_result();
-
-// Vérifier s'il y a des tournois pour aujourd'hui
-if ($result_tournois->num_rows > 0) {
-    echo "<h3>Vous avez des tournois prévus aujourd'hui !</h3>";
-    echo "<button id='btnVoirTournois'>Voir les détails des tournois</button>";
-    echo "<div id='tournoiDetails' style='display: none;'>";
-    echo "<h4>Détails des tournois :</h4>";
-    echo "<ul>";
-
-    $result_tournois->data_seek(0);
-
-    // Afficher les informations de chaque tournoi prévu aujourd'hui
-    while ($row = $result_tournois->fetch_assoc()) {
-        echo "<li>";
-        
-        $date_rencontre = new DateTime($row['date_rencontre']);
-        $aujourdhui = new DateTime();
-
-        if ($date_rencontre->format('Y-m-d') === $aujourdhui->format('Y-m-d')) {
-            $formatted_date = "Aujourd'hui à " . $date_rencontre->format('H\hi');
-        } else {
-            $formatted_date = $date_rencontre->format('d/m/Y à H\hi');
-        }
-        
-        echo "ID Tournoi : " . $row['id_tournoi'] . "<br>";
-        echo "Date de Rencontre : " . $formatted_date . "<br>";
-        
-        echo "Format : " . $tournamentFormats[$row['format']] . "<br>";
-        
-        echo "Clan Demandeur : " . $clanTranslations[$row['id_clan_demandeur']] . "<br>";
-        echo "Clan Receveur : " . $clanTranslations[$row['id_clan_receveur']] . "<br>";
-        echo "Brawlhalla room : #" . $row['brawlhalla_room'] . "<br>";
-        echo "</li><br>";
-    }
-    
-    echo "</ul>";
-    echo "</div>";
-
-    // Script JavaScript pour afficher/masquer les détails des tournois
-    echo "
-    <script>
-        document.getElementById('btnVoirTournois').addEventListener('click', function() {
-            var details = document.getElementById('tournoiDetails');
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-            } else {
-                details.style.display = 'none';
-            }
-        });
-    </script>
-    ";
-} 
-
-
-
-
-
-
 
 
 
@@ -175,13 +109,14 @@ if ($result->num_rows > 0) {
                             $timestamp_rencontre = $date_rencontre->getTimestamp();
 
                             // Affichage du bouton avec le compteur
-                            echo "<div class='go-report'><h2>Un tournoi est disponible !</h2>";
+                            echo "<span class='go-report'>";
+                            echo "<h3>Un tournoi est disponible !</h3>";
                             echo "<p id='compteur'></p>";
-                            echo "<form action='../view/tournoiReport.php' method='post'>";
+                            echo "<form style=' display: flex; justify-content: space-around;' action='../view/tournoiReport.php' method='post'>";
                             echo "<input type='hidden' name='tournoi_id' value='" . $_SESSION['tournoi_id'] . "'>";
-                            echo "<input type='submit' value='Voir les détails du tournoi'>";
+                            echo "<button class='rounded-button' >Check-in</button>";
                             echo "</form>";
-
+                            echo "</span>";
                             // Script JavaScript pour mettre à jour le compteur
                             echo "
                             <script>
@@ -207,11 +142,14 @@ if ($result->num_rows > 0) {
                                 mettreAJourCompteur(); // Appelle immédiatement pour un affichage correct au début
                             </script>
                             ";
-            }
+            } 
         }
-    }
+        else{
+            echo "<h3>Check-in available 30m before</h3>";
+           }  
+   }
 } else {
-    echo "Aucun tournoi en attente pour le clan.";
+    echo "<h3>Aucun tournoi en attente...</h3>";
 }
 
 // Connexion à la base de données et autres logiques
