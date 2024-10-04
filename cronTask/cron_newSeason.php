@@ -3,7 +3,7 @@
 include "../bddConnexion/bddConnexion.php";
 
 
-$date_limite = '2024-12-31';  //! Date de fin de saison
+$date_limite = '2024-10-03';  //! Date de fin de saison
 $date_actuelle = date('Y-m-d');  
 
 // Comparer la date limite avec la date actuelle
@@ -18,7 +18,7 @@ if ($date_actuelle >= $date_limite) {
 
     // SQL pour supprimer le contenu des tables
     $sql = "
-    DELETE FROM match_verif;
+    DELETE FROM verif_match;
     DELETE FROM player_tournoi;
     DELETE FROM players;
     DELETE FROM tournoi;
