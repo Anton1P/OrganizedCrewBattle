@@ -32,13 +32,12 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         $id_clan_demandeur = $_GET['id_clan_demandeur'];
         $id_clan_receveur = $_GET['id_clan_receveur'];
         $brawlhalla_room = $_GET['brawlhalla_room'];
-
+        
         // Détails du tournoi
         echo "<h2>Détails du tournoi</h2>";
-        echo "<p>Date de la rencontre : " . $tournamentDates[$date_rencontre]. "</p>";
         echo "<p>Format : " . $tournamentFormats[$format] . "</p>";
-        echo "<p>Clan Demandeur ID : " . $clanTranslations[$id_clan_demandeur] . "</p>";
-        echo "<p>Clan Receveur ID : " . $clanTranslations[$id_clan_receveur] . "</p>";
+        echo "<p>Clan Demandeur : " . $clanTranslations[$id_clan_demandeur] . "</p>";
+        echo "<p>Clan Receveur : " . $clanTranslations[$id_clan_receveur] . "</p>";
         echo "<p>Salle Brawlhalla : #" . htmlspecialchars($brawlhalla_room) . "</p>";
     }
 } else {

@@ -39,31 +39,10 @@ function getPlayerNames($conn) {
     return $players;
 }
 
-function getTournamentDates($conn) {
-    
-    function formatDateTime($dateString) {
-        $date = strtotime($dateString); // Convertir la chaîne de date en timestamp
-        if ($date === false) {
-            return "Date invalide"; // Gestion des erreurs
-        }
-        return date("d/m/Y \à H:i", $date); // Formatage de la date
-    }
-
-    $sql = "SELECT id_tournoi, date_rencontre FROM tournoi"; // Modifiez la requête si nécessaire
-    $result = $conn->query($sql);
-    
-    $dates = [];
-    while ($row = $result->fetch_assoc()) {
-        $dates[$row['id_tournoi']] = formatDateTime($row['date_rencontre']); // Utiliser la fonction de formatage
-    }
-    
-    return $dates;
-}
-
 
 $clanTranslations = getClanTranslations($conn);
 $tournamentFormats = getTournamentFormats($conn);
 $playerNames = getPlayerNames($conn);
-$tournamentDates = getTournamentDates($conn);
+
 
 ?>

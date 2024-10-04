@@ -12,7 +12,7 @@
 <?php
 include "../bddConnexion/bddConnexion.php";
 include "../APIBrawlhalla/security.php";
-
+include "../APIBrawlhalla/traductions.php";
 
 $id_clan = $_SESSION['brawlhalla_data']['clan_id'];
 // SQL pour récupérer les informations du tournoi du clan connecté
@@ -92,10 +92,10 @@ if ($result->num_rows > 0) {
          
                 // Détails du tournoi
                 echo "<h2>Détails du tournoi</h2>";
-                echo "<p>Date de la rencontre : " . $date_rencontre->format('Y-m-d H:i:s') . "</p>";
-                echo "<p>Format : " . $format . "</p>";
-                echo "<p>Clan Demandeur ID : " . $id_clan_demandeur . "</p>";
-                echo "<p>Clan Receveur ID : " . $id_clan_receveur . "</p>";
+                echo "<p>Date de la rencontre : " . $date_rencontre->format('d/m/Y H:i') . "</p>";
+                echo "<p>Format : " . $tournamentFormats[$format] . "</p>";
+                echo "<p>Clan Demandeur : " . $clanTranslations[$id_clan_demandeur] . "</p>";
+                echo "<p>Clan Receveur : " . $clanTranslations[$id_clan_receveur] . "</p>";
                 
                 $sql_joueurs = "SELECT id_player FROM player_tournoi WHERE id_tournoi = ?";
                 $stmt_joueurs = $conn->prepare($sql_joueurs);
