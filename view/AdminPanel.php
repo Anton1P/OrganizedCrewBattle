@@ -36,7 +36,25 @@ include "../APIBrawlhalla/security.php";
      <?php include "../bddConnexion/traitement_tournoiUpdate.php"; ?><br>
      <?php include "tableauMembresClan.php";?> <br>    
    
-                    <a href="http://localhost/OrganizedCrewBattle/view/askForm.php">askForm</a>
+    <a href="http://localhost/OrganizedCrewBattle/view/askForm.php">askForm</a>
+
+    <?php
+      include "../bddConnexion/bddConnexion.php";
+    if (isset($_SESSION['userData']['steam_id'])) {
+        $steam_id = $_SESSION['userData']['steam_id'];
+        
+        $query = "SELECT steam_id FROM moderation_access WHERE steam_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $steam_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            echo "<a href='../bddConnexion/moderation_access.php'>Accéder à la modération</a>";
+        }
+    }   
+    
+    ?>
  
 
 

@@ -12,7 +12,12 @@ $date_limite->modify('-10 hours');
 $date_limite_format = $date_limite->format('Y-m-d H:i:s');
 
 // Préparer la requête SQL pour supprimer les tournois où la date de rencontre est plus ancienne que 10 heures après la date actuelle
-$sql = "DELETE FROM tournoi WHERE date_rencontre <= ?";
+$sql = "DELETE FROM tournoi
+    WHERE date_rencontre <= ?
+    AND id_tournoi NOT IN (
+        SELECT id_tournoi FROM verif_match
+        WHERE demandeur_sendproof = 1 OR receveur_sendproof = 1)
+";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $date_limite_format);
 

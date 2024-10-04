@@ -119,10 +119,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h1>Envoyer des preuves d'image</h1>
+
     <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id_tournoi" value="<?php echo htmlspecialchars($id_tournoi); ?>">
         <input type="file" name="images[]" multiple accept=".png, .jpg, .jpeg" required>
         <button type="submit">Envoyer</button>
     </form>
+    <p>Si aucune preuves n'est envoiée de la part d'au moin un des deux clans alors le match serra annulée automatiquement dans 10 heures.</p>
 </body>
 </html>

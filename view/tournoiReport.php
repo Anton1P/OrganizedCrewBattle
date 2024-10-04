@@ -55,7 +55,8 @@ if ($result->num_rows > 0) {
         if (isset($_SERVER['HTTP_REFERER'])) {
             $referer = $_SERVER['HTTP_REFERER'];
           if (strpos($referer, '/view/AdminPanel.php') !== false || strpos($referer, 'tournoiReport.php') !== false) {
-       
+
+            $tournoi_checkin = false;
             // Vérifier si les deux clans ont fait leur check-in
             $sql_check = "SELECT clan_demandeur_checkin, clan_receveur_checkin FROM checkin WHERE id_tournoi = ?";
             $stmt_check = $conn->prepare($sql_check);
@@ -264,35 +265,40 @@ function supprimerTournoi(tournoiID) {
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
+<script>
+    // Fonction pour faire la requête AJAX
+    function checkReport() {
+        $.ajax({
+            url: '../bddConnexion/chronoVerification.php',  // Fichier qui vérifie le temps écoulé
+            type: 'POST',
+            data: {
+                id_tournoi: <?php echo $id_tournoi; ?>, // Vous devez passer ici l'ID du tournoi
+                id_clan_demandeur: <?php echo $id_clan_demandeur; ?>, // ID du clan demandeur
+                id_clan_receveur: <?php echo $id_clan_receveur; ?>  // ID du clan receveur
+            },
+            success: function(response) {
+                // Afficher la réponse dans le conteneur
+                $('#response-container').html(response);
+            },
+            error: function() {
+                window.location.href = '../view/AdminPanel.php'
+            }
+        });
+    }
 
-        // Fonction pour mettre à jour le chronomètre et faire une requête AJAX toutes les 20 secondes
-        function updateTimerAndCheckReport() {
-            // Incrémenter le chronomètre chaque seconde
-            setInterval(function() {
-        
-                    $.ajax({
-                        url: '../bddConnexion/chronoVerification.php',  // Fichier qui vérifie le temps écoulé
-                        type: 'POST',
-                        data: {
-                            id_tournoi: <?php echo $id_tournoi; ?>, // Vous devez passer ici l'ID du tournoi
-                            id_clan_demandeur: <?php echo $id_clan_demandeur; ?>, // ID du clan demandeur
-                            id_clan_receveur: <?php echo $id_clan_receveur; ?>  // ID du clan receveur
-                        },
-                        success: function(response) {
-                            // Afficher la réponse dans le conteneur
-                            $('#response-container').html(response);
-                        },
-                        error: function() {
-                            window.location.href = '../view/AdminPanel.php'
-                        }
-                    });
-                
-            }, 1000); // Mettre à jour le chronomètre chaque seconde
-        }
+    // Fonction pour démarrer les requêtes AJAX toutes les secondes après le premier appel
+    function updateTimerAndCheckReport() {
+        // Lancer la première requête immédiatement
+        checkReport();
 
-        // Lancer la fonction pour démarrer le chronomètre et les requêtes AJAX
-        updateTimerAndCheckReport();
-    </script>
+        // Ensuite, exécuter la requête chaque seconde
+        setInterval(function() {
+            checkReport();
+        }, 1000); // Toutes les secondes
+    }
+
+    // Démarrer la fonction
+    updateTimerAndCheckReport();
+</script>
 
 

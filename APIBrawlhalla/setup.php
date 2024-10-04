@@ -14,8 +14,6 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
 
     $name = $result["data"]["name"];
     $brawlhalla_id = $result["data"]["brawlhalla_id"];
-    echo $name;
-    echo $brawlhalla_id;
     
     $url = "https://brawlhalla.fly.dev/v1/stats/id?brawlhalla_id=".$brawlhalla_id;
     $data = file_get_contents($url);
