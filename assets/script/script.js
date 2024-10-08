@@ -101,12 +101,6 @@ function loadMembers(page, sortField, order) {
                     switch (rank) {
                         case 'Leader':
                             return 'gold'; // Couleur pour le Leader
-                        case 'Officer':
-                            return 'aqua'; // Couleur pour l'Officer
-                        case 'Member':
-                            return 'green'; // Couleur pour le Member
-                        default:
-                            return 'white'; // Couleur par défaut pour les rangs inconnus
                     }
                 }
 

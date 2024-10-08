@@ -40,7 +40,7 @@ include "../bddConnexion/loadData.php";
                               </svg>
                               Admin Panel
                          </a>
-                         <a class="header-link" href="#">
+                         <a class="header-link" href="Leaderboard.php">
                               <svg fill="#ffffff"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.4 489.4" xml:space="preserve">
                                    <g>
                                         <path d="M369.75,0h-250.2v44.3h-85.6V110c0,47.2,38.4,85.6,85.6,85.6h1.5c7.9,51.3,47,92.2,97.2,103v70.9h-30.7

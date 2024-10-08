@@ -28,7 +28,7 @@ $tournois_recus = [];
             }
             $tournois_recus[] = $row; 
         }
-        if ($has_pending_tournaments) {
+        if (!$has_pending_tournaments) {
             $_SESSION['notification'] = "Vous avez des tournois en attente !"; 
             $_SESSION['notification_sent'] = true; 
         }
@@ -43,9 +43,6 @@ $result_demande = $conn->query($sql_check_demande);
 $tournois_demandes = [];
 $has_pending_requests = false; 
 
-
-
-    // Si aucune notification n'a encore été envoyée, vérifier les tournois acceptés
     if ($result_demande->num_rows > 0) {
         // Récupérer les tournois demandés
         while ($row = $result_demande->fetch_assoc()) {
@@ -55,14 +52,11 @@ $has_pending_requests = false;
             $tournois_demandes[] = $row; 
         }
 
-        if ($has_pending_requests) {
+        if (!$has_pending_requests) {
             $_SESSION['notification'] = "Vous avez des tournois demandés acceptés !";
             $_SESSION['notification_sent'] = true; 
         }
     }
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
