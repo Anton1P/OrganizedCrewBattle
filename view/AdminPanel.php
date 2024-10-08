@@ -11,6 +11,7 @@ include "../bddConnexion/loadData.php";
           <title>Ranked CrewBattle - Admin Panel</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
           <link rel="stylesheet" href="../assets/styles/style.css" />
+               <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
      </head>
      <body>
           <div class="wrapper">
@@ -126,9 +127,34 @@ include "../bddConnexion/loadData.php";
                               </div>
                               <div class="cards card">
                                    <div style="display:flex; justify-content: space-between;">
-                                        <p>dzeezdezezffzzfezef</p>
+                                        
+                                        <div id="table-container">
+                                             <table id="clan-members">
+                                                  <thead>
+                                                       <tr>
+                                                            <th class="title-th" data-sort="name">Pseudo</th>
+                                                            <th class="title-th" data-sort="rank">Rank</th>
+                                                            <th class="title-th" data-sort="xp">XP</th>
+                                                            <th class="title-th" data-sort="join_date">Date d'arrivée</th>
+                                                       </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                       <!-- Les membres seront chargés ici via AJAX -->
+                                                  </tbody>
+                                             </table>
+                                             <div id="pagination">
+                                                  <svg id="prev"  onclick="loadMembers(currentPage - 1)" class="pagination-svg" aria-label="Page précédente" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24" style="cursor: pointer;">
+                                                       <path d="M15 18l-6-6 6-6v12z"/>
+                                                  </svg>
+                                                  <span id="page-info">Page 1</span>
+                                                  <svg id="next"  onclick="loadMembers(currentPage + 1)"  class="pagination-svg" aria-label="Page suivante" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24" style="cursor: pointer;">
+                                                       <path d="M9 6l6 6-6 6V6z"/>
+                                                  </svg>
+                                             </div>
+                                        </div>
+
                                         <div style="max-width: 300px;">
-                                             <canvas id="myChart" width="200" height="200"></canvas> <!-- Réduction de la taille du canvas -->
+                                             <canvas id="myChart" width="300" height="300"></canvas> <!-- Réduction de la taille du canvas -->
                                         </div>
                                    </div>      
                               </div>
