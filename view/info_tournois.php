@@ -46,7 +46,7 @@ if ($result_tournois->num_rows > 0) {
     
 }
 else{
-    echo "<h3>Nothing here...</h3>";
+    echo "<h3>No clan battles today</h3>";
 }
 
 

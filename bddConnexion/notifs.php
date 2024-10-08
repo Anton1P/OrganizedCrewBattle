@@ -19,7 +19,6 @@ $result_received = $conn->query($sql_check_received);
 
 $tournois_recus = []; 
 
-if (!isset($_SESSION['notification_sent'])) {
     if ($result_received->num_rows > 0) {
         $has_pending_tournaments = false; 
         // Récupérer les tournois reçus
@@ -34,7 +33,7 @@ if (!isset($_SESSION['notification_sent'])) {
             $_SESSION['notification_sent'] = true; 
         }
     }
-}
+
 
 
 // Requête pour vérifier les tournois demandés
@@ -45,7 +44,7 @@ $tournois_demandes = [];
 $has_pending_requests = false; 
 
 
-if (!isset($_SESSION['notification_sent'])) {
+
     // Si aucune notification n'a encore été envoyée, vérifier les tournois acceptés
     if ($result_demande->num_rows > 0) {
         // Récupérer les tournois demandés
@@ -61,7 +60,7 @@ if (!isset($_SESSION['notification_sent'])) {
             $_SESSION['notification_sent'] = true; 
         }
     }
-}
+
 
 
 ?>
@@ -105,20 +104,22 @@ if (!isset($_SESSION['notification_sent'])) {
                     if ($tournoi['accepted'] == 1) {
                         echo "Tournois déjà accepté avec le clan " . $clanTranslations[$tournoi['id_clan_demandeur']];
                     } else {
-                        echo "Id du clan demandeur: " . $clanTranslations[$tournoi['id_clan_demandeur']] . ",<br>
-                              Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br>
-                              Statut: En attente";
-                        
+                        echo $clanTranslations[$tournoi['id_clan_demandeur']] ." invites you<br>
+                              Date : " . htmlspecialchars($tournoi['date_rencontre']) . ", <br>  
+                              Format : " . $tournamentFormats[$tournoi['format']] . " <br>";
+                           
                         // Formulaire pour accepter le tournoi
-                        echo "<form action='../bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                        echo "<form action='../bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;' id='form-accept-" . $tournoi['id_tournoi'] . "'>";
                         echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                        echo "<input type='submit' name='action' value='Accepter' style='color: green;' onclick=\"showPlayerSelection(" . $tournoi['id_tournoi'] . ")\">";
+                        echo "<input type='hidden' name='action' value='Accepter'>";
                         echo "</form>";
+                        echo "<a href='#' style='color: green; text-decoration: none;' onclick=\"document.getElementById('form-accept-" . $tournoi['id_tournoi'] . "').submit(); return false;\">Accept</a>";
                         
-                        echo "<form action='../bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;'>";
+                        echo "<form action='../bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;' id='form-refuse-" . $tournoi['id_tournoi'] . "'>";
                         echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                        echo "<input type='submit' name='action' value='Refuser' style='color: red;'>";
+                        echo "<input type='hidden' name='action' value='Refuser'>";
                         echo "</form>";
+                        echo " | <a href='#' style='color: red; text-decoration: none;' onclick=\"document.getElementById('form-refuse-" . $tournoi['id_tournoi'] . "').submit(); return false;\">Denied</a>";
                     }
                     
                     // Vérifier si le tournoi peut être supprimé
@@ -153,9 +154,9 @@ if (!isset($_SESSION['notification_sent'])) {
             <?php
             if (!empty($tournois_demandes)) {
                 foreach ($tournois_demandes as $tournoi) {
-                    $accepted = $tournoi['accepted'] ? "Accepter" : "En attente de confirmation";
-                    echo "<li>Id du clan receveur: " . $clanTranslations[$tournoi['id_clan_receveur']] . ",<br> 
-                          Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br> 
+                    $accepted = $tournoi['accepted'] ? "Accepted" : "Waiting for a response.";
+                    echo "<li>Clan :  " . $clanTranslations[$tournoi['id_clan_receveur']] . "<br> 
+                          Date: " . htmlspecialchars($tournoi['date_rencontre']) . "<br> 
                           Statut: " . $accepted . "</li>";
                     
                     // Vérifier si le tournoi peut être supprimé

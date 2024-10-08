@@ -153,8 +153,8 @@ include "../bddConnexion/loadData.php";
                                              </div>
                                         </div>
 
-                                        <div style="max-width: 300px;">
-                                             <canvas id="myChart" width="300" height="300"></canvas> <!-- Réduction de la taille du canvas -->
+                                        <div style="max-width: 350px;">
+                                             <canvas id="myChart" width="350" height="350"></canvas> <!-- Réduction de la taille du canvas -->
                                         </div>
                                    </div>      
                               </div>
@@ -172,8 +172,11 @@ include "../bddConnexion/loadData.php";
           </div>
      </body>
 </html>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="../assets/script/script.js"></script>
+
 <script>
     const notificationIcon = document.getElementById('notificationIcon');
     const notificationList = document.getElementById('notificationList');
@@ -194,4 +197,21 @@ include "../bddConnexion/loadData.php";
     <?php else: ?>
         notificationPing.style.display = 'none';
     <?php endif; ?>
+
+    // Supprimer la notification lorsque l'utilisateur clique dessus
+    document.querySelectorAll('#notificationIcon').forEach(notification => {
+        notification.addEventListener('click', () => {
+            fetch('../bddConnexion/clear_notification.php') // Appelle le script pour supprimer la notification
+                .then(response => {
+                    if (response.ok) {
+                        notificationPing.style.display = 'none'; // Cache la pastille rouge
+                    } else {
+                        console.error('Erreur lors de la suppression de la notification');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+        });
+    });
 </script>
