@@ -165,7 +165,7 @@ if (!isset($_SESSION['notification_sent'])) {
                     if ($interval->h >= 24 || $interval->d > 0) { // Si la date du tournoi est dans plus de 24 heures
                         echo "<form action='../bddConnexion/delete_tournoi.php' method='post' style='display:inline;' onsubmit=\"return confirm('Êtes-vous sûr de vouloir supprimer ce tournoi ?');\">";
                         echo "<input type='hidden' name='id_tournoi' value='" . $tournoi['id_tournoi'] . "'>";
-                        echo "<input type='submit' name='action' value='Supprimer' style='color: red;'>";
+                        echo "<a href='#' style='color: red; text-decoration: none;' onclick=\"if(confirm('Êtes-vous sûr de vouloir supprimer ce tournoi ?')) { this.closest('form').submit(); } return false;\">Supprimer</a>";
                         echo "</form>";
                     }
                 }

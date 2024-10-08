@@ -4,13 +4,12 @@ include "../bddConnexion/bddConnexion.php";
 include "../APIBrawlhalla/security.php";
 
 $id_tournoi = $_POST['id_tournoi'] ?? null;
-$id_clan_demandeur = $_POST['id_clan_demandeur'];
-$id_clan_receveur = $_POST['id_clan_receveur'];
+$id_clan_demandeur = $_POST['id_clan_demandeur'] ?? null;
+$id_clan_receveur = $_POST['id_clan_receveur'] ?? null;
 
-
-if (empty($id_tournoi)) {
-    echo "Erreur : ID du tournoi manquant.";
-    exit();
+if (empty($id_clan_demandeur) && empty($id_clan_receveur)) {
+    $id_clan_demandeur =  $_GET['id_clan_demandeur'];
+    $id_clan_receveur =  $_GET['id_clan_receveur'];
 }
 
 
@@ -48,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Limiter à 5 fichiers maximum
         if (count($_FILES['images']['name']) > 5) {
             $_SESSION['notification'] = "Erreur : Vous ne pouvez télécharger que 5 images maximum.";
-            header("Location: ../view/matchVerif.php?id_tournoi=" . $id_tournoi);
+            header("Location: ../view/AdminPanel.php");
             exit();
         }
 
@@ -70,6 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $allowedExtensions = ['jpg', 'jpeg', 'png'];
             $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
+
+            if (preg_match("/[<>\"'\/]/", $fileName)) {
+                $_SESSION['notification'] = "Erreur : Le nom du fichier " . htmlspecialchars($fileName) . " contient des caractères non autorisés.";
+                header("Location: ../view/AdminPanel.php");
+                exit();
+            }
+        
             if (!in_array($fileType, $allowedFileTypes) || !in_array($fileExtension, $allowedExtensions)) {
                 $_SESSION['notification'] = "Erreur : Type de fichier non autorisé pour " . $fileName ." Only png, jpeg, jpg files.";
                 continue; 

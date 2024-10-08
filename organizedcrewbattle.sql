@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 03 oct. 2024 à 14:26
+-- Généré le : mar. 08 oct. 2024 à 13:40
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -55,8 +55,26 @@ CREATE TABLE `clans` (
 --
 
 INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`) VALUES
-(257, 'lol', 0, 7, 1317),
-(2161882, 'Asakai', 7, 0, 1483);
+(257, 'lol', 0, 11, 1287),
+(2161882, 'Asakai', 11, 0, 1513);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `moderation_access`
+--
+
+CREATE TABLE `moderation_access` (
+  `id_modo` int(8) NOT NULL,
+  `steam_id` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `moderation_access`
+--
+
+INSERT INTO `moderation_access` (`id_modo`, `steam_id`) VALUES
+(1, '76561198877699338');
 
 -- --------------------------------------------------------
 
@@ -121,6 +139,7 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (98125910, 'Sekai', 2161882),
 (98341473, 'ABP | MTH', 2161882),
 (102326446, 'iDrxp!?', 2161882),
+(102779605, 'T4RZ4N', 2161882),
 (105693481, 'Pizza Hawaïenne', 2161882),
 (108499902, 'Sucre', 2161882),
 (117003562, 'Tilen', 2161882);
@@ -170,7 +189,7 @@ CREATE TABLE `tournoi_results` (
 --
 
 INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`) VALUES
-(1, 54, 2161882, 257);
+(4, 57, 2161882, 257);
 
 -- --------------------------------------------------------
 
@@ -225,6 +244,12 @@ ALTER TABLE `clans`
   ADD PRIMARY KEY (`id_clan`);
 
 --
+-- Index pour la table `moderation_access`
+--
+ALTER TABLE `moderation_access`
+  ADD PRIMARY KEY (`id_modo`);
+
+--
 -- Index pour la table `players`
 --
 ALTER TABLE `players`
@@ -251,9 +276,9 @@ ALTER TABLE `tournoi`
 --
 ALTER TABLE `tournoi_results`
   ADD PRIMARY KEY (`id_results`),
-  ADD KEY `id_tournoi` (`id_tournoi`),
   ADD KEY `id_winner` (`id_winner`),
-  ADD KEY `id_loser` (`id_loser`);
+  ADD KEY `id_loser` (`id_loser`),
+  ADD KEY `id_tournoi` (`id_tournoi`) USING BTREE;
 
 --
 -- Index pour la table `verif_match`
@@ -281,31 +306,37 @@ ALTER TABLE `verif_report`
 -- AUTO_INCREMENT pour la table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT pour la table `moderation_access`
+--
+ALTER TABLE `moderation_access`
+  MODIFY `id_modo` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=55;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi_results`
 --
 ALTER TABLE `tournoi_results`
-  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Contraintes pour les tables déchargées
@@ -350,9 +381,9 @@ ALTER TABLE `tournoi_results`
 -- Contraintes pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  ADD CONSTRAINT `verif_match_ibfk_1` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`),
   ADD CONSTRAINT `verif_match_ibfk_2` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `tournoi` (`id_clan_demandeur`) ON DELETE CASCADE,
-  ADD CONSTRAINT `verif_match_ibfk_3` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE;
+  ADD CONSTRAINT `verif_match_ibfk_3` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `verif_match_ibfk_4` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `verif_report`
