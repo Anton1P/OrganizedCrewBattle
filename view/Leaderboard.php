@@ -18,7 +18,7 @@ $total_row = $total_result->fetch_assoc();
 $total_clans = $total_row['total'];
 
 // Récupérer les clans triés par ELO
-$query = "SELECT nom_clan, elo_rating, wins, loses FROM clans ORDER BY elo_rating DESC LIMIT $clans_per_page OFFSET $offset";
+$query = "SELECT nom_clan, id_clan, elo_rating, elo_peak, wins, loses FROM clans ORDER BY elo_rating DESC LIMIT $clans_per_page OFFSET $offset";
 $result = $conn->query($query);
 ?>
 
@@ -72,13 +72,17 @@ $result = $conn->query($query);
                               </svg>
                               Classement
                          </a>
-                         <a class="header-link" href="http://localhost/OrganizedCrewBattle/view/askForm.php">
+                         <?php
+                         if ( $rank === 'Leader' || $rank  === 'Officer') {
+                            echo' <a class="header-link" href="http://localhost/OrganizedCrewBattle/view/askForm.php">
                               <svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
                                    <path d="M22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C21.4816 5.82475 21.7706 6.69989 21.8985 8" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                                    <path d="M18 8L15.8411 9.79908C14.0045 11.3296 13.0861 12.0949 12 12.0949C11.3507 12.0949 10.7614 11.8214 10 11.2744M6 8L6.9 8.75L7.8 9.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                               </svg>
                               Ask for a clan battle
-                         </a>
+                         </a>';
+                         }
+                         ?>
                          <div class="notification-wrapper">
                               <div class="notification-icon" id="notificationIcon">
                                    <!-- Icône de cloche blanche en SVG -->
@@ -135,6 +139,7 @@ $result = $conn->query($query);
                     <th>W/L</th>
                     <th>Winrate</th>
                     <th>Elo</th>
+                    <th>Peak elo</th>
                 </tr>
                 <?php if ($result->num_rows > 0): ?>
                     <?php $rank = $offset + 1; ?>
@@ -145,7 +150,7 @@ $result = $conn->query($query);
                         <tr>
                             <td><?php echo $rank; ?></td>
                             <td><img src="<?php echo $tier_icon; ?>" alt="Tier Icon"></td> <!-- Affichage de l'image du tier -->
-                            <td><?php echo htmlspecialchars($row['nom_clan']); ?></td>
+                            <td><a target="_blank" href="https://corehalla.com/stats/clan/<?php echo $row['id_clan']; ?>"><?php echo htmlspecialchars($row['nom_clan']); ?></a></td>
                             <td><?php echo $games_played; ?></td>
                             <td>
                                 <?php echo $row['wins'] . ' - ' . $row['loses']; ?>
@@ -155,7 +160,8 @@ $result = $conn->query($query);
                                 </div>
                             </td>
                             <td class="winrate-cell"><?php echo number_format($winrate, 2); ?>%</td> <!-- Ajouter la classe pour le winrate -->
-                            <td><?php echo $row['elo_rating']; ?></td>
+                            <td style="color:#ffffff;" ><strong><?php echo $row['elo_rating']; ?></strong></td>
+                            <td style="color:#ffffff;" ><?php echo $row['elo_peak']; ?></td>
                         </tr>
                         <?php $rank++; ?>
                     <?php endwhile; ?>
@@ -173,11 +179,10 @@ $conn->close();
 
 
 
-
-
 <style>
 
 .main-container {
+
     align-items: center;
 }
 * {
@@ -207,9 +212,9 @@ $conn->close();
 }
 
 table {
-    width: 100%;
+    width: 90%;
     border-collapse: collapse;
-    background-color: #1f1f1f;
+    background-color: #131630;
 }
 
 thead {
@@ -221,8 +226,6 @@ th, td {
     text-align: left;
 }
 
-
-
 td {
     border-bottom: 1px solid #333;
 }
@@ -233,7 +236,7 @@ td img {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #222;
+    background-color: #191d43;
 }
 
 tbody tr:hover {

@@ -3,327 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard Table</title>
+    <title>Check-in Page</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="table-container">
-        <div class="pagination-controls">
-            <button id="prevBtn" onclick="prevPage()">Précédent</button>
-            <button id="nextBtn" onclick="nextPage()">Suivant</button>
+    <div class="container">
+        <div class="component" id="checkinComponent">
+            <h2>Check in</h2>
+            <div class="active-content">
+                <p>It's time to check into the match!</p>
+                <p>1 player from each team must check-in to complete this step.</p>
+                <div class="player-info">
+                    <img class="avatar" src="https://avatars.steamstatic.com/9fc24ad456cb250a4ca84a651ac4d36b43805b14_medium.jpg" alt="">
+                    <div class="player-details">
+                        <p>zBlackneight prime Leader</p>
+                        <p class="not-checked-in">Not checked in</p>
+                    </div>
+                </div>
+                <p class="remaining-checkin">1 more player must check-in</p>
+                <p class="disqualification-time">Automatic disqualification in <span id="countdown">1111</span></p>
+                <button class="checkin-button" onclick="activateComponent('game1Component')">Check in</button>
+            </div>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Tier</th>
-                    <th>Region</th>
-                    <th>Name</th>
-                    <th>Games</th>
-                    <th>W/L</th>
-                    <th>Winrate</th>
-                    <th>Elo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><img src="tier_icon_1.png" alt="Tier 1"></td>
-                    <td>US-E</td>
-                    <td>snowyXD</td>
-                    <td>209</td>
-                    <td>182W</td>
-                    <td>87.08%</td>
-                    <td>2521</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><img src="tier_icon_2.png" alt="Tier 2"></td>
-                    <td>SA</td>
-                    <td>NavOverYB</td>
-                    <td>146</td>
-                    <td>100W</td>
-                    <td>68.49%</td>
-                    <td>2489</td>
-                </tr>
-                
-                <!-- Continue adding rows similarly -->
-            </tbody>
-        </table>
+
+        <div class="component" id="game1Component">
+            <h2>Report game 1</h2>
+            <div class="active-content">
+                room
+            </div>
+        </div>
+
+        <div class="component" id="game2Component">
+            <h2>Report game 2</h2>
+        </div>
+
+        <div class="component" id="verifyComponent">
+            <h2>Verify match results</h2>
+        </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
 <style>
-* {
+    * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #fff;
+    background-image: url("./assets/img/background-connect.png"); /* ou .png si c'est le cas */
+    background-size: cover;      /* L'image couvre toute la page */
+    background-repeat: no-repeat; /* Évite que l'image se répète */
+    background-position: center; /* Centre l'image dans la page */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-.table-container {
-    width: 90%;
-    margin: 20px auto;
-    position: relative;
+.container {
+    width: 50%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
-.pagination-controls {
-    position: absolute;
-    top: -40px;
-    right: 0;
+.component {
+    margin-bottom: 20px;
 }
 
-.pagination-controls button {
+.active-content {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #795548;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.player-details p {
+    margin: 0;
+}
+
+.not-checked-in {
+    color: red;
+    font-weight: bold;
+}
+
+.remaining-checkin {
+    font-weight: bold;
+    color: #333;
+}
+
+.disqualification-time {
+    color: red;
+}
+
+.checkin-button {
+    background-color: #4CAF50;
+    color: white;
     padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #333;
-    color: #fff;
     border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto 0;
+}
+
+.checkin-button:hover {
+    background-color: #45a049;
+}
+
+.component:not(.active) {
+    display: none;
+}
+
+.component h2 {
+    padding: 15px;
+    text-align: center;
+    background-color: #f5f5f5;
+    border-radius: 10px;
     cursor: pointer;
 }
 
-.pagination-controls button:hover {
-    background-color: #444;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #1f1f1f;
-}
-
-thead {
-    background-color: #292929;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    text-transform: uppercase;
-    color: #a0a0a0;
-    font-size: 12px;
-    border-bottom: 2px solid #444;
-}
-
-td {
-    border-bottom: 1px solid #333;
-}
-
-td img {
-    width: 30px;
-    height: 30px;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #222;
-}
-
-tbody tr:hover {
-    background-color: #333;
-}
-
-td:nth-child(8) {
-    color: #69db7c; /* Green color for Elo */
-}
-
-td:nth-child(7) {
-    color: #69db7c; /* Green color for Winrate */
-}
-
-td:nth-child(6), td:nth-child(5) {
-    color: #ffad4d; /* Gold color for Win/Loss and Games */
-}
-
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    activateComponent('checkinComponent');
+});
+
+function activateComponent(componentId) {
+    const allComponents = document.querySelectorAll('.component');
+    allComponents.forEach(component => {
+        component.classList.remove('active');
+        component.style.display = 'none';
+    });
+
+    const activeComponent = document.getElementById(componentId);
+    activeComponent.classList.add('active');
+    activeComponent.style.display = 'block';
+}
+
+</script>

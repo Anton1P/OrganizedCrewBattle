@@ -4,7 +4,7 @@ $games_played = $row['wins'] + $row['loses'];
 $winrate = ($games_played > 0) ? ($row['wins'] / $games_played) * 100 : 0;
                         
 // Choix de l'image du tier en fonction de l'elo_rating
-    if ($row['elo_rating'] >= 2000) {
+    if ($row['elo_rating'] >= 2000 || $row['elo_peak'] >= 2000) {
       $tier_icon = "../assets/img/Diamond.webp";
     } elseif ($row['elo_rating'] >= 1936 ) {
      $tier_icon = "../assets/img/Platinum 5.webp";
@@ -26,6 +26,9 @@ $winrate = ($games_played > 0) ? ($row['wins'] / $games_played) * 100 : 0;
         $tier_icon = "../assets/img/Gold 2.webp";
        }elseif ($row['elo_rating'] >= 1390 ) {
         $tier_icon = "../assets/img/Gold 1.webp";
+       }
+       elseif ($row['elo_rating'] >= 1181 ) {
+        $tier_icon = "../assets/img/silver.png";
        }
     else {
       $tier_icon = "../assets/img/Diamond.webp";

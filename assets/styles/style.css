@@ -210,6 +210,11 @@ body {
   margin-top: 25px;
   display: flex;
 }
+.user-box-member {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-around;
+}
 .user-box + .user-box {
   margin-top: 20px;
 }
@@ -1209,9 +1214,34 @@ th, td {
  }
 td a {
   text-decoration: none; /* Supprime le soulignement */
-  color: #b252bf; /* Utilise la même couleur que le texte environnant */
+  color: #9b9ca7; /* Utilise la même couleur que le texte environnant */
 }
 td a:hover{
   text-decoration: none; /* Supprime le soulignement */
-  color: #883b92; /* Utilise la même couleur que le texte environnant */
+  color: #4255d3; /* Utilise la même couleur que le texte environnant */
+}
+::-webkit-scrollbar {
+  width: 8px; /* Largeur de la scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Couleur du fond de la piste */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #1a2157; /* Couleur de la barre de scroll */
+  border-radius: 10px; /* Coins arrondis */
+  border: 2px solid transparent; /* Épaissir la barre avec un padding interne */
+  background-clip: padding-box; /* Pour que la bordure ne mange pas la couleur */
+}
+
+/* Style pour Firefox */
+* {
+  scrollbar-width: thin; /* Scrollbar fine */
+  scrollbar-color: #1a2157 transparent; /* Couleur de la barre et de la piste */
+}
+
+/* Pour arrondir les coins de la scrollbar sur Firefox */
+::-moz-scrollbar-thumb {
+  border-radius: 10px;
 }

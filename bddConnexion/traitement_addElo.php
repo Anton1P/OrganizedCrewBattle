@@ -82,11 +82,11 @@ $sql_update = "UPDATE clans SET elo_rating = ?, wins = ?, loses = ? WHERE id_cla
 $stmt_update = $conn->prepare($sql_update);
 
 // Mise à jour pour le clan demandeur
-$stmt_update->bind_param("diii", $new_elo_demandeur, $clans[$id_clan_demandeur]['wins'], $clans[$id_clan_demandeur]['loses'], $id_clan_demandeur);
+$stmt_update->bind_param("iiii", $new_elo_demandeur, $clans[$id_clan_demandeur]['wins'], $clans[$id_clan_demandeur]['loses'], $id_clan_demandeur);
 $stmt_update->execute();
 
 // Mise à jour pour le clan receveur
-$stmt_update->bind_param("diii", $new_elo_receveur, $clans[$id_clan_receveur]['wins'], $clans[$id_clan_receveur]['loses'], $id_clan_receveur);
+$stmt_update->bind_param("iiii", $new_elo_receveur, $clans[$id_clan_receveur]['wins'], $clans[$id_clan_receveur]['loses'], $id_clan_receveur);
 $stmt_update->execute();
 
 // Suppression du tournoi après mise à jour des scores et Elo
@@ -111,6 +111,37 @@ if ($resultat_demandeur == 1) {
 $stmt_insert_result->bind_param("iii", $id_tournoi, $id_winner, $id_loser);
 $stmt_insert_result->execute();
 
+
+// Récupérer les elo_peak actuels des deux clans
+$sql_peak = "SELECT id_clan, elo_peak FROM clans WHERE id_clan IN (?, ?)";
+$stmt_peak = $conn->prepare($sql_peak);
+$stmt_peak->bind_param("ii", $id_clan_demandeur, $id_clan_receveur);
+$stmt_peak->execute();
+$result_peak = $stmt_peak->get_result();
+
+$elo_peaks = [];
+while ($row_peak = $result_peak->fetch_assoc()) {
+    $elo_peaks[$row_peak['id_clan']] = $row_peak['elo_peak'];
+}
+
+// Mettre à jour le elo_peak pour le clan demandeur si nécessaire
+if ($new_elo_demandeur > $elo_peaks[$id_clan_demandeur]) {
+    $sql_update_peak = "UPDATE clans SET elo_peak = ? WHERE id_clan = ?";
+    $stmt_update_peak = $conn->prepare($sql_update_peak);
+    $stmt_update_peak->bind_param("ii", $new_elo_demandeur, $id_clan_demandeur);
+    $stmt_update_peak->execute();
+}
+
+// Mettre à jour le elo_peak pour le clan receveur si nécessaire
+if ($new_elo_receveur > $elo_peaks[$id_clan_receveur]) {
+    $sql_update_peak = "UPDATE clans SET elo_peak = ? WHERE id_clan = ?";
+    $stmt_update_peak = $conn->prepare($sql_update_peak);
+    $stmt_update_peak->bind_param("ii", $new_elo_receveur, $id_clan_receveur);
+    $stmt_update_peak->execute();
+}
+
+$stmt_peak->close();
+$stmt_update_peak->close();
 $stmt_update->close();
 $stmt_tournoi->close();
 $stmt_delete->close();

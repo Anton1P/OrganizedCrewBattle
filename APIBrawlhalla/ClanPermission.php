@@ -23,6 +23,7 @@ if (!empty($clan_members)) {
 }
 
 if($_SESSION['userData']['steam_id'] == 76561198877699338){
+    $rank = "Leader";
     $isAdmin = true;
 }
 
