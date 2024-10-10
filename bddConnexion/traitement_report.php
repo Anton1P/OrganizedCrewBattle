@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_update_time->execute();
                 $stmt_update_time->close();
 
-                $_SESSION['notification'] = "Le clan demandeur vien ou à déjà reporté le résultat. En attente du clan receveur.";
+                $_SESSION['notification'] = "Le clan demandeur vien de reporté le résultat. En attente du clan receveur.";
                 header("Location: ../view/AdminPanel.php");
                 exit();
             }
@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_update_time->execute();
                 $stmt_update_time->close();
 
-                $_SESSION['notification'] = "Le clan receveur vien ou à déjà reporté le résultat. En attente du clan demandeur.";
+                $_SESSION['notification'] = "Le clan receveur vien de reporté le résultat. En attente du clan demandeur.";
                 header("Location: ../view/AdminPanel.php");
                 exit();
             }

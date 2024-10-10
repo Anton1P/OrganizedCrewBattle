@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 08 oct. 2024 à 13:40
+-- Généré le : mer. 09 oct. 2024 à 14:47
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -47,16 +47,17 @@ CREATE TABLE `clans` (
   `nom_clan` varchar(30) NOT NULL COMMENT 'Nom du clan',
   `wins` int(8) NOT NULL COMMENT 'Nombre de victoires',
   `loses` int(8) NOT NULL COMMENT '	Nombre de défaites',
-  `elo_rating` int(8) NOT NULL COMMENT '	Points ELO'
+  `elo_rating` int(8) NOT NULL COMMENT '	Points ELO',
+  `elo_peak` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `clans`
 --
 
-INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`) VALUES
-(257, 'lol', 0, 11, 1287),
-(2161882, 'Asakai', 11, 0, 1513);
+INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`, `elo_peak`) VALUES
+(2161882, 'Asakai', 15, 6, 1599, 1599),
+(5275542, 'LeCronningDeLanimal(rebecca)', 255, 4, 1919, 2001);
 
 -- --------------------------------------------------------
 
@@ -189,7 +190,10 @@ CREATE TABLE `tournoi_results` (
 --
 
 INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`) VALUES
-(4, 57, 2161882, 257);
+(6, 64, 5275542, 2161882),
+(7, 65, 2161882, 5275542),
+(8, 66, 2161882, 5275542),
+(9, 67, 2161882, 5275542);
 
 -- --------------------------------------------------------
 
@@ -306,7 +310,7 @@ ALTER TABLE `verif_report`
 -- AUTO_INCREMENT pour la table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT pour la table `moderation_access`
@@ -318,25 +322,25 @@ ALTER TABLE `moderation_access`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=58;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi_results`
 --
 ALTER TABLE `tournoi_results`
-  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Contraintes pour les tables déchargées

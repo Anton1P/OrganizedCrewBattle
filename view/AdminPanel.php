@@ -115,7 +115,7 @@ include "../bddConnexion/loadData.php";
 
                          
                          <div  class="activity card" style="--delay: 0.5s;">
-                             <?php include "../bddConnexion/traitement_tournoiUpdate.php"; ?>
+                             <?php include "../bddConnexion/traitement_tournoiUpdate.php";?>
                          </div>
                     </div>
                     <div class="user-box second-box">
@@ -154,7 +154,7 @@ include "../bddConnexion/loadData.php";
                                         </div>
 
                                         <div style="max-width: 350px;">
-                                             <canvas id="myChart" width="350" height="350"></canvas> <!-- Réduction de la taille du canvas -->
+                                             <canvas id="myChart" width="350" height="350"></canvas>
                                         </div>
                                    </div>      
                               </div>
@@ -166,16 +166,66 @@ include "../bddConnexion/loadData.php";
                          
                     </div>
                </div>
-               <!-- partial -->
-               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-               <script src="./assets/script/script.js"></script>
           </div>
      </body>
 </html>
 
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <script src="../assets/script/script.js"></script>
+
+<?php include "../bddConnexion/data_clan.php";?>
+
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: [
+      'Wins',
+      'Loses'
+    ],
+    datasets: [{
+      data: [<?php echo json_encode($data["wins"]); ?>, <?php echo json_encode($data["loses"]); ?>],
+      backgroundColor: [
+        '#325dd9',
+        '#c32c1d'
+      ],
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    responsive: false,
+    maintainAspectRatio: false, // Maintient la taille définie
+    cutout: '70%', // Contrôle l'épaisseur du cercle (plus la valeur est grande, plus le trou est large)
+    plugins: {
+      legend: {
+        display: true 
+      },
+      datalabels: {
+        formatter: (value, context) => {
+          // Calculer le pourcentage
+          let total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+          let percentage = (value / total * 100).toFixed(2) + '%';
+          return percentage; // Retourner le pourcentage à afficher
+        },
+        color: '#fff', // Couleur des labels
+        font: {
+          weight: 'bold',
+          size: 12
+        }
+      }
+    }
+  },
+  plugins: [ChartDataLabels] // Active le plugin de labels
+});
+
+</script>
 
 <script>
     const notificationIcon = document.getElementById('notificationIcon');
@@ -215,3 +265,63 @@ include "../bddConnexion/loadData.php";
         });
     });
 </script>
+
+<script>
+    // Fonction pour faire la requête AJAX
+   function checkReport() {
+    $.ajax({
+        url: '../bddConnexion/chronoVerification.php', // Fichier qui vérifie le temps écoulé
+        type: 'POST',
+        data: {
+            id_tournoi: <?php echo $_SESSION['id_tournoi']; ?>,
+            id_clan_demandeur: <?php echo $_SESSION['id_clan_demandeur']; ?>,
+            id_clan_receveur: <?php echo $_SESSION['id_clan_receveur']; ?>
+        },
+        success: function(response) {
+            const data = JSON.parse(response);
+            if (data.status === 'redirect') {
+                // Rediriger avec les données de formulaire
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '../view/matchVerif.php';
+                
+                for (const key in data.formData) {
+                    let input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = data.formData[key];
+                    form.appendChild(input);
+                }
+                
+                document.body.appendChild(form);
+                form.submit();
+            } else if (data.status === 'success') {
+                window.location.href = data.redirect; // Redirection vers la page de traitement ELO
+            } else if (data.status === 'waiting') {
+                $('#response-container').html(data.message);
+            } else if (data.status === 'no_report') {
+                $('#response-container').html(data.message);
+            }
+        },
+        error: function() {
+            console.error("Erreur lors de la vérification du report.");
+            location.reload();
+        }
+    });
+}
+
+    // Fonction pour démarrer les requêtes AJAX toutes les secondes après le premier appel
+    function updateTimerAndCheckReport() {
+        // Lancer la première requête immédiatement
+        checkReport();
+
+        // Ensuite, exécuter la requête chaque seconde
+        setInterval(function() {
+            checkReport();
+        }, 1000); // Toutes les secondes
+    }
+
+    // Démarrer la fonction
+    updateTimerAndCheckReport();
+</script>
+

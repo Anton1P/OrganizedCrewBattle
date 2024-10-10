@@ -20,6 +20,7 @@
 <?php
 include "../bddConnexion/bddConnexion.php";
 include "../APIBrawlhalla/traductions.php";
+include "../APIBrawlhalla/security.php";
 
 if (isset($_SERVER['HTTP_REFERER'])) {
     $referer = $_SERVER['HTTP_REFERER'];
@@ -33,12 +34,47 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         $id_clan_receveur = $_GET['id_clan_receveur'];
         $brawlhalla_room = $_GET['brawlhalla_room'];
         
-        // Détails du tournoi
+        // Vérifier si les deux clans sont d'accord sur le résultat
+        $sql_verif = "SELECT * FROM verif_report WHERE id_tournoi = ?";
+        $stmt_verif = $conn->prepare($sql_verif);
+        $stmt_verif->bind_param("i", $id_tournoi);
+        $stmt_verif->execute();
+        $result_verif = $stmt_verif->get_result();
+
+        if ($result_verif->num_rows > 0) {
+            $verif_data = $result_verif->fetch_assoc();
+            
+            echo $verif_data['id_tournoi']; // Debugging pour voir si les données existent
+            echo "1"; // Debugging pour vérifier le flux d'exécution
+
+            // Vérifier si le clan connecté est le demandeur ou le receveur
+            if ($clan_id == $id_clan_demandeur) {
+                if ($verif_data['clan_demandeur_report'] == 1) {
+                    $_SESSION['notification'] = "Le clan demandeur a déjà reporté le résultat. En attente du clan receveur.";
+                    header("Location: ../view/AdminPanel.php");
+                    exit();
+                }
+            } elseif ($clan_id == $id_clan_receveur) {
+                if ($verif_data['clan_receveur_report'] == 1) {
+                    $_SESSION['notification'] = "Le clan receveur a déjà reporté le résultat. En attente du clan demandeur.";
+                    header("Location: ../view/AdminPanel.php");
+                    exit();
+                }
+            } else {
+                $_SESSION['notification'] = "Erreur : clan non reconnu.";
+                    header("Location: ../view/AdminPanel.php");
+                    exit();
+            }
+        } 
+
+        // Si aucun résultat n'a encore été reporté, afficher les détails du tournoi
         echo "<h2>Détails du tournoi</h2>";
         echo "<p>Format : " . $tournamentFormats[$format] . "</p>";
         echo "<p>Clan Demandeur : " . $clanTranslations[$id_clan_demandeur] . "</p>";
         echo "<p>Clan Receveur : " . $clanTranslations[$id_clan_receveur] . "</p>";
         echo "<p>Salle Brawlhalla : #" . htmlspecialchars($brawlhalla_room) . "</p>";
+
+
     }
 } else {
 

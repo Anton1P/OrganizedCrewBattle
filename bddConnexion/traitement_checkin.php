@@ -53,10 +53,8 @@ if ($result->num_rows > 0) {
         echo "<form action='../view/tournoiReport.php' method='POST'>
                 <input type='hidden' name='id_tournoi' value='$id_tournoi'>
                 <input type='hidden' name='role' value='$role'>
-                <button type='submit' name='checkin'>Check-in</button>
+                <button  class='checkin-button' onclick='activateComponent(\'game1Component\')' type='submit' name='checkin'>Check-in</button>
               </form>";
-    } else {
-        echo "<p>Vous venez de faire votre check-in.</p>";
     }
 } else {
     echo "Aucune donnée de check-in trouvée pour ce tournoi.";

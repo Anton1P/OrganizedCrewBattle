@@ -9,13 +9,27 @@
 });
 </script>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-in Page</title>
+    <link rel="stylesheet" href="../assets/styles/tournoiReport.css">
+</head>
+<body>
+    <div class="container">
+
+
 <?php
 include "../bddConnexion/bddConnexion.php";
 include "../APIBrawlhalla/security.php";
 include "../APIBrawlhalla/traductions.php";
 
 $id_clan = $_SESSION['brawlhalla_data']['clan_id'];
-// SQL pour récupérer les informations du tournoi du clan connecté
+$is_checked_in_ennemy = 0;
+$is_checked_in = 0;
+
 $sql = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND accepted = 1";
 $stmt = $conn->prepare($sql);
 
@@ -58,96 +72,102 @@ if ($result->num_rows > 0) {
 
             $tournoi_checkin = false;
             // Vérifier si les deux clans ont fait leur check-in
-            $sql_check = "SELECT clan_demandeur_checkin, clan_receveur_checkin FROM checkin WHERE id_tournoi = ?";
+            $sql_check = "SELECT * FROM checkin WHERE id_tournoi = ?";
             $stmt_check = $conn->prepare($sql_check);
             $stmt_check->bind_param("i", $id_tournoi);
             $stmt_check->execute();
             $result_check = $stmt_check->get_result();
 
-            if ($result_check->num_rows > 0) {
-                $checkin_data = $result_check->fetch_assoc();     
-                if ($checkin_data['clan_demandeur_checkin'] == 1 && $checkin_data['clan_receveur_checkin'] == 1) {
-                    $tournoi_checkin = true;
-                }
-                else{
-                    $tournoi_checkin = false;
+                if ($result_check->num_rows > 0) {
+                    $checkin_data = $result_check->fetch_assoc();
                     
-                }
-            }
-      
-            // All check message
-            if ($tournoi_checkin == false){
-                echo "<div style='border: 2px solid red; padding: 10px; margin-top: 20px; background-color: #ffe6e6;'>";
-                echo "<h3>Avertissement</h3>";
-                echo "<p>Si vous quittez cette page 15 minutes après le début du tournoi, alors le tournoi sera supprimé.</p>";
-                echo "<p>Attednez que votre adversaire check-in (DQ in 15m)</p>";
-                echo "<p id='compteur'></p>";  
-                echo "</div>";
-            } 
-            else{
-                echo "<div style='border: 2px solid green; padding: 10px; margin-top: 20px; background-color: #2fff2f66  ;'>";
-                echo "Les deux clans ont check-in, le match est prêt.";
-                echo "</div>";
-            }
-         
-                // Détails du tournoi
-                echo "<h2>Détails du tournoi</h2>";
-                echo "<p>Date de la rencontre : " . $date_rencontre->format('d/m/Y H:i') . "</p>";
-                echo "<p>Format : " . $tournamentFormats[$format] . "</p>";
-                echo "<p>Clan Demandeur : " . $clanTranslations[$id_clan_demandeur] . "</p>";
-                echo "<p>Clan Receveur : " . $clanTranslations[$id_clan_receveur] . "</p>";
-                
-                $sql_joueurs = "SELECT id_player FROM player_tournoi WHERE id_tournoi = ?";
-                $stmt_joueurs = $conn->prepare($sql_joueurs);
-                $stmt_joueurs->bind_param("i", $id_tournoi);
-                $stmt_joueurs->execute();
-                $result_joueurs = $stmt_joueurs->get_result();
-
-                echo "<h3>Joueurs Choisis pour le Tournoi :</h3>";
-                if ($result_joueurs->num_rows > 0) {
-                    echo "<ul>";
-                    while ($joueur = $result_joueurs->fetch_assoc()) {
-                        echo "<li>" . htmlspecialchars($joueur['id_player']) . "</li>";
-                    }
-                    echo "</ul>";
-                } else {
-                    echo "<p>Aucun joueur sélectionné.</p>";
-                }
-
-                include "../bddConnexion/traitement_checkin.php";
-
-                if($is_checked_in == 1){
-                    if ($brawlhalla_room != 0) {
-                        echo "<p>Brawlhalla room : #" . $brawlhalla_room . "</p>";
+                    if ($id_clan == $id_clan_demandeur) {
+                        // Le clan connecté est le demandeur
+                        $is_checked_in = $checkin_data['clan_demandeur_checkin'];
+                        $is_checked_in_ennemy = $checkin_data['clan_receveur_checkin'];
+                    } elseif ($id_clan == $id_clan_receveur) {
+                        // Le clan connecté est le receveur
+                        $is_checked_in = $checkin_data['clan_receveur_checkin'];
+                        $is_checked_in_ennemy = $checkin_data['clan_demandeur_checkin'];
                     } else {
-                        echo "<p>Brawlhalla room : Room à setup</p>";
+                        $is_checked_in = 0; 
+                        $is_checked_in_ennemy = 0;
                     }
 
-                    // Si brawlhalla_room est vide, afficher le formulaire
-                    if (empty($brawlhalla_room)) {
-                        echo "<h3>Ajouter la salle Brawlhalla</h3>";
-                        echo '<form action="../view/tournoiReport.php" method="POST">';
-                        echo '<label for="brawlhalla_room">Numéro de salle (6 chiffres) :</label>';
-                        echo '<input type="number" id="brawlhalla_room" name="brawlhalla_room" required min="100000" max="999999" oninput="validateInput(this)">';
-                        echo '<input type="hidden" name="id_tournoi" value="' . $id_tournoi . '">';
-                        echo '<br><br>';
-                        echo '<input type="submit" value="Enregistrer">';
-                        echo '</form>';
+                    if ($checkin_data['clan_demandeur_checkin'] == 1 && $checkin_data['clan_receveur_checkin'] == 1) {
+                        $tournoi_checkin = true;
                     }
-                    elseif($tournoi_checkin == true){
+                    else{
+                        $tournoi_checkin = false;
+                        
+                    }
+                }
+        
+                // All check message
+                if ($tournoi_checkin == false){
+                    echo '<div class="component" id="checkinComponent">';
+                    echo '<h2>Check in</h2>';
+                    echo '<div class="active-content">';
+                    echo '<p>It\'s time to check into the match!</p>';
+                    echo '<p>1 player from each team must check-in to complete this step.</p>';
+                    echo '<div class="player-info">';
+                    echo '<img class="avatar" src="' .$avatar.'" alt="">';
+                    echo '<div class="player-details">';
+                    echo '<p>'. $name .' <strong>'.$rank.'</strong></p>';
+                        if($is_checked_in == 0){
+                            echo '<p class="not-checked-in">Not checked in</p>';
+                        }
+                        else{
+                            echo '<p class="checked-in">Check in !</p>';
+                        }
+                    echo '</div>';
+                    echo '</div>';
+                        if($is_checked_in == 0 && $is_checked_in_ennemy == 0){
+                            echo '<p class="remaining-checkin">2 more player must check-in</p>';
+                        }
+                        elseif($is_checked_in == 0 && $is_checked_in_ennemy == 1 || $is_checked_in == 1 && $is_checked_in_ennemy == 0 ){
+                            echo '<p class="remaining-checkin">1 more player must check-in</p>';
+                        }
+                 
+                    echo '<p class="disqualification-time">Automatic disqualification at +15 : <span id="compteur"></span></p>';
+                    include "../bddConnexion/traitement_checkin.php";
+                    echo '</div>';
+                    echo '</div>';
+                } 
+            // Si le check-in est réussi, activer le composant game1Component
+                if ($tournoi_checkin == true ) {
+                    echo '<div class="component" id="game1Component">';
+                    echo '<h2>Brawlhalla room</h2>';
+                    echo '<div class="active-content">';
+                    echo '<form action="../view/tournoiReport.php" method="POST">';
+                    echo '<label for="brawlhalla_room">Room number (6 digits) : </label>';
+                    echo '<input type="number" id="brawlhalla_room" name="brawlhalla_room" required min="100000" max="999999" oninput="validateInput(this)">';
+                    echo '<input type="hidden" name="id_tournoi" value="' . $id_tournoi . '">';
+                    echo '<br><br>';
+                    echo '<input class="checkin-button" type="submit" value="Submit">';
+                    echo '</form>';
+                    echo '</div>';
+                    echo '</div>';
+                }
 
-                            echo '<a href="resultReport.php?id_tournoi=' . $id_tournoi .
-                                 '&date_rencontre=' . urlencode($date_rencontre->format('Y-m-d H:i:s')) .
-                                 '&format=' . $format .
-                                 '&id_clan_demandeur=' . $id_clan_demandeur .
-                                 '&id_clan_receveur=' . $id_clan_receveur .
-                                 '&brawlhalla_room=' . $brawlhalla_room .
-                                 '">Report</a> <br>';
-                    }
+                if (!empty($brawlhalla_room) && $tournoi_checkin == true) {
+                    echo '<div class="component" id="game2Component">';
+                    echo '<h2>Report the Crewbattle</h2>';
+                    echo '<div class="active-content">';
+                    echo '<div id="response-container">Nobody reported the match yet</div>';
+                    echo '<a class="checkin-button"  href="resultReport.php?id_tournoi=' . $id_tournoi .
+                    '&date_rencontre=' . urlencode($date_rencontre->format('Y-m-d H:i:s')) .
+                    '&format=' . $format .
+                    '&id_clan_demandeur=' . $id_clan_demandeur .
+                    '&id_clan_receveur=' . $id_clan_receveur .
+                    '&brawlhalla_room=' . $brawlhalla_room .
+                    '">Report</a> <br>';
+                    echo '</div>';
+                    echo '</div>';
                 }
             }
             else{
-                header("Location: ../view/AdminPanel.php");
+                    header("Location: ../view/AdminPanel.php");
             }
         } else {
             $_SESSION['notification'] = "Impossible de se rendre sur la page report du tournoi comme cela";
@@ -164,27 +184,37 @@ if ($result->num_rows > 0) {
 
      // Mettre à jour la colonne brawlhalla_room dans la base de données
      if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($brawlhalla_room)) {
-        $id_tournoi = $_POST['id_tournoi'];
-        $brawlhalla_room = $_POST['brawlhalla_room'];
-    
-        $sql = "UPDATE tournoi SET brawlhalla_room = ? WHERE id_tournoi = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("si", $brawlhalla_room, $id_tournoi);
-    
-        if ($stmt->execute()) {
-            header("Location: ../view/tournoiReport.php");
-            exit();
-        } else {
-            echo "Erreur lors de la mise à jour de la salle Brawlhalla: " . $stmt->error;
+        if(isset($_POST['id_tournoi']) && isset($_POST['brawlhalla_room'])){
+            $id_tournoi = $_POST['id_tournoi'];
+            $brawlhalla_room = $_POST['brawlhalla_room'];
+        
+            $sql = "UPDATE tournoi SET brawlhalla_room = ? WHERE id_tournoi = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("si", $brawlhalla_room, $id_tournoi);
+
+            if ($stmt->execute()) {
+                header("Location: ../view/tournoiReport.php");
+                exit();
+            } else {
+                echo "Erreur lors de la mise à jour de la salle Brawlhalla: " . $stmt->error;
+            }
+            $stmt->close();
         }
-    
-        $stmt->close();
     }
-
-
 ?>
 
-<div id="response-container">Personne n'a encore report.</div>
+
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+
 
 
 
@@ -195,15 +225,37 @@ if ($result->num_rows > 0) {
 
 
 <script>
-    function validateInput(input) {
-    // Supprimer les caractères non numériques
-    input.value = input.value.replace(/[^0-9]/g, '');
-    
-    // Limiter à 6 chiffres
-    if (input.value.length > 6) {
-        input.value = input.value.slice(0, 6);
+var tournoi_checkin = <?php echo json_encode($tournoi_checkin); ?>;
+var brawlhalla_room = <?php echo json_encode($brawlhalla_room); ?>;
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Vérification des conditions basées sur les variables PHP
+    if (tournoi_checkin === false) {
+        // Si le check-in n'est pas fait, afficher le composant de check-in
+        activateComponent('checkinComponent');
+    } else if (tournoi_checkin === true && brawlhalla_room == 0) {
+        // Si le check-in est fait et la salle Brawlhalla n'est pas encore définie
+        activateComponent('game1Component');
+    } else if (tournoi_checkin === true && brawlhalla_room !== 0) {
+        // Si le check-in est fait et que la salle est définie
+        activateComponent('game2Component');
     }
+});
+
+function activateComponent(componentId) {
+    const allComponents = document.querySelectorAll('.component');
+    allComponents.forEach(component => {
+        component.style.display = 'none'; // Masquer tous les composants
+    });
+
+    const activeComponent = document.getElementById(componentId);
+    activeComponent.style.display = 'block'; // Afficher le composant activé
 }
+</script>
+
+<script src="../assets/script/"></script>
+
+<script>
 // Initialiser le compte à rebours pour le tournoi
 let timestampRencontre = <?php echo $date_rencontre->getTimestamp(); ?>;  // Timestamp de la rencontre
 let compteurElem = document.getElementById('compteur');
@@ -218,7 +270,7 @@ function mettreAJourCompteur() {
         let secondes = Math.abs(secondesRestantes) % 60;
         
         let signe = secondesRestantes > 0 ? '-' : '+';  // Affiche '-' avant le début et '+' après
-        compteurElem.innerText = 'Temps jusqu\'à la rencontre : ' + signe + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
+        compteurElem.innerText =  signe + String(minutes).padStart(2, '0') + ':' + String(secondes).padStart(2, '0');
 
         // Vérification si 15 minutes sont écoulées après le début du tournoi
         if (secondesRestantes < -900) { // 15 minutes (900 secondes) après la rencontre
@@ -231,6 +283,19 @@ function mettreAJourCompteur() {
 // Mettre à jour le compteur chaque seconde
 let intervalle = setInterval(mettreAJourCompteur, 1000);
 mettreAJourCompteur();  
+</script>
+
+
+<script>
+    function validateInput(input) {
+    // Supprimer les caractères non numériques
+    input.value = input.value.replace(/[^0-9]/g, '');
+    
+    // Limiter à 6 chiffres
+    if (input.value.length > 6) {
+        input.value = input.value.slice(0, 6);
+    }
+}
 
 function verifierCheckin(tournoiID) {
     // Appel AJAX pour vérifier si les deux équipes ont fait leur check-in
@@ -243,6 +308,9 @@ function verifierCheckin(tournoiID) {
             if (response.checkin_demandeur == 0 || response.checkin_receveur == 0) {
                 // Si l'une des équipes n'a pas check-in, supprimer le tournoi
                 supprimerTournoi(tournoiID);
+            }
+            if(response.checkin_demandeur == 1 || response.checkin_receveur == 1){
+                location.reload(); 
             }
         }
     };
@@ -263,28 +331,56 @@ function supprimerTournoi(tournoiID) {
     xhr.send("id_tournoi=" + tournoiID);
 }
 </script>
+
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 
 <script>
     // Fonction pour faire la requête AJAX
     function checkReport() {
-        $.ajax({
-            url: '../bddConnexion/chronoVerification.php',  // Fichier qui vérifie le temps écoulé
-            type: 'POST',
-            data: {
-                id_tournoi: <?php echo $id_tournoi; ?>, // Vous devez passer ici l'ID du tournoi
-                id_clan_demandeur: <?php echo $id_clan_demandeur; ?>, // ID du clan demandeur
-                id_clan_receveur: <?php echo $id_clan_receveur; ?>  // ID du clan receveur
-            },
-            success: function(response) {
-                // Afficher la réponse dans le conteneur
-                $('#response-container').html(response);
-            },
-            error: function() {
-                window.location.href = '../view/AdminPanel.php'
+    $.ajax({
+        url: '../bddConnexion/chronoVerification.php', // Fichier qui vérifie le temps écoulé
+        type: 'POST',
+        data: {
+            id_tournoi: <?php echo $_SESSION['id_tournoi']; ?>,
+            id_clan_demandeur: <?php echo $_SESSION['id_clan_demandeur']; ?>,
+            id_clan_receveur: <?php echo $_SESSION['id_clan_receveur']; ?>
+        },
+        success: function(response) {
+            const data = JSON.parse(response);
+            if (data.status === 'redirect') {
+                // Rediriger avec les données de formulaire
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '../view/matchVerif.php';
+                
+                for (const key in data.formData) {
+                    let input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = data.formData[key];
+                    form.appendChild(input);
+                }
+                
+                document.body.appendChild(form);
+                form.submit();
+            } else if (data.status === 'success') {
+                window.location.href = data.redirect; // Redirection vers la page de traitement ELO
+            } else if (data.status === 'waiting') {
+                $('#response-container').html(data.message);
+            } else if (data.status === 'no_report') {
+                $('#response-container').html(data.message);
             }
-        });
-    }
+        },
+        error: function() {
+            console.error("Erreur lors de la vérification du report.");
+            location.reload();
+        }
+    });
+}
 
     // Fonction pour démarrer les requêtes AJAX toutes les secondes après le premier appel
     function updateTimerAndCheckReport() {
