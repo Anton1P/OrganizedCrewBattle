@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Vérifier que au moins un clan a été sélectionné
+// Vérifier qu'au moins un clan a été sélectionné
 if (!empty($askClan_id) && !empty($askedClan_ids)) {
     foreach ($askedClan_ids as $askedClan_id) {
         // Vérifier si la combinaison des deux clans existe déjà dans le tournoi
@@ -48,8 +48,30 @@ if (!empty($askClan_id) && !empty($askedClan_ids)) {
             $stmt_check_clan->bind_param("i", $askedClan_id);
             $stmt_check_clan->execute();
             $result_clan = $stmt_check_clan->get_result();
-        
+
             if ($result_clan->num_rows > 0) {
+                // Vérifier si le clan a déjà fait une demande de tournoi
+                $sql_check_previous_request = "SELECT * FROM tournoi WHERE id_clan_demandeur = ?";
+                $stmt_check_previous_request = $conn->prepare($sql_check_previous_request);
+                $stmt_check_previous_request->bind_param("i", $askClan_id);
+                $stmt_check_previous_request->execute();
+                $result_previous_request = $stmt_check_previous_request->get_result();
+
+                if ($result_previous_request->num_rows > 0) { 
+                    // On a trouvé des demandes de tournoi pour ce clan
+                    while ($previous_data = $result_previous_request->fetch_assoc()) {
+                        $previous_date = new DateTime($previous_data['date_rencontre']);
+                        $new_date = new DateTime($date_rencontre);
+                        $diff = $new_date->diff($previous_date);  
+                        // Vérifiez si la nouvelle date est d'au moins 1 heure plus tard
+                        if ($diff->h < 1 && $diff->days == 0) { // Moins d'une heure, mais le même jour
+                            $_SESSION['notification'] = "Erreur : Vous avez déjà demandé un tournois ayant le même jours avec moins d'heure d'intervale";
+                            header("Location: ../view/askForm.php");
+                            exit();
+                        }
+                    }
+                }
+
                 // Préparation de la requête d'insertion du tournoi
                 $sql_insert = "INSERT INTO tournoi (id_clan_demandeur, id_clan_receveur, date_rencontre, format, accepted) 
                                VALUES (?, ?, ?, ?, ?)";

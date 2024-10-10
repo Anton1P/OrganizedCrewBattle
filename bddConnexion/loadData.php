@@ -10,7 +10,7 @@ if ($result->num_rows > 0) {
 } else {
 
     // Préparer la requête d'insertion
-    $sql = "INSERT INTO clans (id_clan, nom_clan, wins, loses, elo_rating) VALUES ($clan_id , '$clan_name', 0, 0, 1200)";
+    $sql = "INSERT INTO clans (id_clan, nom_clan, wins, loses, elo_rating, elo_peak) VALUES ($clan_id , '$clan_name', 0, 0, 1200, 1200)";
 
         if ($conn->query($sql) === TRUE) {
             // echo "Nouveau clan créé avec succès !";

@@ -5,7 +5,8 @@ include "../bddConnexion/bddConnexion.php";
 // Initialisation de la réponse
 $response = [
     'status' => 'error',
-    'message' => ''
+    'message' => '',
+    'match_verified' => false // Ajoutez une clé pour indiquer si le match a été vérifié
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -33,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'id_clan_demandeur' => $id_clan_demandeur,
                     'id_clan_receveur' => $id_clan_receveur
                 ];
+                $response['match_verified'] = true; 
             } else {
                 $report_time = new DateTime($data['report_time']);
                 $now = new DateTime();
@@ -48,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $response['status'] = 'waiting';
                     $response['message'] = "Une personne a déjà reporté la partie. Il vous reste " . $time_remaining . " minutes avant l'auto-report.";
                 }
+                $response['match_verified'] = true;
             }
         } else {
             $response['status'] = 'no_report';

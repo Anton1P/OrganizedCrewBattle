@@ -279,6 +279,12 @@ new Chart(ctx, {
         },
         success: function(response) {
             const data = JSON.parse(response);
+
+            if (data.match_verified) {
+                console.log('Le match a déjà été vérifié.');
+                return; 
+            }
+
             if (data.status === 'redirect') {
                 // Rediriger avec les données de formulaire
                 let form = document.createElement('form');
@@ -305,7 +311,6 @@ new Chart(ctx, {
         },
         error: function() {
             console.error("Erreur lors de la vérification du report.");
-            location.reload();
         }
     });
 }
@@ -318,7 +323,7 @@ new Chart(ctx, {
         // Ensuite, exécuter la requête chaque seconde
         setInterval(function() {
             checkReport();
-        }, 1000); // Toutes les secondes
+        }, 10000); // Toutes les secondes
     }
 
     // Démarrer la fonction
