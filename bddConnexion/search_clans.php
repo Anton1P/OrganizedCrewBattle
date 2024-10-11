@@ -9,12 +9,13 @@ if (isset($_POST['search'])) {
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
-        // Afficher les résultats sous forme de cases à cocher
+        // Afficher les résultats sous forme de liens
         while ($row = $result->fetch_assoc()) {
-            echo '<div>
-                    <input type="checkbox" name="clan_ids[]" value="' . $row['id_clan'] . '" class="clan-checkbox" id="clan_' . $row['id_clan'] . '">
-                    <label for="clan_' . $row['id_clan'] . '">' . $row['nom_clan'] . '</label>
-                  </div>';
+            // Générer un lien avec les informations du clan en paramètre GET
+            echo ' <a href="#" class="clan-link" data-id="' . $row['id_clan'] . '" data-nom="' . $row['nom_clan'] . '">
+                    <div>
+                   ' . $row['nom_clan'] . '</div> </a>';
+               
         }
     } else {
         echo '<div>Aucun clan trouvé.</div>';

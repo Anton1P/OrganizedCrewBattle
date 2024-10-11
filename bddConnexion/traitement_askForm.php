@@ -5,7 +5,6 @@ include "../APIBrawlhalla/security.php";
 $askClan_id = $_SESSION['brawlhalla_data']['clan_id']; 
 $askedClan_ids = isset($_POST['clan_ids']) ? $_POST['clan_ids'] : []; // Récupérer les clans sélectionnés
 $format = $_POST['format'];
-$players = isset($_POST['joueurs']) ? $_POST['joueurs'] : []; // Tableau de joueurs
 $accepted = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -13,14 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($date_rencontre)) {
         $_SESSION['notification'] = "Erreur : La date de rencontre ne peut pas être vide.";
-        header("Location: ../view/askForm.php");
+        $_SESSION['from_treatment'] = true; 
+        header("Location: ../view/ask.php");
         exit(); 
     } else {
         // Vérifier que c'est une date valide
         $timestamp = strtotime($date_rencontre);
         if ($timestamp === false || $timestamp === 0) {
             $_SESSION['notification'] = "Erreur : Date de rencontre invalide.";
-            header("Location: ../view/askForm.php");
+            $_SESSION['from_treatment'] = true; 
+            header("Location: ../view/ask.php");
             exit(); 
         }
     }
@@ -39,7 +40,8 @@ if (!empty($askClan_id) && !empty($askedClan_ids)) {
         if ($result_combination->num_rows > 0) {
             // Si la combinaison existe déjà, ne pas insérer le tournoi
             $_SESSION['notification'] = "Erreur : Ces deux clans sont déjà engagés dans un tournoi.";
-            header("Location: ../view/askForm.php");
+            $_SESSION['from_treatment'] = true; 
+            header("Location: ../view/ask.php");
             exit(); 
         } else {
             // Vérification de l'existence du clan receveur dans la BDD
@@ -65,8 +67,9 @@ if (!empty($askClan_id) && !empty($askedClan_ids)) {
                         $diff = $new_date->diff($previous_date);  
                         // Vérifiez si la nouvelle date est d'au moins 1 heure plus tard
                         if ($diff->h < 1 && $diff->days == 0) { // Moins d'une heure, mais le même jour
-                            $_SESSION['notification'] = "Erreur : Vous avez déjà demandé un tournois ayant le même jours avec moins d'heure d'intervale";
-                            header("Location: ../view/askForm.php");
+                            $_SESSION['notification'] = "Erreur : Vous avez déjà demandé un tournoi ayant le même jour avec moins d'heure d'intervalle.";
+                            $_SESSION['from_treatment'] = true; 
+                            header("Location: ../view/ask.php");
                             exit();
                         }
                     }
@@ -80,15 +83,6 @@ if (!empty($askClan_id) && !empty($askedClan_ids)) {
 
                 // Exécution de la requête et vérification
                 if ($stmt_insert->execute()) {
-                    $tournoi_id = $stmt_insert->insert_id; // Récupérer l'ID du tournoi inséré
-                    // Insérer chaque joueur sélectionné dans la table player_tournoi
-                    foreach ($players as $player_id) {
-                        $sql_insert_player = "INSERT INTO player_tournoi (id_player, id_tournoi) VALUES (?, ?)";
-                        $stmt_insert_player = $conn->prepare($sql_insert_player);
-                        $stmt_insert_player->bind_param("ii", $player_id, $tournoi_id);
-                        $stmt_insert_player->execute();
-                        $stmt_insert_player->close();
-                    }
                     $_SESSION['notification'] = "Demande de tournois effectuée.";
                 } else {
                     echo "Erreur lors de la création du tournoi : " . $stmt_insert->error;
@@ -112,7 +106,8 @@ if (!empty($askClan_id) && !empty($askedClan_ids)) {
     exit(); 
 } else {
     $_SESSION['notification'] = "Les identifiants des clans ne peuvent pas être vides.";
-    header("Location: ../view/askForm.php");
+    $_SESSION['from_treatment'] = true; 
+    header("Location: ../view/ask.php");
     exit();
 }
 ?>

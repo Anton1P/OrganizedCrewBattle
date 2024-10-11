@@ -175,7 +175,9 @@ if ($result->num_rows > 0) {
             exit();
         }
     } else {
-        echo "Aucun tournoi trouvé.";
+        $_SESSION['notification'] = "Aucun tournoi trouvé.";
+        header("Location: ../view/AdminPanel.php");
+        exit();
     }
 } else {
     header("Location: ../view/AdminPanel.php");

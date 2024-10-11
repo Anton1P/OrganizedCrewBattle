@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("../img/background-connect.png"); /* ou .png si c'est le cas */
+    background-size: cover;      /* L'image couvre toute la page */
+      background-repeat: no-repeat; /* Évite que l'image se répète */
+      background-position: center; /* Centre l'image dans la page */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 50%;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 10px 20px 10px rgba(0, 0, 0, 0.5);
+    margin: 0 auto;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+h2 {
+    text-align: center;
+    color: white;
+}
+
+label {
+    font-size: 16px;
+    color: white;
+}
+
+select, input, button {
+    width: 95%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #282828;
+    color: white;
+}
+
+.search-results {
+    margin-top:28px;
+    position: absolute;
+    top: 45px;
+    width: 98%;
+    background-color: #282828;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.search-results div {
+    padding: 10px;
+    border-bottom: 1px solid #3a3a3a;
+    cursor: pointer;
+}
+
+.search-results div:hover {
+    background-color: #3a3a3a;
+}
+
+.clan-link {
+    color: white;
+    text-decoration: none;
+}
+
+.clan-link:hover {
+    text-decoration: underline;
+}
+
+.notification {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid red;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-bar {
+    width: 95%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+button {
+    background-color: #d27bee;;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #834c95;
+}
+
+.date-picker {
+    background-color: #282828;
+    color: white;
+}
+.recap {
+    color: #d27bee;
+    display: none; /* Masqué par défaut */
+    display: flex;
+    justify-content: center;
+    margin: 0px ;
+}
+.recap p{
+    margin: 0px ;
+}
