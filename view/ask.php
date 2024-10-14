@@ -71,7 +71,7 @@
                 <option value="2">CrewBattle Bo5</option>
                 <option value="3">French CrewBattle</option>
             </select>
-            <button type="button" id="formatNext">Confirm</button>
+            <button type="button" id="formatNext" disabled>Confirm</button>
         </div>
 
         <!-- Date selection (hidden by default) -->
@@ -87,6 +87,24 @@
         <input type="hidden" name="joueurs[]" id="joueurs_ids"> <!-- To store the selected players -->
     </form>
 </div>
+
+<script>
+    // Obtenez des références aux éléments
+    const formatSelect = document.getElementById('format');
+    const formatNextButton = document.getElementById('formatNext');
+
+    // Fonction pour vérifier si une option valide est sélectionnée
+    function checkSelection() {
+        // Activez le bouton si une option valide est sélectionnée
+        formatNextButton.disabled = formatSelect.value === "";
+    }
+
+    // Écoutez les changements sur le select
+    formatSelect.addEventListener('change', checkSelection);
+
+    // Vérifiez la sélection initiale
+    checkSelection();
+</script>
 
 <script>
     $(document).ready(function() {

@@ -1,5 +1,6 @@
-<?php   
-include "../APIBrawlhalla/security.php";
+<?php  
+session_start();
+include "../APIBrawlhalla/setup.php";
 include "../bddConnexion/bddConnexion.php";
 include "../bddConnexion/loadData.php";
 ?>
@@ -26,9 +27,9 @@ include "../bddConnexion/loadData.php";
                <div class="main-container">
                     <div class="header">
                          <div class="logo">
-                              <a href="AdminPanel.php"><img style="height: 80px;" src="../assets/img/mini-logo-2.png" alt=""></a>
+                              <a href="../APIBrawlhalla/routes.php"><img style="height: 80px;" src="../assets/img/mini-logo-2.png" alt=""></a>
                          </div>
-                         <a class="header-link active" href="#">
+                         <a class="header-link active" href="../APIBrawlhalla/routes.php">
                               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff">
                                    <path d="M10 13a2 2 0 110-4 2 2 0 010 4zm0-2.5a.5.5 0 100 1 .5.5 0 000-1z" />
                                    <path d="M20.3 11.8h-8.8a.8.8 0 010-1.6h8.8a.8.8 0 010 1.6zM8.5 11.8H3.7a.8.8 0 010-1.6h4.8a.8.8 0 010 1.6zM15 19a2 2 0 110-4 2 2 0 010 4zm0-2.5a.5.5 0 100 1 .5.5 0 000-1z" />
@@ -38,7 +39,7 @@ include "../bddConnexion/loadData.php";
                                    />
                                    <path d="M23.3 6H.6a.8.8 0 010-1.5h22.6a.8.8 0 010 1.5z" />
                               </svg>
-                              Member Panel
+                         <?php echo $rank;?> Panel
                          </a>
                          <a class="header-link" href="Leaderboard.php">
                               <svg fill="#ffffff"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.4 489.4" xml:space="preserve">
@@ -114,9 +115,6 @@ include "../bddConnexion/loadData.php";
                          
                     </div>
                </div>
-               <!-- partial -->
-               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-               <script src="./assets/script/script.js"></script>
           </div>
      </body>
 </html>
@@ -127,45 +125,59 @@ include "../bddConnexion/loadData.php";
 }
 </style>
 
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <script src="../assets/script/script.js"></script>
 
+<?php include "../bddConnexion/data_clan.php";?>
+
 <script>
-    const notificationIcon = document.getElementById('notificationIcon');
-    const notificationList = document.getElementById('notificationList');
-    const notificationPing = document.getElementById('notificationPing');
+const ctx = document.getElementById('myChart').getContext('2d');
 
-    // Afficher/Masquer la liste des notifications
-    notificationIcon.addEventListener('click', () => {
-        if (notificationList.style.display === 'none' || notificationList.style.display === '') {
-            notificationList.style.display = 'block';
-        } else {
-            notificationList.style.display = 'none';
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: [
+      'Wins',
+      'Loses'
+    ],
+    datasets: [{
+      data: [<?php echo json_encode($data["wins"]); ?>, <?php echo json_encode($data["loses"]); ?>],
+      backgroundColor: [
+        '#325dd9',
+        '#c32c1d'
+      ],
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    responsive: false,
+    maintainAspectRatio: false, // Maintient la taille définie
+    cutout: '70%', // Contrôle l'épaisseur du cercle (plus la valeur est grande, plus le trou est large)
+    plugins: {
+      legend: {
+        display: true 
+      },
+      datalabels: {
+        formatter: (value, context) => {
+          // Calculer le pourcentage
+          let total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+          let percentage = (value / total * 100).toFixed(2) + '%';
+          return percentage; // Retourner le pourcentage à afficher
+        },
+        color: '#fff', // Couleur des labels
+        font: {
+          weight: 'bold',
+          size: 12
         }
-    });
+      }
+    }
+  },
+  plugins: [ChartDataLabels] // Active le plugin de labels
+});
 
-    // Afficher la pastille rouge si il y a des notifications
-    <?php if (!empty($_SESSION['notification'])): ?>
-        notificationPing.style.display = 'block';
-    <?php else: ?>
-        notificationPing.style.display = 'none';
-    <?php endif; ?>
-
-    // Supprimer la notification lorsque l'utilisateur clique dessus
-    document.querySelectorAll('#notificationIcon').forEach(notification => {
-        notification.addEventListener('click', () => {
-            fetch('../bddConnexion/clear_notification.php') // Appelle le script pour supprimer la notification
-                .then(response => {
-                    if (response.ok) {
-                        notificationPing.style.display = 'none'; // Cache la pastille rouge
-                    } else {
-                        console.error('Erreur lors de la suppression de la notification');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur :', error);
-                });
-        });
-    });
 </script>

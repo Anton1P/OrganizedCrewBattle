@@ -1,5 +1,6 @@
 <?php
-include "../APIBrawlhalla/security.php";
+session_start();
+include "../APIBrawlhalla/setup.php";
 header('Content-Type: application/json');
 
 // Obtenir les membres du clan via l'API

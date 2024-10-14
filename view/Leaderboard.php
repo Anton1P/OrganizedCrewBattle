@@ -1,6 +1,7 @@
 <?php
+session_start();
 include "../bddConnexion/bddConnexion.php";
-include "../APIBrawlhalla/security.php";
+include "../APIBrawlhalla/setup.php";
 
 // Définir le nombre de clans par page
 $clans_per_page = 25;
@@ -29,6 +30,7 @@ $result = $conn->query($query);
     <title>Ranked CrewBattle - Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
     <link rel="stylesheet" href="../assets/styles/style.css" />
+    <link rel="stylesheet" href="../assets/styles/leaderboard.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -57,7 +59,7 @@ $result = $conn->query($query);
                                    />
                                    <path d="M23.3 6H.6a.8.8 0 010-1.5h22.6a.8.8 0 010 1.5z" />
                               </svg>
-                              Admin Panel
+                              <?php echo $rank;?> Panel
                          </a>
                          <a class="header-link active" href="Leaderboard.php">
                               <svg fill="#ffffff"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.4 489.4" xml:space="preserve">
@@ -80,9 +82,7 @@ $result = $conn->query($query);
                                    <path d="M18 8L15.8411 9.79908C14.0045 11.3296 13.0861 12.0949 12 12.0949C11.3507 12.0949 10.7614 11.8214 10 11.2744M6 8L6.9 8.75L7.8 9.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                               </svg>
                               Ask for a clan battle
-                         </a>';
-                         }
-                         ?>
+                         </a>
                          <div class="notification-wrapper">
                               <div class="notification-icon" id="notificationIcon">
                                    <!-- Icône de cloche blanche en SVG -->
@@ -99,6 +99,11 @@ $result = $conn->query($query);
                                    </ul>
                               </div>
                          </div>
+                         
+                         ';
+                         }
+                         ?>
+                         
 
             </div>
 
@@ -176,116 +181,6 @@ $result = $conn->query($query);
 <?php
 $conn->close();
 ?>
-
-
-
-<style>
-
-.main-container {
-
-    align-items: center;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.table-container {
-    width: 90%;
-    margin: 80px auto;
-    position: relative;
-}
-
-
-.pagination-controls button {
-    padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-.pagination-controls button:hover {
-    background-color: #444;
-}
-
-table {
-    width: 90%;
-    border-collapse: collapse;
-    background-color: #131630;
-}
-
-thead {
-    background-color: #292929;
-}
-
-th, td {
-    padding: 4px;
-    text-align: left;
-}
-
-td {
-    border-bottom: 1px solid #333;
-}
-
-td img {
-    width: 30px;
-    height: 30px;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #191d43;
-}
-
-tbody tr:hover {
-    background-color: #333;
-}
-
-
-        /* Style pour la barre de progression */
-        .progress-bar {
-            width: 100%;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 5px;
-            margin-top: 5px;
-            background-color: #ed7853;
-        }
-.progress-bar div {
-            height: 100%;
-            
-        }
-.progress-win {
-            background-color: #24cd7c;
-        }
-.pagination-controls {
-    text-align: center;
-    margin: 20px 0;
-}
-
-.pagination-controls button {
-    padding: 10px 15px;
-    margin: 0 5px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.pagination-controls button:hover {
-    background-color: #444;
-}
-
-.pagination-controls button.active-page {
-    background-color: #24cd7c; /* Couleur pour la page active */
-    font-weight: bold;
-}
-
-</style>
 
 <script>
     const notificationIcon = document.getElementById('notificationIcon');

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultat du Tournoi</title>
+    <link rel="stylesheet" href="../assets/styles/ask.css">
     <script>
         // Fonction pour afficher une popup de confirmation avant l'envoi du formulaire
         function confirmSubmission(event) {
@@ -16,7 +17,7 @@
     </script>
 </head>
 <body>
-
+<div class="container">
 <?php
 include "../bddConnexion/bddConnexion.php";
 include "../APIBrawlhalla/traductions.php";
@@ -104,6 +105,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
     
     <button type="submit" onclick="confirmSubmission(event)">Envoyer</button>
 </form>
-
+</div>
 </body>
 </html>

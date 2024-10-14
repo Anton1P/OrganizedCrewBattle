@@ -38,7 +38,7 @@ include "../bddConnexion/loadData.php";
                                    />
                                    <path d="M23.3 6H.6a.8.8 0 010-1.5h22.6a.8.8 0 010 1.5z" />
                               </svg>
-                              Admin Panel
+                              <?php echo $rank;?> Panel
                          </a>
                          <a class="header-link" href="Leaderboard.php">
                               <svg fill="#ffffff"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.4 489.4" xml:space="preserve">

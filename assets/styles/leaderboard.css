@@ -1,0 +1,109 @@
+
+.main-container {
+
+    align-items: center;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.table-container {
+    width: 90%;
+    margin: 80px auto;
+    position: relative;
+}
+
+
+.pagination-controls button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination-controls button:hover {
+    background-color: #444;
+}
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    background-color: #131630;
+}
+
+thead {
+    background-color: #292929;
+}
+
+th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+td {
+    border-bottom: 1px solid #333;
+}
+
+td img {
+    width: 30px;
+    height: 30px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #191d43;
+}
+
+tbody tr:hover {
+    background-color: #333;
+}
+
+
+        /* Style pour la barre de progression */
+        .progress-bar {
+            width: 100%;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 5px;
+            margin-top: 5px;
+            background-color: #ed7853;
+        }
+.progress-bar div {
+            height: 100%;
+            
+        }
+.progress-win {
+            background-color: #24cd7c;
+        }
+.pagination-controls {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pagination-controls button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.pagination-controls button:hover {
+    background-color: #444;
+}
+
+.pagination-controls button.active-page {
+    background-color: #d27bee; /* Couleur pour la page active */
+    font-weight: bold;
+}
+
+.pagination-controls button.active-page:hover {
+    background-color: #834c95; /* Couleur pour la page active */
+    font-weight: bold;
+}

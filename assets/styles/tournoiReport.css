@@ -111,3 +111,31 @@ h2 {
     border-radius: 10px;
     cursor: pointer;
 }
+/* Styles pour l'input de la room Brawlhalla */
+input[type="number"] {
+    width: 100%; /* Remplit l'espace disponible */
+    padding: 10px; /* Ajoute de l'espace intérieur */
+    border: 2px solid #d27bee; /* Bordure violette */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de la police */
+    color: #333; /* Couleur du texte */
+    outline: none; /* Supprime la bordure de focus par défaut */
+    transition: border-color 0.3s ease; /* Transition pour la couleur de bordure */
+}
+
+input[type="number"]:focus {
+    border-color: #834c95; /* Couleur de bordure lorsqu'il est actif */
+    box-shadow: 0 0 5px rgba(131, 76, 149, 0.5); /* Ombre pour donner du relief */
+}
+
+/* Styles pour les erreurs */
+input[type="number"].error {
+    border-color: red; /* Bordure rouge en cas d'erreur */
+}
+
+/* Styles pour les messages d'erreur */
+.error-message {
+    color: red; /* Couleur rouge pour les messages d'erreur */
+    font-size: 12px; /* Taille de la police pour les messages d'erreur */
+    margin-top: 5px; /* Espacement au-dessus du message */
+}
