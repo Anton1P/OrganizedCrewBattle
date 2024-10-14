@@ -28,7 +28,7 @@ $tournois_recus = [];
             }
             $tournois_recus[] = $row; 
         }
-        if (!$has_pending_tournaments) {
+        if (!$has_pending_tournaments &&  !isset($_SESSION['notification_sent'])) {
             $_SESSION['notification'] = "Vous avez des tournois en attente !"; 
             $_SESSION['notification_sent'] = true; 
         }
@@ -51,8 +51,8 @@ $has_pending_requests = false;
             }
             $tournois_demandes[] = $row; 
         }
-
-        if (!$has_pending_requests) {
+    
+        if (!$has_pending_requests && !isset($_SESSION['notification_sent']) ) {
             $_SESSION['notification'] = "Vous avez des tournois demandés acceptés !";
             $_SESSION['notification_sent'] = true; 
         }

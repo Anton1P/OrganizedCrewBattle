@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demande de Tournoi</title>
+    <title>Tournament Request</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
     <link rel="stylesheet" href="../assets/styles/ask.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
@@ -12,84 +12,103 @@
 <body>
 
 <div class="container">
-    <?php session_start();
-      if (isset($_SESSION['from_treatment']) && isset($_SESSION['notification'])) {
+    <?php 
+        session_start();
+        if (isset($_SESSION['from_treatment']) && isset($_SESSION['notification'])) {
             echo '<div class="notification">' . $_SESSION['notification'] . '</div>';
-            unset($_SESSION['notification']); // Supprimer la notification après l'affichage
+            unset($_SESSION['notification']); // Remove the notification after displaying it
         }
     ?>
     
-    <h2>Recherche de Clan</h2>
+    <h2>Clan Search</h2>
 
+    <!-- Recap section -->
     <div id="recap" class="recap">
         <p id="recapText"></p> 
     </div>
 
-
+    <!-- Search and request form -->
     <form action="../bddConnexion/traitement_askForm.php" method="POST" id="tournamentForm">
-     
+        
+        <!-- Clan search component -->
         <div id="clanSearchComponent" class="search-container">
-            <label for="clan_search">Rechercher un clan :</label>
-            <input type="text" class="search-bar" id="clan_search" placeholder="Nom du clan" required>
-            <div id="search_results" class="search-results"></div>
+            <label for="clan_search">Search for a clan:</label>
+            <div>
+                <input type="text" class="search-bar" id="clan_search" placeholder="Clan name" required>
+                <ul id="search_results" class="search-results"></ul>
+            </div>
+
+            <!-- Clan suggestion component -->
+            <div id="clanSuggestionComponent">
+                <h2>Clan Suggestions</h2>
+                <div class="suggestion-container">
+                    <div class="criteria">
+                        <label for="suggestion_criteria">Suggestion criteria:</label>
+                        <select id="suggestion_criteria" name="suggestion_criteria">
+                            <option value="elo">Clans with similar Elo range</option>
+                            <option value="elo_higher">Clans with ~100 more Elo</option>
+                            <option value="elo_lower">Clans with ~100 less Elo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="suggestions">
+                        <label for="suggested_clan">Suggested clans:</label>
+                        <ul id="suggested_clan_list" class="suggested-clan-list">
+                            <!-- Suggestions will be dynamically added by AJAX -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Choix du format (invisible par défaut) -->
+        <!-- Tournament format selection (hidden by default) -->
         <div id="formatComponent" class="hidden">
-            <h2>Choisir le format du tournoi</h2>
-            <label for="format">Format :</label>
+            <h2>Select Tournament Format</h2>
+            <label for="format">Format:</label>
             <select id="format" name="format" required>
-                <option disabled selected value="">--Sélectionnez un format--</option>
+                <option disabled selected value="">--Select a format--</option>
                 <option value="1">CrewBattle Bo3</option>
                 <option value="2">CrewBattle Bo5</option>
                 <option value="3">French CrewBattle</option>
             </select>
-            <button type="button" id="formatNext">Valider</button>
+            <button type="button" id="formatNext">Confirm</button>
         </div>
 
-        <!-- Choix de la date (invisible par défaut) -->
+        <!-- Date selection (hidden by default) -->
         <div id="dateComponent" class="hidden">
-            <h2>Choisir la date et l'heure</h2>
-            <label for="date_rencontre">Date et heure :</label>
+            <h2>Select Date and Time</h2>
+            <label for="date_rencontre">Date and Time:</label>
             <input type="datetime-local" id="date_rencontre" name="date_rencontre" class="date-picker" required>
-            <button type="submit" id="submitForm">Envoyer</button>
+            <button type="submit" id="submitForm">Submit</button>
         </div>
         
-        <!-- Champs cachés pour les clans sélectionnés -->
-        <input type="hidden" name="clan_ids[]" id="clan_ids"> <!-- Pour stocker l'ID du clan sélectionné -->
-        <input type="hidden" name="joueurs[]" id="joueurs_ids"> <!-- Pour stocker les joueurs sélectionnés -->
+        <!-- Hidden fields for selected clans -->
+        <input type="hidden" name="clan_ids[]" id="clan_ids"> <!-- To store the selected clan ID -->
+        <input type="hidden" name="joueurs[]" id="joueurs_ids"> <!-- To store the selected players -->
     </form>
 </div>
 
 <script>
     $(document).ready(function() {
-        var recapClan = ""; // Variable pour stocker le nom du clan
-        var recapFormat = ""; // Variable pour stocker le format
-        var recapDate = ""; // Variable pour stocker la date
+        var recapClan = ""; // Stores the name of the selected clan
+        var recapFormat = ""; // Stores the tournament format
+        var recapDate = ""; // Stores the selected date
 
+        // Update the recap section
         function updateRecap() {
-            var recapText = ""; // Variable pour stocker le texte à afficher
+            var recapText = recapClan ? recapClan : '';
+            recapText += recapFormat ? (recapText ? " > " : "") + recapFormat : '';
+            recapText += recapDate ? (recapText ? " > " : "") + recapDate : '';
 
-            if (recapClan) {
-                recapText += recapClan;
-            }
-            if (recapFormat) {
-                recapText += (recapText ? " > " : "") + recapFormat;
-            }
-            if (recapDate) {
-                recapText += (recapText ? " > " : "") + recapDate;
-            }
-
-            // Si le texte de récapitulatif n'est pas vide, on l'affiche
             if (recapText) {
-                $('#recap').show(); // Affiche la div si elle n'était pas affichée
-                $('#recapText').text(recapText); // Met à jour le texte du récapitulatif
+                $('#recap').show();
+                $('#recapText').text(recapText);
             } else {
-                $('#recap').hide(); // Cache la div si aucun élément n'est sélectionné
+                $('#recap').hide();
             }
         }
 
-        // Barre de recherche en temps réel
+        // Real-time clan search
         $('#clan_search').on('keyup', function() {
             var searchQuery = $(this).val();
             if (searchQuery.length >= 2) {
@@ -106,54 +125,61 @@
             }
         });
 
-        // Lorsqu'un lien de clan est cliqué
+        // Clan selection from search results
         $(document).on('click', '.clan-link', function(e) {
-            e.preventDefault(); // Empêcher la redirection
-
-            // Récupérer les informations du clan depuis le lien
+            e.preventDefault();
             var selectedClanId = $(this).data('id');
             var selectedClanName = $(this).data('nom');
 
-            // Ajouter l'ID du clan sélectionné au formulaire
-            $('#clan_ids').val(selectedClanId); // Met à jour le champ caché avec l'ID du clan
-
-            // Mettre à jour la variable de récapitulatif pour le clan
+            $('#clan_ids').val(selectedClanId); // Store the clan ID
             recapClan = selectedClanName;
-            updateRecap(); // Mettre à jour l'affichage
+            updateRecap();
 
-            // Cacher la recherche et afficher le format de tournoi
             $('#clanSearchComponent').addClass('hidden');
             $('#formatComponent').removeClass('hidden');
         });
 
-        // Lorsque le format est validé
+        // Format confirmation
         $('#formatNext').on('click', function() {
-            var formatText = $('#format option:selected').text();
+            recapFormat = $('#format option:selected').text();
+            updateRecap();
 
-            // Mettre à jour la variable de récapitulatif pour le format
-            recapFormat = formatText;
-            updateRecap(); // Mettre à jour l'affichage
-
-            // Cacher le format et afficher la sélection de date
             $('#formatComponent').addClass('hidden');
             $('#dateComponent').removeClass('hidden');
         });
 
-        // Lorsque la date est sélectionnée
+        // Date selection
         $('#date_rencontre').on('change', function() {
-            var selectedDate = $(this).val();
-
-            // Mettre à jour la variable de récapitulatif pour la date
-            recapDate = selectedDate;
-            updateRecap(); // Mettre à jour l'affichage
+            recapDate = $(this).val();
+            updateRecap();
         });
 
-        // Initialiser le datepicker
+        // Initialize date picker
         flatpickr(".date-picker", {
             enableTime: true,
             dateFormat: "Y-m-d H:i:S",
             time_24hr: true,
-            minDate: "<?php echo (new DateTime())->format('Y-m-d\TH:i'); ?>"
+            minDate: "<?php echo (new DateTime())->format('Y-m-d\TH:i'); ?>",
+        });
+
+        // Load clan suggestions
+        function loadClanSuggestions(criteria) {
+            $.ajax({
+                url: '../bddConnexion/suggest_clans.php',
+                type: 'POST',
+                data: { criteria: criteria },
+                success: function(response) {
+                    $('#suggested_clan_list').html(response);
+                }
+            });
+        }
+
+        // Load suggestions when the page loads
+        loadClanSuggestions($('#suggestion_criteria').val());
+
+        // Update suggestions when the criteria changes
+        $('#suggestion_criteria').on('change', function() {
+            loadClanSuggestions($(this).val());
         });
     });
 </script>

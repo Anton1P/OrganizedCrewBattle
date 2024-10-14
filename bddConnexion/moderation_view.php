@@ -55,19 +55,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
         // Formulaire pour soumettre le résultat du match
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $winner = $_POST['winner'];
-       
-            // Mettre à jour le résultat du tournoi dans la base de données
-            if ($winner == 'demandeur') {
-                $query = "UPDATE verif_report SET clan_demandeur_result = 1, clan_receveur_result = 0 WHERE id_tournoi = ?";
-            } else {
-                $query = "UPDATE verif_report SET clan_receveur_result = 1, clan_demandeur_result = 0 WHERE id_tournoi = ?";
-            }
-
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("i", $id_tournoi);
-            $stmt->execute();
-
+     
             function deleteDirectory($dir) {
                 if (!is_dir($dir)) return;
                 $files = scandir($dir);
@@ -83,13 +71,53 @@ if (isset($_SERVER['HTTP_REFERER'])) {
                 rmdir($dir); // Supprime le dossier
             }
 
-            // Suppression des fichiers et du dossier
-            deleteDirectory($dir);
+
+            if(isset($_POST['winner'])){
+                $winner = $_POST['winner'];
+       
+                // Mettre à jour le résultat du tournoi dans la base de données
+                if ($winner == 'demandeur') {
+                    $query = "UPDATE verif_report SET clan_demandeur_result = 1, clan_receveur_result = 0 WHERE id_tournoi = ?";
+                } else {
+                    $query = "UPDATE verif_report SET clan_receveur_result = 1, clan_demandeur_result = 0 WHERE id_tournoi = ?";
+                }
+    
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("i", $id_tournoi);
+                $stmt->execute();
+
+                // Suppression des fichiers et du dossier
+                deleteDirectory($dir);
+    
+                echo "Résultat mis à jour avec succès.";
+                header("Location: ../bddConnexion/traitement_addElo.php?id_tournoi=". $id_tournoi);
+                exit(); 
+    
+            }     
 
 
-            echo "Résultat mis à jour avec succès.";
-            header("Location: ../bddConnexion/traitement_addElo.php?id_tournoi=". $id_tournoi);
-            exit(); 
+            if (isset($_POST['id_tournoi']) && isset($_POST['delete'])) {
+                $id_tournoi = $_POST['id_tournoi'];
+
+                // Requête pour supprimer le tournoi
+                $sql = "DELETE FROM tournoi WHERE id_tournoi = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $id_tournoi);
+
+
+                if ($stmt->execute()) {   
+                    deleteDirectory($dir);
+                    $_SESSION['notification'] = "Tournoi supprimé avec succès.";
+                    header("Location: ../view/AdminPanel.php");
+                    exit(); 
+                } else {
+                    $_SESSION['notification'] = "Erreur lors de la suppression du tournoi.";
+                }
+
+                $stmt->close();
+            }
+
+
         }
     }
 }
@@ -106,4 +134,10 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         </option>
     </select>
     <button type="submit">Envoyer</button>
+</form>
+
+<form action="" method="POST">
+    <input type="hidden" name="id_tournoi" value="<?php echo $id_tournoi; ?>">
+    <input type="hidden" name="delete" value="<?php echo true; ?>">
+    <button type="submit">Delete</button>
 </form>

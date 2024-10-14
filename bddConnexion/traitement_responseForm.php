@@ -32,7 +32,7 @@ if (!empty($tournois_recus)) {
             }
         } 
     }
-    $_SESSION['notification'] = "Joueur(s) ajouté(s) !";
+    $_SESSION['notification'] = "Crew battle accepted !";
     header("Location: ../view/AdminPanel.php");
     exit();
 } else {

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //? Mettre à jour le statut du tournoi dans la base de données pour "accepté"
         $sql_update = "UPDATE tournoi SET accepted = 1 WHERE id_tournoi = $id_tournoi";
         if ($conn->query($sql_update) === TRUE) {
-            header("Location: ../view/responseForm.php");
+            header("Location: ../bddConnexion/traitement_responseForm.php");
         } else {
             $_SESSION['notification'] = "Erreur lors de l'acceptation du tournoi.";
         }

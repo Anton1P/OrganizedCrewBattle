@@ -3,9 +3,9 @@ body {
     margin: 0;
     padding: 0;
     background-image: url("../img/background-connect.png"); /* ou .png si c'est le cas */
-    background-size: cover;      /* L'image couvre toute la page */
-      background-repeat: no-repeat; /* Évite que l'image se répète */
-      background-position: center; /* Centre l'image dans la page */
+    background-size: cover; /* L'image couvre toute la page */
+    background-repeat: no-repeat; /* Évite que l'image se répète */
+    background-position: center; /* Centre l'image dans la page */
     color: white;
     display: flex;
     justify-content: center;
@@ -48,16 +48,33 @@ select, input, button {
     color: white;
 }
 
+/* Correction du style de la barre de recherche */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-bar {
+    width: 95%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Ajustement pour que les résultats apparaissent juste sous la barre de recherche */
 .search-results {
-    margin-top:28px;
-    position: absolute;
-    top: 45px;
-    width: 98%;
+    position: absolute; /* Important pour qu'elle soit sous la barre */
+    top: 45px; /* Ajustement pour placer la liste sous la barre */
+    width: 95%; /* Correspond à la largeur de la barre de recherche */
     background-color: #282828;
     border-radius: 8px;
-    max-height: 300px;
+    max-height: 300px; /* Limitation de la hauteur */
     overflow-y: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    z-index: 1000; /* Assure que la liste est bien visible par-dessus */
 }
 
 .search-results div {
@@ -87,23 +104,9 @@ select, input, button {
     color: #721c24;
 }
 
-.search-container {
-    position: relative;
-    width: 100%;
-}
-
-.search-bar {
-    width: 95%;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-}
-
+/* Style pour les boutons */
 button {
-    background-color: #d27bee;;
+    background-color: #d27bee;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -116,13 +119,63 @@ button:hover {
     background-color: #282828;
     color: white;
 }
+
+/* Style pour la section récapitulative */
 .recap {
     color: #d27bee;
     display: none; /* Masqué par défaut */
     display: flex;
     justify-content: center;
-    margin: 0px ;
+    margin: 0px;
 }
-.recap p{
-    margin: 0px ;
+
+.recap p {
+    margin: 0px;
 }
+.suggestion-container {
+    display: flex;
+    align-items: flex-start; /* Aligner les éléments en haut */
+    justify-content: space-between;
+    width: 100%;
+}
+
+.criteria {
+    width: 48%; /* La sélection du critère prendra environ la moitié de la largeur */
+}
+
+.suggestions {
+    width: 48%; /* La liste des suggestions prendra également la moitié de la largeur */
+}
+
+.suggestions ul {
+    padding: 0;
+    list-style: none;
+    margin-top: 10px;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px; /* Largeur de la scrollbar */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Couleur du fond de la piste */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #1e1e1e; /* Couleur de la barre de scroll */
+    border-radius: 10px; /* Coins arrondis */
+    border: 2px solid transparent; /* Épaissir la barre avec un padding interne */
+    background-clip: padding-box; /* Pour que la bordure ne mange pas la couleur */
+  }
+  
+  /* Style pour Firefox */
+  * {
+    scrollbar-width: thin; /* Scrollbar fine */
+    scrollbar-color: #1e1e1e transparent; /* Couleur de la barre et de la piste */
+  }
+  
+  /* Pour arrondir les coins de la scrollbar sur Firefox */
+  ::-moz-scrollbar-thumb {
+    border-radius: 10px;
+  }

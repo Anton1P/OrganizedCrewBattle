@@ -7,9 +7,10 @@ $id_tournoi = $_POST['id_tournoi'] ?? null;
 $id_clan_demandeur = $_POST['id_clan_demandeur'] ?? null;
 $id_clan_receveur = $_POST['id_clan_receveur'] ?? null;
 
-if (empty($id_clan_demandeur) && empty($id_clan_receveur)) {
+if (empty($id_clan_demandeur) && empty($id_clan_receveur) && empty($id_tournoi)) {
     $id_clan_demandeur =  $_GET['id_clan_demandeur'];
     $id_clan_receveur =  $_GET['id_clan_receveur'];
+    $id_tournoi =  $_GET['id_tournoi'];
 }
 
 
@@ -72,19 +73,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (preg_match("/[<>\"'\/]/", $fileName)) {
                 $_SESSION['notification'] = "Erreur : Le nom du fichier " . htmlspecialchars($fileName) . " contient des caractères non autorisés.";
-                header("Location: ../view/AdminPanel.php");
+                $_SESSION['from_treatment'] = true;
+                header("Location: ../view/matchVerif.php?id_clan_demandeur=$id_clan_demandeur&id_clan_receveur=$id_clan_receveur&id_tournoi=$id_tournoi");
                 exit();
             }
         
             if (!in_array($fileType, $allowedFileTypes) || !in_array($fileExtension, $allowedExtensions)) {
                 $_SESSION['notification'] = "Erreur : Type de fichier non autorisé pour " . $fileName ." Only png, jpeg, jpg files.";
-                continue; 
+                $_SESSION['from_treatment'] = true;
+                header("Location: ../view/matchVerif.php?id_clan_demandeur=$id_clan_demandeur&id_clan_receveur=$id_clan_receveur&id_tournoi=$id_tournoi");
+                exit();
             }
 
             // Vérifier la taille du fichier (max 5 Mo)
             if ($fileSize > 5 * 1024 * 1024) {
                 $_SESSION['notification'] = "Erreur : La taille du fichier " . $fileName . " est trop grande. Max: 5 Mo.";
-                continue;
+                $_SESSION['from_treatment'] = true;
+               header("Location: ../view/matchVerif.php?id_clan_demandeur=$id_clan_demandeur&id_clan_receveur=$id_clan_receveur&id_tournoi=$id_tournoi");
+                exit();
             }
 
             // Déplacer le fichier vers le répertoire cible
@@ -122,8 +128,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Vérification de Match</title>
+    <link rel="stylesheet" href="../assets/styles/ask.css" />
 </head>
 <body>
+<div class="container">
+<?php 
+        if (isset($_SESSION['notification']) && isset($_SESSION['from_treatment'])) {
+            echo '<div class="notification">' . $_SESSION['notification'] . '</div>';
+            unset($_SESSION['notification']); // Remove the notification after displaying it
+        }
+    ?>
+    
     <h1>Envoyer des preuves d'image</h1>
 
     <form action="" method="post" enctype="multipart/form-data">
@@ -132,5 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Envoyer</button>
     </form>
     <p>Si aucune preuves n'est envoiée de la part d'au moin un des deux clans alors le match serra annulée automatiquement dans 10 heures.</p>
+</div>
 </body>
 </html>
