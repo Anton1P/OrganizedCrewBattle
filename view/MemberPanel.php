@@ -25,11 +25,11 @@ include "../bddConnexion/loadData.php";
                     </a>
                </div>
                <div class="main-container">
-                    <div class="header">
+                    <div class="header ">
                          <div class="logo">
                               <a href="../APIBrawlhalla/routes.php"><img style="height: 80px;" src="../assets/img/mini-logo-2.png" alt=""></a>
                          </div>
-                         <a class="header-link active" href="../APIBrawlhalla/routes.php">
+                         <a class="header-link header-link-member active" href="../APIBrawlhalla/routes.php">
                               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff">
                                    <path d="M10 13a2 2 0 110-4 2 2 0 010 4zm0-2.5a.5.5 0 100 1 .5.5 0 000-1z" />
                                    <path d="M20.3 11.8h-8.8a.8.8 0 010-1.6h8.8a.8.8 0 010 1.6zM8.5 11.8H3.7a.8.8 0 010-1.6h4.8a.8.8 0 010 1.6zM15 19a2 2 0 110-4 2 2 0 010 4zm0-2.5a.5.5 0 100 1 .5.5 0 000-1z" />
@@ -41,7 +41,7 @@ include "../bddConnexion/loadData.php";
                               </svg>
                          <?php echo $rank;?> Panel
                          </a>
-                         <a class="header-link" href="Leaderboard.php">
+                         <a class="header-link header-link-member" href="Leaderboard.php">
                               <svg fill="#ffffff"  version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.4 489.4" xml:space="preserve">
                                    <g>
                                         <path d="M369.75,0h-250.2v44.3h-85.6V110c0,47.2,38.4,85.6,85.6,85.6h1.5c7.9,51.3,47,92.2,97.2,103v70.9h-30.7
@@ -54,7 +54,7 @@ include "../bddConnexion/loadData.php";
                               </svg>
                               Classement
                          </a>
-                         <a class="header-link" href="../view/documentation.html">
+                         <a class="header-link header-link-member" href="../view/documentation.html">
                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20">
                                         <rect x="8" y="4" width="40" height="56" fill="none" stroke="WHITE" stroke-width="2"/>
                                         <polyline points="8,4 32,4 48,20 48,60 8,60" fill="none" stroke="WHITE" stroke-width="2"/>
@@ -68,9 +68,9 @@ include "../bddConnexion/loadData.php";
                          </a>
                     </div>
                   
-                    <div class="user-box first-box">
-                         <div class="account-wrapper" style="--delay: 0.2s;">
-                              <div class="account-profile">
+                    <div class="user-box first-box first-box-member">
+                         <div class="account-wrapper member-profile" style="--delay: 0.2s;">
+                              <div class="account-profile ">
                                    <img src="<?php echo $avatar;?>" alt="" />
 
                                    <div class="account-name"> <?php echo $name; ?>  </div>
@@ -87,7 +87,7 @@ include "../bddConnexion/loadData.php";
                                    </div>
                               </div>
                               <div class="cards card">
-                                   <div style="display:flex; justify-content: space-between;">
+                                   <div id="div-myChart" >
                                         
                                         <div id="table-container">
                                              <table id="clan-members">
@@ -126,6 +126,9 @@ include "../bddConnexion/loadData.php";
                          </div>
                          
                     </div>
+                    <div class="card transection hey hey-member" style="display:none;">
+                            <?php include "../view/info_tournois.php";?>
+                         </div>
                </div>
           </div>
      </body>

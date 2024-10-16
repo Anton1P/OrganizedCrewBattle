@@ -995,6 +995,9 @@ body {
   .account-wrapper{
     display: none;
   }
+  .member-profile{
+    display: flex;
+  }
   .transection{
     width: 30%;
   }
@@ -1027,7 +1030,9 @@ body {
   .header-link {
     display: none;
   }
-
+ .header-link-member{
+  display: flex;
+ }
 }
 @media screen and (max-width: 850px) {
   .activity-card,
@@ -1063,12 +1068,26 @@ body {
   margin-bottom: 30%;
 }
 
+.first-box-member{
+  margin-bottom: 0%;
 }
+}
+
+
+@media screen and (max-width: 600px) {
+  .header-link-member{
+    display: none;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .first-box{
     display: flex;
     flex-wrap:wrap;
     margin-bottom: 50vh;
+  }
+  .first-box-member{
+    margin-bottom: 0%;
   }
   .activity {
     width: 100%;
@@ -1079,6 +1098,9 @@ body {
 }
 .cards.card{
   padding: 0px;
+}
+.hey-member{
+  margin-top: 0px;
 }
 }
 
@@ -1091,6 +1113,9 @@ body {
 @media screen and (max-width: 334px) {
 .hey{
   margin-top: 120px;
+}
+.hey-member{
+  margin-top: 0px;
 }
 }
 
