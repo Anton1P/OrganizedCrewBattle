@@ -54,6 +54,18 @@ include "../bddConnexion/loadData.php";
                               </svg>
                               Classement
                          </a>
+                         <a class="header-link" href="../view/documentation.html">
+                                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20">
+                                        <rect x="8" y="4" width="40" height="56" fill="none" stroke="WHITE" stroke-width="2"/>
+                                        <polyline points="8,4 32,4 48,20 48,60 8,60" fill="none" stroke="WHITE" stroke-width="2"/>
+                                        <line x1="16" y1="12" x2="32" y2="12" stroke="WHITE" stroke-width="2"/>
+                                        <line x1="16" y1="20" x2="40" y2="20" stroke="WHITE" stroke-width="2"/>
+                                        <line x1="16" y1="28" x2="40" y2="28" stroke="WHITE" stroke-width="2"/>
+                                        <line x1="16" y1="36" x2="40" y2="36" stroke="WHITE" stroke-width="2"/>
+                                        <line x1="16" y1="44" x2="40" y2="44" stroke="WHITE" stroke-width="2"/>
+                                   </svg>
+                                   Documentation
+                         </a>
                     </div>
                   
                     <div class="user-box first-box">

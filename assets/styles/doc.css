@@ -1,0 +1,352 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header (Navbar) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0d0d1f;
+    color: white;
+    padding: 15px 30px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 8vh;
+    z-index: 10;
+}
+
+.logo img {
+    height: 70px;
+    margin-left: 4vh;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 8vh); /* Ajuste pour le header */
+    margin-top: 8vh; /* Pour le mettre sous la navbar */
+    height: auto;
+}
+.container > *:last-child {
+    margin-bottom: 30px;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    width: 15%;
+    background-color: #191e45;
+    padding: 20px;
+    padding-top: 50px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 8vh); /* Ajuste la hauteur pour qu'elle soit visible sous la navbar */
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li ul {
+    margin-left: 15px;
+    display: none; /* Masqué par défaut */
+    overflow: hidden; /* Pour masquer le contenu pendant l'animation de fermeture */
+    height: 0; /* Hauteur initiale à 0 */
+    transition: height 0.4s ease; /* Animation de transition */
+}
+
+.sidebar ul li button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #cacaca;
+}
+
+.sidebar ul li button:hover {
+    color: #ffffff;
+}
+
+.sidebar ul li ul li a {
+    text-decoration: none;
+    color: #b9b9b9;
+    font-size: 16px;
+}
+
+.sidebar ul li ul li a:hover {
+    color: #ffffff;
+}
+
+.content {
+    margin-left: 15%; /* Pour aligner avec la sidebar */
+    padding: 20px;
+    width: 80%; /* Réduit la largeur pour l'espace de la sidebar */
+}
+
+.content h1 {
+    margin-bottom: 10px;
+    position: relative;
+}
+.content ul {
+    margin-bottom: 10px;
+    position: relative;
+    margin: 20px;
+}
+
+/* Ligne en pointillé sous chaque H1 */
+.content h1::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px; /* Augmente légèrement la hauteur pour plus de visibilité */
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.3) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3) 75%, transparent 75%, transparent);
+    background-size: 10px 2px; /* Modifie la taille pour créer un effet plus net et espacé */
+    margin-top: 15px; /* Espace supplémentaire entre le h1 et la ligne */
+}
+
+.content p {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.pagination {
+    margin-top: 20px; /* Espace au-dessus de la pagination */
+    margin-bottom: 20px; /* Espace au-dessus de la pagination */
+    padding: 20px; /* Ajoute un peu de padding autour du contenu */
+    background-color: #f1f1f1; /* Couleur de fond douce */
+    border-radius: 8px; /* Coins arrondis */
+}
+
+.pagination h3 {
+    margin-bottom: 10px; /* Espace sous le titre */
+    color: #0d0d1f; /* Couleur du texte du titre */
+    cursor: pointer;
+}
+.pagination h3:hover {
+    color: #1e1ef7; /* Couleur du texte du titre */
+}
+.pagination ul {
+    list-style-type: disc; /* Utilise des puces pour la liste */
+    margin-left: 20px; /* Espace à gauche pour les puces */
+}
+
+.pagination ul li {
+    margin-bottom: 10px; /* Espace entre les éléments de la liste */
+}
+
+.pagination strong {
+    color: #0d0d1f; /* Couleur du texte en gras */
+}
+
+.toggle-arrow {
+    float: right; /* Aligne la flèche à droite */
+    cursor: pointer; /* Indique que c'est cliquable */
+    font-size: 18px; /* Taille de la flèche */
+    transition: transform 0.3s ease; /* Animation de transformation */
+}
+
+.hidden-content {
+    overflow: hidden; /* Cache le contenu qui déborde */
+    transition: max-height 0.4s ease; /* Transition pour l'animation */
+    max-height: 0; /* Commence avec une hauteur maximale de 0 pour cacher le contenu */
+    display: none; /* Masque le contenu par défaut */
+}
+
+#language-toggle {
+    margin-left: 20px; /* Ajoute un espacement à gauche */
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff; /* Couleur du bouton */
+    color: white; /* Couleur du texte */
+    cursor: pointer;
+    border-radius: 5px; /* Coins arrondis */
+}
+
+#language-toggle:hover {
+    background-color: #0056b3; /* Couleur au survol */
+}
+
+
+/* Responsive design */
+@media (max-width: 1300px) {
+    .sidebar {
+        width: 20%;
+    }
+
+    .content {
+        width: 80%;
+        margin-left: 20%;
+    }
+
+    .logo img {
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 25%;
+    }
+
+    .content {
+        width: 75%;
+        margin-left: 25%;
+    }
+
+    .navbar {
+        padding: 15px;
+    }
+
+    .nav-links a {
+        margin: 0 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto; /* Ajustement pour le contenu vertical */
+    }
+
+    .sidebar {
+        width: 100%;
+        display: none; /* Masqué sur mobile */
+        height: auto; /* Ne pas avoir de hauteur fixe */
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0; /* Supprime la marge pour les petits écrans */
+    }
+
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .navbar .nav-links {
+        margin-top: 10px;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+    }
+
+    .logo img {
+        display: none; /* Masqué sur mobile */
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar {
+        padding: 10px 20px;
+    }
+
+    .nav-links a {
+        margin: 0 5px;
+        font-size: 12px;
+    }
+
+    .sidebar ul li button {
+        font-size: 18px;
+    }
+
+    .content p {
+        font-size: 14px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px; /* Largeur de la scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* Couleur du fond de la piste */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #1a2157; /* Couleur de la barre de scroll */
+    border-radius: 10px; /* Coins arrondis */
+    border: 2px solid transparent; /* Épaissir la barre avec un padding interne */
+    background-clip: padding-box; /* Pour que la bordure ne mange pas la couleur */
+}
+
+/* Style pour Firefox */
+* {
+    scrollbar-width: thin; /* Scrollbar fine */
+    scrollbar-color: #1a2157 transparent; /* Couleur de la barre et de la piste */
+}
+
+/* Pour arrondir les coins de la scrollbar sur Firefox */
+::-moz-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+.footer {
+    background-color: #191e45; /* Couleur de fond du footer */
+    text-align: center; /* Centre le contenu */
+    padding: 10px 0; /* Ajoute un peu de padding */
+    position: relative; /* Pour le placer correctement */
+   
+}
+
+.logo-sb {
+    height: 30px; /* Ajuste la taille du logo Discord */
+    transition: transform 0.3s; /* Animation pour l'effet hover */
+}
+
+.logo-sb:hover {
+    transform: scale(1.1); /* Agrandit le logo au hover */
+}
+
+.example-img {
+    display: block; /* Affiche l'image en bloc */
+    margin-bottom: 30px ; /* Centre l'image avec une marge en haut et en bas */
+    max-width: 100%; /* S'assure que l'image est responsive */
+    height: auto; /* Conserve le ratio d'aspect */
+}
+
+.nav-links a svg {
+    width: 24px;
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.nav-links svg + svg {
+    margin-top: 34px;
+}

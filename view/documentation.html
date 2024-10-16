@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+    <link rel="stylesheet" href="../assets/styles/doc.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- Header (Navbar) -->
+    <header class="navbar">
+        <div class="logo">
+           <a href="AdminPanel.php"><img src="../assets/img/mini-logo-2.png" alt="Logo" /></a>
+        </div>
+        <nav class="nav-links">
+            <button id="language-toggle">Français</button>
+            <a href="AdminPanel.php">Panel</a>
+            <a href="Leaderboard.php">Leaderboard</a>
+            <a href="documentation.html">Documentation</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Navigation menu on the left -->
+        <nav class="sidebar">
+            <h2>Documentation</h2>
+            <ul>
+                <li>
+                    <button class="toggle">Introduction</button>
+                    <ul class="submenu">
+                        <li><a href="#section1">- Site Map</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <button class="toggle">Make Crew Battle</button>
+                    <ul class="submenu">
+                        <li><a href="#section2">- How to Make Requests</a></li>
+                        <li><a href="#section3">- How to Validate a Request</a></li>
+                        <li><a href="#section4">- How to Check-in My Crew Battle</a></li>
+                        <li><a href="#section5">- How to Report My Crew Battle</a></li>
+                        <li><a href="#section6">- How to Submit Evidence</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <button class="toggle">Others</button>
+                    <ul class="submenu">
+                        <li><a href="#section7">- The Different Panels</a></li>
+                        <li><a href="#section8">- Leaderboard</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Footer -->
+            <footer class="footer">
+                <a href="https://discord.com" target="_blank">
+                    <img src="../assets/img/discord-logo.png" alt="Discord Logo" class="logo-sb" />
+                </a>
+                <a href="https://corehalla.com" target="_blank">
+                    <img src="../assets/img/corehalla.png" alt="Corehalla Logo" class="logo-sb" />
+                </a>
+            </footer>
+        </nav>
+
+        <!-- Main content -->
+        <div class="content">
+            <h1 id="section1">Ranked Crew Battle Documentation</h1>
+            <p>Welcome to <strong>Ranked Crew Battle</strong>, the platform dedicated to organizing crew battles in the game <strong>Brawlhalla</strong>. This site allows you to manage your clans, view rankings, and participate in exciting battles.</p>
+            
+            <h4>Legal Notice</h4>
+            <p><em>Visual assets courtesy of Blue Mammoth Games. Ranked Crew Battle is neither associated nor endorsed by Blue Mammoth Games and doesn't reflect the views or opinions of Blue Mammoth Games or anyone officially involved in developing Brawlhalla. Brawlhalla and Blue Mammoth Games are trademarks of Blue Mammoth Games.</em></p>
+            
+            <h2>Site Map</h2>
+            <p>To access Ranked Crew Battle, it is mandatory to log in with your Steam account. You have probably already completed this step, as access to the site is conditioned by your login.</p>
+           
+            <img src="../assets/img/steam-login.png" alt="Logo" class="example-img"/>
+            
+            <div class="pagination">
+                <h3 onclick="toggleContent()">
+                    The Different Parts of the Site 
+                    <span class="toggle-arrow">&darr;</span>
+                </h3>
+                <div class="hidden-content" style="display: none;">
+                    <p>The site is divided into four main sections:</p>
+                    <ul>
+                        <li>
+                            <strong>Panel (Dashboard)</strong>
+                            <p>This is the homepage of your experience on Ranked Crew Battle. Depending on your status within your clan, you will have access to two types of panels:</p>
+                            <ul>
+                                <li><strong>Admin Panel:</strong> Accessible only to clan leaders and officers. This panel allows you to use all site features to effectively manage your clan.</li>
+                                <li><strong>Member Panel:</strong> If you are not a leader or officer, you will have access to a simplified version of the page. This panel allows you to view important information about your clan and stay informed about future crew battles.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Leaderboard</strong>
+                            <p>This page is accessible to all users. It displays the ranking of the best clans, allowing you to track your performance and that of your competitors.</p>
+                        </li>
+                        <li>
+                            <strong>Crew Battle Request</strong>
+                            <p>On this page, you can make a request to another clan to organize a crew battle. You will specify the date and format of the desired battle.</p>
+                        </li>
+                        <li>
+                            <strong>Documentation</strong>
+                            <p>You are currently on this page! Here, you will find useful information to navigate and use the features of Ranked Crew Battle.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+
+            <h1 id="section2">How to Make Requests</h1>
+            <h2>Clan Search</h2>
+            <p>When you log in as an admin on your <strong>Panel</strong> page, you have access to the <strong>Crew Battle Request</strong> page. On this page, you can search for clans in the search bar. If a clan is available on the site, it means that a leader or officer of that clan has logged in. In this case, you will be able to send a request to that clan.</p>
+            <img src="../assets/img/recherche-clan.png" alt="" class="example-img"/>
+            <p>To help you choose which clans you can face without too much difficulty, suggestions are created based on your clan's ELO, which is by default set to 1200. A suggestion displays the names of 5 random clans in the clan list, along with their ELO.</p>
+            <p>If the 5 suggested clan names do not ring a bell, you can press <strong>F5</strong> to refresh the page, which will give you 5 other clan names to consider!</p>
+           
+            <h2>Dates and Formats</h2>
+            <p>Once you have chosen the clan, you will need to select the formats. These formats are predefined based on the formats commonly used in Brawlhalla crew battles. Once the format is chosen, select the date of your meeting. A history of your request will then appear at the top.</p>
+            <img src="../assets/img/date-clan.png" alt="" class="example-img">
+            <strong><p style="color: rgb(223, 52, 52);">Special Rule - Request Times</p></strong>
+            <p>You cannot choose the same date and time for two different tournament requests; you need an hour between the two request times. For example, if today is December 31st and I choose to face the clan named LeCronningDeLanimal at noon the same day, while I have already requested another clan for December 31st at noon, an error message will appear. However, I could very well request a crew battle with LeCronningDeLanimal on the same day but at 1 PM instead of 12 PM.
+            <br>This avoids a situation where you have a crew battle at the same time with two clans, which is something the site does not foresee.</p>
+
+
+            <h1 id="section3">How to Validate a Request</h1>
+            <p>Validating a crew battle request is very simple. Go to your clan's "Admin Panel" page, then to the "Received Crew Battles" section. Click the button to display the list of received requests. This list will indicate which clan proposed a crew battle, the date and time, and the chosen format. Just below, two very clear buttons will allow you to either accept or reject the battle.</p>
+            <img src="../assets/img/demande-clan.png" alt="" class="example-img">
+            <p>If you were the one who requested a crew battle, it will appear in the Crew Battle Requested section.</p>
+
+
+            <h1 id="section4">How to Check-in My Crew Battle</h1>
+            <p>On the day of the crew battle you organized, you will be able to access the check-in page 30 minutes before the official match time. If both clans have checked in before the scheduled time, the battle can be started immediately. However, the check-in page becomes inaccessible if one of the clans is more than 15 minutes late. After this time, if neither clan has checked in, the crew battle is automatically canceled.</p>
+            <img src="../assets/img/checkin.png" alt="" class="example-img">
+
+            <h2>Check-in Page</h2>
+            <p>Once on the check-in page (see the image below), you can see which clans have confirmed their presence and which have not yet done so. Simply click the button to register.</p>
+            <img src="../assets/img/checkin-accept.png" alt="" class="example-img">
+
+            <h2>Brawlhalla Room</h2>
+            <p>As soon as both clans have checked in, you will need to enter the Brawlhalla room ID so that both teams can join.</p>
+            <img src="../assets/img/checkin-room.png" alt="" class="example-img">
+
+            <h2>Report the Results</h2>
+            <p>Once this is done, a button will appear to report the result of the match. <br>⚠️ Be careful not to report too quickly! If your opponent has already submitted their result before you, a message will notify you how long ago it was submitted. If only one clan submits their result and the other does not within 20 minutes, the result will be automatically validated and updated in the rankings.</p>
+            <img src="../assets/img/checkin-report.png" alt="" class="example-img">
+            <p>In the event of a dispute, if both clans report a victory, it means that one of them is lying. You will then be asked to provide image evidence on the dedicated page to resolve the conflict.</p>
+       
+
+            <h1 id="section5">How to Report My Crew Battle</h1>
+            <p>A clean page will appear to summarize all the elements of the crew battle. This is where you can record the match results.</p>
+            <img src="../assets/img/report.png" alt="" class="example-img">
+            <p>As mentioned previously, in the event of a dispute, you will be asked to submit visual evidence via the dedicated page to resolve the conflict.</p>
+
+
+            <h1 id="section6">How to Submit Evidence</h1>
+            <p>To submit evidence, simply go to the dedicated page (see images below). You will be able to upload up to five images to support your victory or defeat.</p>
+            <img src="../assets/img/preuve.png" alt="" class="example-img">
+            <p>Only certain types of images will be accepted. The expected formats are either the podium results right after the match or those provided via the replay. If you provide evidence via the replay, make sure the players' usernames are clearly visible. An example is shown below.</p>
+            <img  src="../assets/img/preuve-exp1.png" alt="" class="example-img">
+            <p>Why this type of image in particular? Because they are difficult to manipulate via Photoshop. If you attempt to cheat in this way, it will be quickly detected. Please note that any attempt to falsify recognized images will result in the clan being banned from the site.
+
+            </p>
+            <p>Each image must be under 5MB, not contain any unauthorized characters (such as /, ', etc.), and be in PNG or JPEG format.
+            <strong>If the images sent do not comply with the rules mentioned above, a moderator may cancel the match. In this case, no clan will lose or gain points.</p></strong>
+            
+            
+            <h1 id="section7">The Different Panels</h1>
+            <p>There are two types of panels, as previously mentioned: the Admin Panel and the Member Panel.</p>
+            
+            <h2>Admin Panel</h2>
+            <p>Below is an illustration of the Admin Panel.</p>
+            <img style="width: 75%;" src="../assets/img/panel-admin.png" alt="" class="example-img">
+            <p>Several elements differ from the Member Panel. First, the header offers additional links, allowing you to navigate to more pages. Additionally, a bell icon allows you to receive important notifications.</p>
+            <p>Then, three additional boxes appear, dedicated to receiving crew battle requests and check-ins. These are the main differences compared to the Member Panel.</p>
+
+            <h2>Member Panel</h2>
+            <p>The Member Panel, on the other hand, offers a much simpler interface. It is mainly designed to inform players about their clan's statistics. The available features are limited but essential. Members can view clan rankings and track their performance, as well as access a section dedicated to documentation, where they can get all the necessary information on how to use the site.</p>
+            <img style="width: 75%;" src="../assets/img/panel-member.png" alt="" class="example-img">
+            <p>This panel focuses on the essentials, providing members with the information they need without the complexity of the additional features found in the Admin Panel.</p>
+
+            <h1 id="section8">The Leaderboard</h1>
+            <p>The leaderboard page displays the clan rankings in real-time, allowing you to track the performance of various groups. Each page can display up to 25 players, providing a clear view of the top clans and their progression in the rankings.</p>
+        </div>
+
+    </div>
+    <footer class="footer">
+        <a href="https://discord.com" target="_blank">
+            <img src="../assets/img/discord-logo.png" alt="Discord Logo" class="logo-sb" />
+        </a>
+        <a href="https://corehalla.com" target="_blank">
+            <img src="../assets/img/corehalla.png" alt="Corehalla Logo" class="logo-sb" />
+        </a>
+    </footer>
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Récupère tous les boutons de la sidebar qui permettent d'ouvrir/fermer les sous-menus
+    const toggleButtons = document.querySelectorAll('.toggle');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const currentlyActiveMenu = document.querySelector('.submenu.active');
+            const submenu = this.nextElementSibling;
+
+            // Fermer l'autre sous-menu s'il est ouvert et différent de celui qu'on clique
+            if (currentlyActiveMenu && currentlyActiveMenu !== submenu) {
+                closeMenu(currentlyActiveMenu);
+            }
+
+            // Alterner entre ouvrir/fermer le sous-menu cliqué
+            if (submenu.classList.contains('active')) {
+                closeMenu(submenu);
+            } else {
+                openMenu(submenu);
+            }
+        });
+    });
+
+    // Fonction pour ouvrir un sous-menu avec une transition smooth
+    function openMenu(submenu) {
+        submenu.style.display = 'block';
+        submenu.style.height = '0px'; // Initialiser à 0 pour l'animation
+        submenu.classList.add('active');
+
+        // Déclencher l'animation smooth pour le déploiement
+        setTimeout(() => {
+            submenu.style.height = submenu.scrollHeight + 'px'; // Ajuste la hauteur en fonction du contenu réel
+            submenu.style.transition = 'height 0.4s ease'; // Animation smooth
+        }, 10); // Délai pour déclencher la transition après le display block
+    }
+
+    // Fonction pour fermer un sous-menu avec une transition smooth
+    function closeMenu(submenu) {
+        submenu.style.height = '0px';
+        submenu.style.transition = 'height 0.4s ease'; // Animation smooth
+
+        // Une fois l'animation terminée, cacher complètement l'élément
+        submenu.addEventListener('transitionend', function () {
+            if (submenu.style.height === '0px') {
+                submenu.style.display = 'none';
+                submenu.classList.remove('active');
+            }
+        }, { once: true });
+    }
+});
+
+</script>
+<script>
+    function toggleContent() {
+        const hiddenContent = document.querySelector('.hidden-content');
+        const arrow = document.querySelector('.toggle-arrow');
+    
+        if (hiddenContent.style.display === "none" || hiddenContent.style.display === "") {
+            hiddenContent.style.display = "block"; // Affiche le contenu
+            hiddenContent.style.maxHeight = hiddenContent.scrollHeight + "px"; // Ajuste la hauteur au contenu
+    
+            arrow.style.transform = "rotate(180deg)"; // Tourne la flèche vers le haut
+        } else {
+            hiddenContent.style.maxHeight = "0"; // Réinitialise la hauteur
+    
+            // Ferme le contenu après l'animation
+            hiddenContent.addEventListener('transitionend', function() {
+                hiddenContent.style.display = "none";
+            }, { once: true });
+            
+            arrow.style.transform = "rotate(0deg)"; // Restaure la flèche vers le bas
+        }
+    }
+    </script>
+    
+<script src="../assets/script/translate.js"></script>

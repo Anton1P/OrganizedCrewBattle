@@ -96,9 +96,9 @@ $has_pending_requests = false;
                 foreach ($tournois_recus as $tournoi) {
                     echo "<li>";
                     if ($tournoi['accepted'] == 1) {
-                        echo "Tournois déjà accepté avec le clan " . $clanTranslations[$tournoi['id_clan_demandeur']];
+                        echo "Tournois déjà accepté avec le clan " .$clanTranslations[$tournoi['id_clan_demandeur']];
                     } else {
-                        echo $clanTranslations[$tournoi['id_clan_demandeur']] ." invites you<br>
+                        echo "<a style='color: #4255d3; text-decoration: none;' target='_blank' href='https://corehalla.com/stats/clan/" . $tournoi['id_clan_demandeur'] . "'>" . $clanTranslations[$tournoi['id_clan_demandeur']] . "</a> invites you<br>
                               Date : " . htmlspecialchars($tournoi['date_rencontre']) . ", <br>  
                               Format : " . $tournamentFormats[$tournoi['format']] . " <br>";
                            
@@ -149,7 +149,7 @@ $has_pending_requests = false;
             if (!empty($tournois_demandes)) {
                 foreach ($tournois_demandes as $tournoi) {
                     $accepted = $tournoi['accepted'] ? "Accepted" : "Waiting for a response.";
-                    echo "<li>Clan :  " . $clanTranslations[$tournoi['id_clan_receveur']] . "<br> 
+                    echo "<li>Clan :  <a style='color: #4255d3; text-decoration: none;' target='_blank' href='https://corehalla.com/stats/clan/" . $tournoi['id_clan_receveur'] . "'>" . $clanTranslations[$tournoi['id_clan_receveur']] . "</a><br> 
                           Date: " . htmlspecialchars($tournoi['date_rencontre']) . "<br> 
                           Statut: " . $accepted . "</li>";
                     
