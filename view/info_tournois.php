@@ -37,11 +37,11 @@ if ($result_tournois->num_rows > 0) {
         } else {
             $formatted_date = $date_rencontre->format('d/m/Y à H\hi');
         }
-        echo "<h3>". $clanTranslations[$row['id_clan_demandeur']] ." Vs ".  $clanTranslations[$row['id_clan_receveur']]  ."</h3>";
+        echo " <div class='info-today'> <h3>". $clanTranslations[$row['id_clan_demandeur']] ." Vs ".  $clanTranslations[$row['id_clan_receveur']]  ."</h3>";
         echo  $formatted_date . "<br>";
         echo  $tournamentFormats[$row['format']] . "<br>";
         echo "Brawlhalla room : #" . $row['brawlhalla_room'] . "<br>";
-        echo "<br>";
+        echo "<br> </div>";
     }
     
 }

@@ -929,10 +929,19 @@ body {
   margin-bottom: 6px;
 }
 
+#div-myChart{
+  display:flex; 
+  justify-content: space-between;
+}
+
+
+
+
+
+
+
+
 @media screen and (max-width: 1500px) {
-  .wrapper {
-    max-width: 1200px;
-  }
 
   .activity {
     width: 49%;
@@ -945,81 +954,80 @@ body {
     height: 100%;
   }
 
-  .first-box {
-    flex-wrap: wrap;
-  }
+
   .first-box .cards-wrapper {
     width: 67%;
     max-width: none;
     margin: 20px 0;
   }
-  .first-box .cards-wrapper .item.is-active {
-    background: none;
-    color: inherit;
-  }
+ 
   .first-box .account-wrapper {
     max-width: none;
     width: calc(33% - 20px);
     margin: 20px 0 20px 20px;
   }
 
-  .second-box {
-    flex-wrap: wrap;
-  }
-  .second-box .cards-wrapper {
-    margin-top: 40px;
-    width: 66%;
-  }
 
-  .transection {
-    margin-top: 40px;
-    max-width: none;
-    width: 30%;
-  }
-}
-@media screen and (max-width: 1200px) {
+
+} 
+ @media screen and (max-width: 1350px) {
   .time {
     display: none;
   }
-}
-@media screen and (max-width: 1060px) {
-  .user-info .button,
-.user-info .hour {
+  .logo{
     display: none;
+  }
+  #myChart{
+    display :flex !important;
+  }
+  #div-myChart{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #table-container{
+    width: 100% !important;
+  }
+}
+
+
+@media screen and (max-width: 1060px) {
+  .account-wrapper{
+    display: none;
+  }
+  .transection{
+    width: 30%;
   }
 }
 @media screen and (max-width: 1020px) {
-  .user-box .cards-view {
+  .transection{
     display: none;
   }
-
-  .user-box .cards-header .cards-button {
-    display: none;
+  .hey{
+    display: flex !important;
+    z-index: 1;
+    width: 100%;
+    max-width: 870px;
+    margin-left: 0px;
+    margin-top: 80px;
+    height: 40%;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-
-  .cards-header-date {
-    margin: auto;
+  .second-box{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .info-today{
+    width: 33%;
   }
 }
 @media screen and (max-width: 930px) {
-  .second-box .cards-wrapper {
-    width: 100%;
-  }
-
-  .transection {
-    width: 100%;
-    margin-left: 0;
-    height: 100%;
-    margin-top: 20px;
-  }
-
   .header-link {
     display: none;
   }
 
-  .user-info .profile {
-    margin-right: 0;
-  }
 }
 @media screen and (max-width: 850px) {
   .activity-card,
@@ -1045,24 +1053,47 @@ body {
     margin-top: 20px;
   }
 }
-@media screen and (max-width: 720px) {
-  .first-box .account-wrapper {
-    display: none;
-  }
+@media screen and (max-width: 800px) {
+  .card + .card {
+    margin-left: 0px;
+}
+.first-box{
+  display: flex;
+  flex-wrap:wrap;
+  margin-bottom: 30%;
+}
 
-  .first-box .cards-wrapper {
+}
+@media screen and (max-width: 500px) {
+  .first-box{
+    display: flex;
+    flex-wrap:wrap;
+    margin-bottom: 50vh;
+  }
+  .activity {
     width: 100%;
-  }
-
-  .second-box .cards.card {
-    overflow-y: auto;
-  }
+    max-width: none;
 }
-@media screen and (max-width: 420px) {
-  .destination-card + .destination-card {
+.card{
+  margin-bottom: 10px;
+}
+.cards.card{
+  padding: 0px;
+}
+}
+
+@media screen and (max-width: 400px) {
+  .cards-wrapper{
     display: none;
   }
+
 }
+@media screen and (max-width: 334px) {
+.hey{
+  margin-top: 120px;
+}
+}
+
 .user-box > * {
   -webkit-animation: top 1s var(--delay) both;
           animation: top 1s var(--delay) both;
@@ -1245,3 +1276,82 @@ td a:hover{
 ::-moz-scrollbar-thumb {
   border-radius: 10px;
 }
+
+/* @media (max-width: 1300px) {
+  .wrapper {
+    max-width: 1200px;
+  }
+  .left-side {
+    width: 5rem;
+  }
+  .main-container {
+    padding: 20px;
+  }
+}
+
+
+@media (max-width: 1000px) {
+  .wrapper {
+    flex-direction: column;
+  }
+  .left-side {
+    width: 100%;
+    flex-direction: row;
+    padding: 10px 0;
+  }
+  .main-container {
+    padding: 15px;
+  }
+  .header-link {
+    font-size: 14px;
+  }
+}
+
+
+@media (max-width: 700px) {
+  .wrapper {
+    padding: 10px;
+  }
+  .left-side {
+    width: 4rem;
+  }
+  .main-container {
+    padding: 10px;
+  }
+  .header-link {
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .wrapper {
+    padding: 5px;
+  }
+  .left-side {
+    width: 3rem;
+  }
+  .main-container {
+    padding: 5px;
+  }
+  .header-link {
+    font-size: 10px;
+  }
+}
+
+
+@media (max-width: 300px) {
+  .wrapper {
+    flex-direction: column;
+    padding: 2px;
+  }
+  .left-side {
+    width: 100%;
+  }
+  .main-container {
+    padding: 2px;
+  }
+  .header-link {
+    font-size: 8px;
+  }
+}  */

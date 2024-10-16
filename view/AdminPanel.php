@@ -2,6 +2,7 @@
 include "../APIBrawlhalla/security.php";
 include "../bddConnexion/bddConnexion.php";
 include "../bddConnexion/loadData.php";
+include "../bddConnexion/data_clan.php";
 ?>
 
 <!DOCTYPE html>
@@ -133,12 +134,14 @@ include "../bddConnexion/loadData.php";
                     <div class="user-box second-box">
                          <div class="cards-wrapper" style="--delay: 1s;">
                               <div class="cards-header" style="padding: 10px 20px;">
-                                   <div class="cards-header-date" >
-                                       <h3>Clan Asakai</h3> 
+                                   <div class="cards-header-date" style="display:flex;" >
+                                       <h3>Clan Asakai</h3> <span style="margin-left:8px;">->  
+                                        <?php echo $data["elo_rating"];?> elo</span>
+                                        <span style="margin-left:45vw;">Top 158</span>
                                    </div>
                               </div>
                               <div class="cards card">
-                                   <div style="display:flex; justify-content: space-between;">
+                                   <div id="div-myChart" >
                                         
                                         <div id="table-container">
                                              <table id="clan-members">
@@ -177,6 +180,10 @@ include "../bddConnexion/loadData.php";
                          </div>
                          
                     </div>
+                    <div class="card transection hey" style="display:none;">
+                            <?php include "../view/info_tournois.php";?>
+                         </div>
+                  
                </div>
           </div>
      </body>
@@ -189,8 +196,6 @@ include "../bddConnexion/loadData.php";
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
 <script src="../assets/script/script.js"></script>
-
-<?php include "../bddConnexion/data_clan.php";?>
 
 <script>
 const ctx = document.getElementById('myChart').getContext('2d');
