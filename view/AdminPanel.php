@@ -149,7 +149,10 @@ include "../bddConnexion/traitement_addTop.php";
                             <div class="cards-header-date" style="display:flex;">
                                 <h3>Clan Asakai</h3> <span style="margin-left:8px;">->  
                                 <?php echo $data["elo_rating"];?> elo</span>
-                                <span style="margin-left:45vw;"> Top  <?php echo $data_clan_top["top"];?></span>
+                                <?php include "../bddConnexion/search_gainElo.php";?>  
+                            </div>  
+                            <div class="cards-header-date" style="display:flex;">
+                                 <p> Top  <?php echo $data_clan_top["top"];?></p> 
                             </div>
                         </div>
                         <div class="cards card">

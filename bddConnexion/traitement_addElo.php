@@ -70,12 +70,22 @@ while ($row = $result->fetch_assoc()) {
 // Calculate new Elo points
 if ($resultat_demandeur == 1 && $resultat_receveur == 0) {
     [$new_elo_demandeur, $new_elo_receveur] = calculateElo($clans[$id_clan_demandeur]['elo_rating'], $clans[$id_clan_receveur]['elo_rating']);
+
+    $elo_change_demandeur = $new_elo_demandeur - $clans[$id_clan_demandeur]['elo_rating'];
+    $elo_change_receveur = $new_elo_receveur - $clans[$id_clan_receveur]['elo_rating'];
+    $elo_change_demandeur = urlencode($elo_change_demandeur); // Encode la valeur pour l'URL
+    $elo_change_receveur = urlencode($elo_change_receveur); // Encode la valeur pour l'URL
     
     $clans[$id_clan_demandeur]['wins'] += 1;
     $clans[$id_clan_receveur]['loses'] += 1;
 } elseif ($resultat_demandeur == 0 && $resultat_receveur == 1) {
     [$new_elo_receveur, $new_elo_demandeur] = calculateElo($clans[$id_clan_receveur]['elo_rating'], $clans[$id_clan_demandeur]['elo_rating']);
-    
+
+    $elo_change_demandeur = $new_elo_demandeur - $clans[$id_clan_demandeur]['elo_rating'];
+    $elo_change_receveur = $new_elo_receveur - $clans[$id_clan_receveur]['elo_rating'];
+    $elo_change_demandeur = urlencode($elo_change_demandeur); // Encode la valeur pour l'URL
+    $elo_change_receveur = urlencode($elo_change_receveur); // Encode la valeur pour l'URL
+
     $clans[$id_clan_receveur]['wins'] += 1;
     $clans[$id_clan_demandeur]['loses'] += 1;
 } else {
@@ -139,6 +149,6 @@ $stmt_insert_result->close();
 $conn->close();
 
 $_SESSION['notification'] = "Tournament processed successfully. Results have been recorded."; // Translated text
-header("Location: ../view/AdminPanel.php");
+header("Location: ../view/AdminPanel.php?elo_change_demandeur=$elo_change_demandeur&elo_change_receveur=$elo_change_receveur&id_tournoi=$id_tournoi&id_clan_receveur=$id_clan_receveur&id_clan_demandeur=$id_clan_demandeur");
 exit();
 ?>

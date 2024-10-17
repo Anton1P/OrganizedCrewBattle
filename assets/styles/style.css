@@ -1356,3 +1356,6 @@ td a:hover{
         display: flex;
     }
 }
+.cards-header-date p{
+  margin-left: 20px;
+}
