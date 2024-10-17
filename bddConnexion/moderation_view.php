@@ -7,7 +7,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         include "../bddConnexion/bddConnexion.php";
         include "../APIBrawlhalla/traductions.php";
 
-        // Vérification si l'utilisateur est autorisé
+        // Check if the user is authorized
         if (!isset($_SESSION['userData']['steam_id'])) {
             header("Location: ../APIBrawlhalla/routes.php");
             exit();
@@ -16,11 +16,11 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         $id_tournoi = $_GET['id_tournoi'] ?? null;
 
         if (!$id_tournoi) {
-            echo "ID du tournoi manquant."; 
+            echo "Tournament ID is missing."; 
             exit();
         }
 
-        // Récupération des informations du tournoi
+        // Retrieve tournament information
         $query = "SELECT * FROM tournoi WHERE id_tournoi = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $id_tournoi);
@@ -28,22 +28,22 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         $tournoi = $stmt->get_result()->fetch_assoc();
 
         if (!$tournoi) {
-            echo "Tournoi non trouvé.";
+            echo "Tournament not found.";
             exit();
         }
 
-        // Récupérer les IDs des clans demandeurs et receveurs
+        // Retrieve the IDs of the requesting and receiving clans
         $id_clan_demandeur = $tournoi['id_clan_demandeur'];
         $id_clan_receveur = $tournoi['id_clan_receveur'];
         $format_tournoi = $tournoi['format']; 
 
-        // Affichage des images du tournoi
+        // Display tournament images
         $dir = "../assets/images/" . $id_tournoi . "/";
         $images = scandir($dir);
 
-        echo "<h1>Tournoi ID : " . htmlspecialchars($id_tournoi) . "</h1>";
-        echo "<h2>Format du tournoi : " . $tournamentFormats[$format_tournoi] . "</h2>"; // Afficher le format du tournoi
-        echo "<h2>Images du tournoi :</h2>";
+        echo "<h1>Tournament ID: " . htmlspecialchars($id_tournoi) . "</h1>";
+        echo "<h2>Tournament Format: " . $tournamentFormats[$format_tournoi] . "</h2>"; // Display tournament format
+        echo "<h2>Tournament Images:</h2>";
 
         echo "<ul style='display:flex; list-style-type: none; '>";
         foreach ($images as $image) {
@@ -53,7 +53,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         }
         echo "</ul>";
 
-        // Formulaire pour soumettre le résultat du match
+        // Form to submit the match result
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      
             function deleteDirectory($dir) {
@@ -62,20 +62,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
                 foreach ($files as $file) {
                     if ($file != "." && $file != "..") {
                         if (is_dir($dir . "/" . $file)) {
-                            deleteDirectory($dir . "/" . $file); // Récursion pour supprimer les sous-dossiers
+                            deleteDirectory($dir . "/" . $file); // Recursion to delete subdirectories
                         } else {
-                            unlink($dir . "/" . $file); // Supprime les fichiers
+                            unlink($dir . "/" . $file); // Delete files
                         }
                     }
                 }
-                rmdir($dir); // Supprime le dossier
+                rmdir($dir); // Delete the directory
             }
-
 
             if(isset($_POST['winner'])){
                 $winner = $_POST['winner'];
        
-                // Mettre à jour le résultat du tournoi dans la base de données
+                // Update the tournament result in the database
                 if ($winner == 'demandeur') {
                     $query = "UPDATE verif_report SET clan_demandeur_result = 1, clan_receveur_result = 0 WHERE id_tournoi = ?";
                 } else {
@@ -86,54 +85,49 @@ if (isset($_SERVER['HTTP_REFERER'])) {
                 $stmt->bind_param("i", $id_tournoi);
                 $stmt->execute();
 
-                // Suppression des fichiers et du dossier
+                // Delete files and the directory
                 deleteDirectory($dir);
     
-                echo "Résultat mis à jour avec succès.";
+                echo "Result successfully updated.";
                 header("Location: ../bddConnexion/traitement_addElo.php?id_tournoi=". $id_tournoi);
                 exit(); 
-    
             }     
-
 
             if (isset($_POST['id_tournoi']) && isset($_POST['delete'])) {
                 $id_tournoi = $_POST['id_tournoi'];
 
-                // Requête pour supprimer le tournoi
+                // Query to delete the tournament
                 $sql = "DELETE FROM tournoi WHERE id_tournoi = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $id_tournoi);
 
-
                 if ($stmt->execute()) {   
                     deleteDirectory($dir);
-                    $_SESSION['notification'] = "Tournoi supprimé avec succès.";
+                    $_SESSION['notification'] = "Tournament successfully deleted.";
                     header("Location: ../view/AdminPanel.php");
                     exit(); 
                 } else {
-                    $_SESSION['notification'] = "Erreur lors de la suppression du tournoi.";
+                    $_SESSION['notification'] = "Error deleting the tournament.";
                 }
 
                 $stmt->close();
             }
-
-
         }
     }
 }
 ?>
 
 <form action="" method="POST">
-    <label for="winner">Sélectionnez le gagnant :</label>
+    <label for="winner">Select the winner:</label>
     <select name="winner" id="winner">
         <option value="demandeur">
-            Clan Demandeur : <?php echo isset($clanTranslations[$id_clan_demandeur]) ? htmlspecialchars($clanTranslations[$id_clan_demandeur]) : "Inconnu"; ?>
+            Requesting Clan: <?php echo isset($clanTranslations[$id_clan_demandeur]) ? htmlspecialchars($clanTranslations[$id_clan_demandeur]) : "Unknown"; ?>
         </option>
         <option value="receveur">
-            Clan Receveur :  <?php echo isset($clanTranslations[$id_clan_receveur]) ? htmlspecialchars($clanTranslations[$id_clan_receveur]) : "Inconnu"; ?>
+            Receiving Clan:  <?php echo isset($clanTranslations[$id_clan_receveur]) ? htmlspecialchars($clanTranslations[$id_clan_receveur]) : "Unknown"; ?>
         </option>
     </select>
-    <button type="submit">Envoyer</button>
+    <button type="submit">Submit</button>
 </form>
 
 <form action="" method="POST">

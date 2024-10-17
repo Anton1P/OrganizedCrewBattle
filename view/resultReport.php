@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultat du Tournoi</title>
+    <title>Tournament Result</title>
     <link rel="stylesheet" href="../assets/styles/ask.css">
     <script>
-        // Fonction pour afficher une popup de confirmation avant l'envoi du formulaire
+        // Function to display a confirmation popup before submitting the form
         function confirmSubmission(event) {
-            event.preventDefault(); // Empêche l'envoi du formulaire immédiatement
-            let confirmation = confirm("Êtes-vous sûr de vouloir envoyer ces résultats ?");
+            event.preventDefault(); // Prevent the form from being submitted immediately
+            let confirmation = confirm("Are you sure you want to submit these results?");
             if (confirmation) {
-                document.getElementById("resultForm").submit(); // Envoie le formulaire si l'utilisateur confirme
+                document.getElementById("resultForm").submit(); // Submit the form if the user confirms
             }
         }
     </script>
@@ -27,7 +27,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
     $referer = $_SERVER['HTTP_REFERER'];
     if (strpos($referer, 'tournoiReport.php') !== false || strpos($referer, 'resultReport.php') !== false) {
 
-        // Récupérer les variables depuis l'URL
+        // Retrieve variables from the URL
         $id_tournoi = $_GET['id_tournoi'];
         $date_rencontre = $_GET['date_rencontre'];
         $format = $_GET['format'];
@@ -35,7 +35,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         $id_clan_receveur = $_GET['id_clan_receveur'];
         $brawlhalla_room = $_GET['brawlhalla_room'];
         
-        // Vérifier si les deux clans sont d'accord sur le résultat
+        // Check if both clans agree on the result
         $sql_verif = "SELECT * FROM verif_report WHERE id_tournoi = ?";
         $stmt_verif = $conn->prepare($sql_verif);
         $stmt_verif->bind_param("i", $id_tournoi);
@@ -45,47 +45,43 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         if ($result_verif->num_rows > 0) {
             $verif_data = $result_verif->fetch_assoc();
             
-            echo $verif_data['id_tournoi']; // Debugging pour voir si les données existent
-            echo "1"; // Debugging pour vérifier le flux d'exécution
+            echo $verif_data['id_tournoi']; // Debugging to see if the data exists
+            echo "1"; // Debugging to check the execution flow
 
-            // Vérifier si le clan connecté est le demandeur ou le receveur
+            // Check if the connected clan is the demander or the receiver
             if ($clan_id == $id_clan_demandeur) {
                 if ($verif_data['clan_demandeur_report'] == 1) {
-                    $_SESSION['notification'] = "Le clan demandeur a déjà reporté le résultat. En attente du clan receveur.";
+                    $_SESSION['notification'] = "The requester clan has already reported the result. Waiting for the receiver clan.";
                     header("Location: ../view/AdminPanel.php");
                     exit();
                 }
             } elseif ($clan_id == $id_clan_receveur) {
                 if ($verif_data['clan_receveur_report'] == 1) {
-                    $_SESSION['notification'] = "Le clan receveur a déjà reporté le résultat. En attente du clan demandeur.";
+                    $_SESSION['notification'] = "The receiver clan has already reported the result. Waiting for the requester clan.";
                     header("Location: ../view/AdminPanel.php");
                     exit();
                 }
             } else {
-                $_SESSION['notification'] = "Erreur : clan non reconnu.";
-                    header("Location: ../view/AdminPanel.php");
-                    exit();
+                $_SESSION['notification'] = "Error: unrecognized clan.";
+                header("Location: ../view/AdminPanel.php");
+                exit();
             }
         } 
 
-        // Si aucun résultat n'a encore été reporté, afficher les détails du tournoi
-        echo "<h2>Détails du tournoi</h2>";
-        echo "<p>Format : " . $tournamentFormats[$format] . "</p>";
-        echo "<p>Clan Demandeur : " . $clanTranslations[$id_clan_demandeur] . "</p>";
-        echo "<p>Clan Receveur : " . $clanTranslations[$id_clan_receveur] . "</p>";
-        echo "<p>Salle Brawlhalla : #" . htmlspecialchars($brawlhalla_room) . "</p>";
-
-
+        // If no results have been reported yet, display the tournament details
+        echo "<h2>Tournament Details</h2>";
+        echo "<p>Format: " . $tournamentFormats[$format] . "</p>";
+        echo "<p>Requester Clan: " . $clanTranslations[$id_clan_demandeur] . "</p>";
+        echo "<p>Receiver Clan: " . $clanTranslations[$id_clan_receveur] . "</p>";
+        echo "<p>Brawlhalla Room: #" . htmlspecialchars($brawlhalla_room) . "</p>";
     }
 } else {
-
     header("Location: ../view/AdminPanel.php");
     exit();
 }
 ?>
 
-
-<h2>Soumettre les résultats du tournoi</h2>
+<h2>Submit Tournament Results</h2>
 
 <form id="resultForm" action="../bddConnexion/traitement_report.php" method="POST">
     <input type="hidden" name="id_tournoi" value="<?php echo htmlspecialchars($id_tournoi); ?>">
@@ -96,15 +92,16 @@ if (isset($_SERVER['HTTP_REFERER'])) {
     <input type="hidden" name="brawlhalla_room" value="<?php echo htmlspecialchars($brawlhalla_room); ?>">
     <input type="hidden" name="verif_report" value="1">
 
-    <label for="resultat">Choisissez le résultat :</label>
+    <label for="resultat">Choose the result:</label>
     <select name="resultat" id="resultat" required>
-        <option value="1">Victoire</option>
-        <option value="0">Défaite</option>
+        <option value="1">Victory</option>
+        <option value="0">Defeat</option>
     </select>
     <br><br>
     
-    <button type="submit" onclick="confirmSubmission(event)">Envoyer</button>
+    <button type="submit" onclick="confirmSubmission(event)">Submit</button>
 </form>
+<p>If no evidence is submitted by at least one of the two clans, the match will be automatically canceled in 10 hours.</p>
 </div>
 </body>
 </html>

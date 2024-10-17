@@ -2,11 +2,11 @@
 session_start();
 include "../bddConnexion/bddConnexion.php";
 
-// Initialisation de la réponse
+// Initialize the response
 $response = [
     'status' => 'error',
     'message' => '',
-    'match_verified' => false // Ajoutez une clé pour indiquer si le match a été vérifié
+    'match_verified' => false // Add a key to indicate if the match has been verified
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_clan_demandeur = $_POST['id_clan_demandeur'];
     $id_clan_receveur = $_POST['id_clan_receveur'];
 
-    // Requête pour récupérer le temps du premier report
+    // Query to retrieve the time of the first report
     $sql_check_time = "SELECT * FROM verif_report WHERE id_tournoi = ? AND id_clan_demandeur = ? AND id_clan_receveur = ?";
     $stmt_check_time = $conn->prepare($sql_check_time);
     
@@ -25,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $data = $result->fetch_assoc();
 
         if (isset($data['report_time'])) {
-            // Vérifiez si les résultats des clans sont égaux
-            if ($data['clan_demandeur_result'] == $data['clan_receveur_result']) {
-                // Rediriger avec un formulaire
+            // Check if the results of the clans are equal
+            if ($data['clan_demandeur_result'] == $data['clan_receveur_result'] && $data['clan_demandeur_report'] === 1 && $data['clan_receveur_report'] === 1) {
+                // Redirect with a form
                 $response['status'] = 'redirect';
                 $response['formData'] = [
                     'id_tournoi' => $id_tournoi,
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $report_time = new DateTime($data['report_time']);
                 $now = new DateTime();
                 $diff = $now->diff($report_time);
-                $minutes_passed = $diff->i; // Minutes écoulées
+                $minutes_passed = $diff->i; // Minutes passed
                 $time = 20;
 
                 if ($minutes_passed >= $time) {
@@ -48,26 +48,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     $time_remaining = $time - $minutes_passed;
                     $response['status'] = 'waiting';
-                    $response['message'] = "Une personne a déjà reporté la partie. Il vous reste " . $time_remaining . " minutes avant l'auto-report.";
+                    $response['message'] = "Someone has already reported the match. You have " . $time_remaining . " minutes left before auto-report.";
                 }
                 $response['match_verified'] = true;
             }
         } else {
             $response['status'] = 'no_report';
-            $response['message'] = "Nobody reported the match yet."; // Si le premier rapport n'est pas encore effectué
+            $response['message'] = "Nobody reported the match yet."; // If the first report has not yet been made
         }
     } else {
-        $response['message'] = "Erreur lors de la préparation de la requête.";
+        $response['message'] = "Error preparing the query.";
     }
 
-    // Renvoyer la réponse en JSON
+    // Return the response as JSON
     echo json_encode($response);
 } else {
-    // Si la méthode de requête n'est pas POST
-    $response['message'] = "Méthode de requête invalide.";
+    // If the request method is not POST
+    $response['message'] = "Invalid request method.";
     echo json_encode($response);
 }
 
-// Fermer la connexion
+// Close the connection
 $conn->close();
 ?>

@@ -4,21 +4,21 @@ include "../bddConnexion/bddConnexion.php";
 if (isset($_POST['id_tournoi'])) {
     $id_tournoi = $_POST['id_tournoi'];
 
-    // Requête pour supprimer le tournoi
+    // Query to delete the tournament
     $sql = "DELETE FROM tournoi WHERE id_tournoi = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_tournoi);
 
     if ($stmt->execute()) {
-        $_SESSION['notification'] = "Tournoi supprimé avec succès.";
+        $_SESSION['notification'] = "Tournament successfully deleted.";
     } else {
-        $_SESSION['notification'] = "Erreur lors de la suppression du tournoi.";
+        $_SESSION['notification'] = "Error deleting the tournament.";
     }
 
     $stmt->close();
 }
 
-// Redirection vers le panneau d'administration
+// Redirect to the admin panel
 header("Location: ../view/AdminPanel.php");
 exit();
 ?>

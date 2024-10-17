@@ -1,12 +1,12 @@
 <script>
     window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {
-        console.log("La page a été chargée via la navigation arrière/avant");
-        location.reload();  
-    } else {
-        console.log("La page a été chargée normalement");
-    }
-});
+        if (event.persisted) {
+            console.log("The page was loaded via back/forward navigation");
+            location.reload();  
+        } else {
+            console.log("The page was loaded normally");
+        }
+    });
 </script>
 
 <!DOCTYPE html>
@@ -154,6 +154,10 @@ if ($result->num_rows > 0) {
                     echo '<div class="component" id="game2Component">';
                     echo '<h2>Report the Crewbattle</h2>';
                     echo '<div class="active-content">';
+                      // If no results have been reported yet, display the tournament details
+                    echo "<h4>Tournament Details :</h4> <br>";
+                    echo "<p>Format: " . $tournamentFormats[$format] . "</p>";
+                    echo "<p>Brawlhalla Room: #" . htmlspecialchars($brawlhalla_room) . "</p> <br>";
                     echo '<div id="response-container">Nobody reported the match yet</div>';
                     echo '<a class="checkin-button"  href="resultReport.php?id_tournoi=' . $id_tournoi .
                     '&date_rencontre=' . urlencode($date_rencontre->format('Y-m-d H:i:s')) .
@@ -170,12 +174,12 @@ if ($result->num_rows > 0) {
                     header("Location: ../view/AdminPanel.php");
             }
         } else {
-            $_SESSION['notification'] = "Impossible de se rendre sur la page report du tournoi comme cela";
+            $_SESSION['notification'] = "Cannot access the tournament report page like this.";
             header("Location: ../view/AdminPanel.php");
             exit();
         }
     } else {
-        $_SESSION['notification'] = "Aucun tournoi trouvé.";
+        $_SESSION['notification'] = "No tournament found.";
         header("Location: ../view/AdminPanel.php");
         exit();
     }
@@ -326,7 +330,7 @@ function supprimerTournoi(tournoiID) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            alert("Le tournoi a été supprimé car une équipe n'a pas check-in à temps.");
+            alert("The tournament has been deleted because a team did not check in on time.");
             location.reload();  // Recharger la page après la suppression
         }
     };

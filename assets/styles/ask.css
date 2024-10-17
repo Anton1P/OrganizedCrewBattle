@@ -179,3 +179,85 @@ button:hover {
   ::-moz-scrollbar-thumb {
     border-radius: 10px;
   }
+/* Pour les écrans de 1300px et plus */
+@media (max-width: 1300px) {
+    .container {
+        width: 70%;
+    }
+    .search-bar, select, input, button {
+        width: 90%;
+    }
+    .suggestion-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .criteria, .suggestions {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+/* Pour les écrans de 1000px à 1300px */
+@media (max-width: 1000px) {
+    .container {
+        width: 80%;
+    }
+    .search-bar, select, input, button {
+        width: 85%;
+    }
+    .suggestion-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .criteria, .suggestions {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+/* Pour les écrans de 700px à 1000px */
+@media (max-width: 700px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+    .search-bar, select, input, button {
+        width: 80%;
+    }
+    .suggestion-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Pour les écrans de 400px à 700px */
+@media (max-width: 400px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+    .search-bar, select, input, button {
+        width: 100%;
+    }
+    h2 {
+        font-size: 18px;
+    }
+}
+
+/* Pour les écrans en dessous de 400px */
+@media (max-width: 300px) {
+    .container {
+        width: 100%;
+        padding: 5px;
+    }
+    h2 {
+        font-size: 16px;
+    }
+    .search-bar, select, input, button {
+        width: 100%;
+        padding: 10px;
+    }
+}

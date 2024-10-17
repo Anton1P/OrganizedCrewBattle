@@ -139,3 +139,91 @@ input[type="number"].error {
     font-size: 12px; /* Taille de la police pour les messages d'erreur */
     margin-top: 5px; /* Espacement au-dessus du message */
 }
+
+/* Pour les écrans de 1300px et moins */
+@media (max-width: 1300px) {
+    .container {
+        width: 70%;
+    }
+    .checkin-button {
+        padding: 10px;
+        width: 100%;
+    }
+    input[type="number"] {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+/* Pour les écrans de 1000px à 1300px */
+@media (max-width: 1000px) {
+    .container {
+        width: 80%;
+    }
+    .checkin-button {
+        padding: 8px;
+        width: 100%;
+    }
+    .player-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    input[type="number"] {
+        font-size: 14px;
+    }
+}
+
+/* Pour les écrans de 700px à 1000px */
+@media (max-width: 700px) {
+    .container {
+        width: 90%;
+    }
+    h2 {
+        font-size: 18px;
+    }
+    .checkin-button {
+        font-size: 14px;
+        padding: 7px;
+    }
+    input[type="number"] {
+        font-size: 12px;
+        padding: 7px;
+    }
+}
+
+/* Pour les écrans de 400px à 700px */
+@media (max-width: 400px) {
+    .container {
+        width: 95%;
+    }
+    .checkin-button {
+        font-size: 12px;
+        padding: 5px;
+    }
+    h2 {
+        font-size: 16px;
+    }
+    input[type="number"] {
+        font-size: 12px;
+        padding: 5px;
+    }
+}
+
+/* Pour les écrans de moins de 300px */
+@media (max-width: 300px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+    .checkin-button {
+        font-size: 10px;
+        padding: 5px;
+    }
+    h2 {
+        font-size: 14px;
+    }
+    input[type="number"] {
+        font-size: 10px;
+        padding: 4px;
+    }
+}

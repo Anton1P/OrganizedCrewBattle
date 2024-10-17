@@ -8,32 +8,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
 
     if ($action === 'Accepter') {
-        //? Mettre à jour le statut du tournoi dans la base de données pour "accepté"
+        //? Update the tournament status in the database to "accepted"
         $sql_update = "UPDATE tournoi SET accepted = 1 WHERE id_tournoi = $id_tournoi";
         if ($conn->query($sql_update) === TRUE) {
             header("Location: ../bddConnexion/traitement_responseForm.php");
         } else {
-            $_SESSION['notification'] = "Erreur lors de l'acceptation du tournoi.";
+            $_SESSION['notification'] = "Error while accepting the tournament.";
         }
     } elseif ($action === 'Refuser') {
-        //? Mettre à jour le statut du tournoi dans la base de données pour "refusé"
+        //? Update the tournament status in the database to "refused"
         $sql_update = "DELETE FROM tournoi WHERE id_tournoi = $id_tournoi";
         if ($conn->query($sql_update) === TRUE) {
-            $_SESSION['notification'] = "Le tournoi a été refusé.";
+            $_SESSION['notification'] = "The tournament has been refused.";
         } else {
-            $_SESSION['notification'] = "Erreur lors du refus du tournoi.";
+            $_SESSION['notification'] = "Error while refusing the tournament.";
         }
 
-         //? Mettre à jour le statut du player_tournoi dans la base de données pour "refusé"
-         $sql_update = "DELETE FROM player_tournoi WHERE id_tournoi = $id_tournoi";
-         if ($conn->query($sql_update) === TRUE) {
+        //? Update the player_tournoi status in the database to "refused"
+        $sql_update = "DELETE FROM player_tournoi WHERE id_tournoi = $id_tournoi";
+        if ($conn->query($sql_update) === TRUE) {
             header("Location: ../view/AdminPanel.php");
-         } else {
-             $_SESSION['notification'] = "Erreur lors du refus du tournoi.";
-         }
-
+        } else {
+            $_SESSION['notification'] = "Error while refusing the tournament.";
+        }
     }
-   
-  
-   exit();
+
+    exit();
 }

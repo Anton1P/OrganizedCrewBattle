@@ -1302,81 +1302,57 @@ td a:hover{
   border-radius: 10px;
 }
 
-/* @media (max-width: 1300px) {
-  .wrapper {
-    max-width: 1200px;
-  }
-  .left-side {
-    width: 5rem;
-  }
-  .main-container {
-    padding: 20px;
-  }
+   /* Style de la nav mobile, cachée par défaut */
+   .mobile-nav {
+    display: none;
+    background-color: #11132c;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-
-@media (max-width: 1000px) {
-  .wrapper {
-    flex-direction: column;
-  }
-  .left-side {
-    width: 100%;
-    flex-direction: row;
-    padding: 10px 0;
-  }
-  .main-container {
+.mobile-nav a {
+    color: white;
+    text-decoration: none;
     padding: 15px;
-  }
-  .header-link {
-    font-size: 14px;
-  }
+    display: block;
 }
 
-
-@media (max-width: 700px) {
-  .wrapper {
-    padding: 10px;
-  }
-  .left-side {
-    width: 4rem;
-  }
-  .main-container {
-    padding: 10px;
-  }
-  .header-link {
-    font-size: 12px;
-  }
+/* Bouton pour afficher le menu mobile */
+.mobile-menu-toggle {
+    display: none;
+    font-size: 24px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
 }
 
+/* Affichage de la nav mobile pour les petits écrans */
+@media (max-width: 768px) {
+    .header .header-link {
+        display: none;
+    }
 
-@media (max-width: 400px) {
-  .wrapper {
-    padding: 5px;
-  }
-  .left-side {
-    width: 3rem;
-  }
-  .main-container {
-    padding: 5px;
-  }
-  .header-link {
-    font-size: 10px;
-  }
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .mobile-nav {
+        display: none;
+    }
+
+    .mobile-nav.active {
+        display: flex;
+    }
 }
-
-
-@media (max-width: 300px) {
-  .wrapper {
-    flex-direction: column;
-    padding: 2px;
-  }
-  .left-side {
-    width: 100%;
-  }
-  .main-container {
-    padding: 2px;
-  }
-  .header-link {
-    font-size: 8px;
-  }
-}  */

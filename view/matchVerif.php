@@ -35,7 +35,7 @@ $is_receveur = ($row['id_clan_receveur'] == $clan_id);
 // Si l'utilisateur a déjà envoyé des preuves, rediriger vers l'admin panel
 if (($is_demandeur && $row['demandeur_sendproof'] == 1) || 
     ($is_receveur && $row['receveur_sendproof'] == 1)) {
-    $_SESSION['notification'] = "Vous avez déjà soumis des preuves pour ce tournoi.";
+    $_SESSION['notification'] = "You have already submitted proof for this tournament.";
     header("Location: ../view/AdminPanel.php");
     exit();
 }
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES['images'])) {
         // Limiter à 5 fichiers maximum
         if (count($_FILES['images']['name']) > 5) {
-            $_SESSION['notification'] = "Erreur : Vous ne pouvez télécharger que 5 images maximum.";
+            $_SESSION['notification'] = "Error: You can only upload a maximum of 5 images.";
             header("Location: ../view/AdminPanel.php");
             exit();
         }
@@ -72,14 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             if (preg_match("/[<>\"'\/]/", $fileName)) {
-                $_SESSION['notification'] = "Erreur : Le nom du fichier " . htmlspecialchars($fileName) . " contient des caractères non autorisés.";
+                $_SESSION['notification'] = "Error: The file name " . htmlspecialchars($fileName) . " contains unauthorized characters.";
                 $_SESSION['from_treatment'] = true;
                 header("Location: ../view/matchVerif.php?id_clan_demandeur=$id_clan_demandeur&id_clan_receveur=$id_clan_receveur&id_tournoi=$id_tournoi");
                 exit();
             }
         
             if (!in_array($fileType, $allowedFileTypes) || !in_array($fileExtension, $allowedExtensions)) {
-                $_SESSION['notification'] = "Erreur : Type de fichier non autorisé pour " . $fileName ." Only png, jpeg, jpg files.";
+                $_SESSION['notification'] = "Error: Unauthorized file type for " . $fileName . ". Only png, jpeg, and jpg files are allowed.";
                 $_SESSION['from_treatment'] = true;
                 header("Location: ../view/matchVerif.php?id_clan_demandeur=$id_clan_demandeur&id_clan_receveur=$id_clan_receveur&id_tournoi=$id_tournoi");
                 exit();
@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Vérifier la taille du fichier (max 5 Mo)
             if ($fileSize > 5 * 1024 * 1024) {
-                $_SESSION['notification'] = "Erreur : La taille du fichier " . $fileName . " est trop grande. Max: 5 Mo.";
+                $_SESSION['notification'] = "Error: The file " . $fileName . " is too large. Max: 5 MB.";
                 $_SESSION['from_treatment'] = true;
                header("Location: ../view/matchVerif.php?id_clan_demandeur=$id_clan_demandeur&id_clan_receveur=$id_clan_receveur&id_tournoi=$id_tournoi");
                 exit();
@@ -96,9 +96,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Déplacer le fichier vers le répertoire cible
             $targetFilePath = $targetDir . basename($fileName);
             if (move_uploaded_file($fileTmpPath, $targetFilePath)) {
-                $_SESSION['notification'] = "L'image " . $fileName . " a été téléchargée avec succès.";
+                $_SESSION['notification'] = "The image " . $fileName . " has been uploaded successfully.";
             } else {
-                $_SESSION['notification'] = "Erreur lors du téléchargement de l'image " . $fileName . ".";
+                $_SESSION['notification'] = "Error while uploading the image " . $fileName . ".";
             }
         }
 
@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_query($conn, $updateQuery);
 
         // Redirection après soumission
-        $_SESSION['notification'] = "Preuves envoyées avec succès.";
+        $_SESSION['notification'] = "Proofs sent successfully.";
         header("Location: ../view/AdminPanel.php");
         exit();
     }
@@ -124,10 +124,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vérification de Match</title>
+    <title>Match Verification</title>
     <link rel="stylesheet" href="../assets/styles/ask.css" />
 </head>
 <body>
@@ -139,14 +139,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     ?>
     
-    <h1>Envoyer des preuves d'image</h1>
+    <title>Match Verification</title>
 
     <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id_tournoi" value="<?php echo htmlspecialchars($id_tournoi); ?>">
         <input type="file" name="images[]" multiple accept=".png, .jpg, .jpeg" required>
-        <button type="submit">Envoyer</button>
+        <button type="submit">Submit</button>
     </form>
-    <p>Si aucune preuves n'est envoiée de la part d'au moin un des deux clans alors le match serra annulée automatiquement dans 10 heures.</p>
+    <p>If no proof is submitted by at least one of the two clans, the match will be automatically canceled in 10 hours.</p>
 </div>
 </body>
 </html>

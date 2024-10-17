@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 15 oct. 2024 à 10:39
+-- Généré le : jeu. 17 oct. 2024 à 11:58
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -36,13 +36,6 @@ CREATE TABLE `checkin` (
   `clan_receveur_checkin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `checkin`
---
-
-INSERT INTO `checkin` (`id_checkin`, `id_tournoi`, `id_clan_demandeur`, `clan_demandeur_checkin`, `id_clan_receveur`, `clan_receveur_checkin`) VALUES
-(59, 2161894, 2161882, 1, 5275542, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -68,14 +61,28 @@ INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`, `elo_
 (744, 'LesMiaou', 0, 0, 1200, 1200),
 (1234, 'Asakouille', 0, 0, 1200, 1200),
 (7441, 'LesMiaou', 0, 0, 1200, 1200),
+(74345, 'LesMiaou', 0, 0, 1200, 1200),
 (123411, 'Asakouille', 0, 1, 1185, 1200),
 (477447, 'LesMiaou', 0, 0, 1250, 1200),
+(742434, 'Asakouille', 0, 0, 1200, 1200),
 (744417, 'LesMiaou', 0, 0, 1200, 1200),
-(744774, 'Asakouille', 0, 0, 1200, 1200),
-(2161882, 'Asakai', 3, 0, 1229, 1229),
+(744774, 'Asakouille', 2, 0, 1231, 1231),
+(2161882, 'Asakai', 4, 4, 1180, 1242),
+(2434590, 'SmurfLand', 0, 0, 1200, 1200),
 (4474747, 'LesMiaou', 0, 0, 1150, 1200),
-(5275542, 'LeCronningDeLanimal(rebecca)', 255, 11, 1185, 2001),
-(47744747, 'Asakouille', 0, 0, 1200, 1200);
+(5275542, 'LeCronningDeLanimal(rebecca)', 255, 12, 1171, 2001),
+(12344535, 'Asakouille', 0, 0, 1200, 1200),
+(12345378, 'Asakouille', 0, 1, 1185, 1200),
+(47744747, 'Asakouille', 1, 0, 1214, 1214),
+(52575542, 'LeCronningDeLanimal(rebecca)', 255, 12, 1171, 2001),
+(74414538, 'LesMiaou', 0, 0, 1200, 1200),
+(216481882, 'Asakai', 5, 0, 1255, 1255),
+(243448590, 'SmurfLand', 0, 0, 1200, 1200),
+(445374747, 'LesMiaou', 0, 0, 1150, 1200),
+(477447248, 'LesMiaou', 0, 0, 1250, 1200),
+(744417835, 'LesMiaou', 0, 0, 1200, 1200),
+(744738378, 'LesMiaou', 0, 0, 1200, 1200),
+(1234114532, 'Asakouille', 0, 1, 1185, 1200);
 
 -- --------------------------------------------------------
 
@@ -143,6 +150,7 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (55347075, 'Azur.', 2161882),
 (57452641, 'ReinerGOAT', 2161882),
 (57734993, 'ComboTopaz', 2161882),
+(59935374, 'Rebecc&ce', 2434590),
 (63072326, 'larafy', 2161882),
 (63114984, 'Yuh Madda Bwoyfren Izziiiツ', 2161882),
 (65320761, 'INA', 2161882),
@@ -160,9 +168,12 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (98341473, 'ABP | MTH', 2161882),
 (102326446, 'iDrxp!?', 2161882),
 (102779605, 'T4RZ4N', 2161882),
+(103888044, 'CaiuX', 2434590),
+(105448424, 'im gay wlh', 2434590),
 (105693481, 'Pizza Hawaïenne', 2161882),
 (108499902, 'Sucre', 2161882),
-(117003562, 'Tilen', 2161882);
+(117003562, 'Tilen', 2161882),
+(120712302, 'France Power', 2434590);
 
 -- --------------------------------------------------------
 
@@ -196,7 +207,7 @@ CREATE TABLE `tournoi` (
 --
 
 INSERT INTO `tournoi` (`id_tournoi`, `id_clan_demandeur`, `id_clan_receveur`, `date_rencontre`, `format`, `accepted`, `brawlhalla_room`) VALUES
-(2161894, 2161882, 5275542, '2024-10-14 13:17:00.000000', 1, 1, 353543);
+(2161903, 2161882, 52575542, '2024-10-17 11:33:00.000000', 1, 1, 245425);
 
 -- --------------------------------------------------------
 
@@ -216,18 +227,10 @@ CREATE TABLE `tournoi_results` (
 --
 
 INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`) VALUES
-(6, 64, 5275542, 2161882),
-(7, 65, 2161882, 5275542),
-(8, 66, 2161882, 5275542),
-(9, 67, 2161882, 5275542),
-(10, 73, 2161882, 5275542),
-(11, 75, 2161882, 5275542),
-(12, 76, 2161882, 5275542),
-(13, 77, 2161882, 5275542),
-(14, 78, 2161882, 5275542),
-(15, 80, 2161882, 5275542),
-(16, 96, 2161882, 123),
-(17, 2161890, 2161882, 5275542);
+(19, 2161902, 744774, 2161882),
+(20, 2161904, 744774, 2161882),
+(21, 2161905, 216481882, 2161882),
+(22, 2161906, 47744747, 2161882);
 
 -- --------------------------------------------------------
 
@@ -261,13 +264,6 @@ CREATE TABLE `verif_report` (
   `clan_receveur_result` tinyint(1) NOT NULL,
   `report_time` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `verif_report`
---
-
-INSERT INTO `verif_report` (`id_verifReport`, `id_tournoi`, `id_clan_demandeur`, `clan_demandeur_report`, `clan_demandeur_result`, `id_clan_receveur`, `clan_receveur_report`, `clan_receveur_result`, `report_time`) VALUES
-(52, 2161894, 2161882, 1, 1, 5275542, 0, 0, '2024-10-14 11:19:06');
 
 --
 -- Index pour les tables déchargées
@@ -351,7 +347,7 @@ ALTER TABLE `verif_report`
 -- AUTO_INCREMENT pour la table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT pour la table `moderation_access`
@@ -363,25 +359,25 @@ ALTER TABLE `moderation_access`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=2161895;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=2161907;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi_results`
 --
 ALTER TABLE `tournoi_results`
-  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- Contraintes pour les tables déchargées
@@ -392,8 +388,8 @@ ALTER TABLE `verif_report`
 --
 ALTER TABLE `checkin`
   ADD CONSTRAINT `checkin_ibfk_1` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE,
-  ADD CONSTRAINT `checkin_ibfk_2` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `tournoi` (`id_clan_demandeur`) ON DELETE CASCADE,
-  ADD CONSTRAINT `checkin_ibfk_3` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_clan_demandeur_checkin` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_clan_receveur_checkin` FOREIGN KEY (`id_clan_receveur`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `players`
@@ -426,16 +422,16 @@ ALTER TABLE `tournoi_results`
 -- Contraintes pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  ADD CONSTRAINT `verif_match_ibfk_2` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `tournoi` (`id_clan_demandeur`) ON DELETE CASCADE,
-  ADD CONSTRAINT `verif_match_ibfk_3` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_clan_demandeur_match` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_clan_receveur_match` FOREIGN KEY (`id_clan_receveur`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE,
   ADD CONSTRAINT `verif_match_ibfk_4` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  ADD CONSTRAINT `verif_report_ibfk_1` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `tournoi` (`id_clan_demandeur`) ON DELETE CASCADE,
-  ADD CONSTRAINT `verif_report_ibfk_2` FOREIGN KEY (`id_clan_receveur`) REFERENCES `tournoi` (`id_clan_receveur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_clan_demandeur` FOREIGN KEY (`id_clan_demandeur`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_clan_receveur` FOREIGN KEY (`id_clan_receveur`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE,
   ADD CONSTRAINT `verif_report_ibfk_3` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE;
 COMMIT;
 
