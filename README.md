@@ -1,6 +1,6 @@
 # Ranked Crew Battle
 
-![Logo](/assets/img/mini-logo-2.png) <!-- Ensure the path is correct -->
+![Logo](/assets/img/logo-2.png) <!-- Ensure the path is correct -->
 
 ## 🚀 Introduction
 
@@ -35,7 +35,7 @@ Ranked Crew Battle is designed to provide a competitive and structured environme
 
 To access Ranked Crew Battle, you must log in with your **Steam** account. You have likely already completed this step, as access to the site is conditioned on your login.
 
-![Steam Login](../assets/img/steam-login.png)
+![Steam Login](/assets/img/steam-login.png)
 
 ## ⚖️ Legal Disclaimer
 
@@ -43,7 +43,7 @@ To access Ranked Crew Battle, you must log in with your **Steam** account. You h
 
 ## 📞 Contact
 
-For any questions or suggestions, feel free to reach out via our [Discord server](https://discord.com) or our site [Corehalla](https://corehalla.com).
+For any questions or suggestions, feel free to reach out via our [Discord server](https://discord.com).
 
 ---
 
