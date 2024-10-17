@@ -1,6 +1,6 @@
 # Ranked Crew Battle
 
-<div style="text-align: center;">
+<div align="center">
     <img src="/assets/img/logo-2.png" alt="Logo" width="200" /> <!-- Adjust the width as needed -->
 </div>
 
