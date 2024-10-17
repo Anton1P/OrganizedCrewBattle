@@ -15,7 +15,7 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
     // Vérifier si la requête API a réussi
     if (!$result || !isset($result["data"]["brawlhalla_id"])) {
         // Redirection si l'API échoue ou si les données sont manquantes
-        header("Location: error.html");
+        header("Location: ../view/error.html");
         exit();
     }
 
@@ -29,7 +29,7 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
     // Vérifier si la deuxième requête API a réussi
     if (!$result || !isset($result["data"]["name"])) {
         // Redirection si l'API échoue ou si les données sont manquantes
-        header("Location: error.html");
+        header("Location: ../view/error.html");
         exit();
     }
     
