@@ -15,6 +15,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check-in Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../assets/styles/tournoiReport.css">
 </head>
 <body>
@@ -108,6 +109,14 @@ if ($result->num_rows > 0) {
                     echo '<div class="component" id="checkinComponent">';
                     echo '<h2>Check in</h2>';
                     echo '<div class="active-content">';
+                    echo '<div style="display:flex; justify-content: space-between;">
+                                <button class="button-home" onclick="window.location.href=\'AdminPanel.php\';">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                                <button class="button-refresh" onclick="location.reload();">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>';
                     echo '<p>It\'s time to check into the match!</p>';
                     echo '<p>1 player from each team must check-in to complete this step.</p>';
                     echo '<div class="player-info">';
@@ -139,6 +148,14 @@ if ($result->num_rows > 0) {
                     echo '<div class="component" id="game1Component">';
                     echo '<h2>Brawlhalla room</h2>';
                     echo '<div class="active-content">';
+                    echo '<div style="display:flex; justify-content: space-between;">
+                                <button class="button-home" onclick="window.location.href=\'AdminPanel.php\';">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                                <button class="button-refresh" onclick="location.reload();">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>';
                     echo '<form action="../view/tournoiReport.php" method="POST">';
                     echo '<label for="brawlhalla_room">Room number (6 digits) : </label>';
                     echo '<input type="number" id="brawlhalla_room" name="brawlhalla_room" required min="100000" max="999999" oninput="validateInput(this)">';
@@ -154,7 +171,14 @@ if ($result->num_rows > 0) {
                     echo '<div class="component" id="game2Component">';
                     echo '<h2>Report the Crewbattle</h2>';
                     echo '<div class="active-content">';
-                      // If no results have been reported yet, display the tournament details
+                    echo '<div style="display:flex; justify-content: space-between;">
+                                <button class="button-home" onclick="window.location.href=\'AdminPanel.php\';">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                                <button class="button-refresh" onclick="location.reload();">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>';
                     echo "<h4>Tournament Details :</h4> <br>";
                     echo "<p>Format: " . $tournamentFormats[$format] . "</p>";
                     echo "<p>Brawlhalla Room: #" . htmlspecialchars($brawlhalla_room) . "</p> <br>";

@@ -12,6 +12,11 @@ if (empty($id_clan_demandeur) && empty($id_clan_receveur) && empty($id_tournoi))
     $id_clan_receveur =  $_GET['id_clan_receveur'];
     $id_tournoi =  $_GET['id_tournoi'];
 }
+if (empty($id_clan_demandeur) && empty($id_clan_receveur) && empty($id_tournoi)) {
+    $_SESSION['notification'] = "You can't do this.";
+    header("Location: ../view/AdminPanel.php");
+    exit();
+}
 
 
 // Maintenant, nous récupérons les informations mises à jour du tournoi

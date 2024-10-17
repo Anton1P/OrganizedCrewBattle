@@ -140,6 +140,32 @@ input[type="number"].error {
     margin-top: 5px; /* Espacement au-dessus du message */
 }
 
+.button-refresh{
+    background-color: #d27bee;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    margin-bottom: 10px;
+    text-decoration: none;
+    justify-content: center;
+}
+.button-home{
+    background-color: #d27bee;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    margin-bottom: 10px;
+    text-decoration: none;
+    justify-content: center;
+}
+
+
 /* Pour les écrans de 1300px et moins */
 @media (max-width: 1300px) {
     .container {
@@ -227,3 +253,4 @@ input[type="number"].error {
         padding: 4px;
     }
 }
+

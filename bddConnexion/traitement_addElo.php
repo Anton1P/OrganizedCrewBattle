@@ -117,36 +117,21 @@ if ($resultat_demandeur == 1) {
 $stmt_insert_result->bind_param("iii", $id_tournoi, $id_winner, $id_loser);
 $stmt_insert_result->execute();
 
-// Retrieve the current elo_peak of both clans
-$sql_peak = "SELECT id_clan, elo_peak FROM clans WHERE id_clan IN (?, ?)";
-$stmt_peak = $conn->prepare($sql_peak);
-$stmt_peak->bind_param("ii", $id_clan_demandeur, $id_clan_receveur);
-$stmt_peak->execute();
-$result_peak = $stmt_peak->get_result();
+// Calculate ranking and update the `top` column for all clans
+$sql_rankings = "SELECT id_clan, elo_rating FROM clans ORDER BY elo_rating DESC";
+$result_rankings = $conn->query($sql_rankings);
 
-$elo_peaks = [];
-while ($row_peak = $result_peak->fetch_assoc()) {
-    $elo_peaks[$row_peak['id_clan']] = $row_peak['elo_peak'];
+$position = 1;
+while ($row = $result_rankings->fetch_assoc()) {
+    $id_clan = $row['id_clan'];
+    $sql_update_top = "UPDATE clans SET top = ? WHERE id_clan = ?";
+    $stmt_update_top = $conn->prepare($sql_update_top);
+    $stmt_update_top->bind_param("ii", $position, $id_clan);
+    $stmt_update_top->execute();
+    $position++;
 }
 
-// Update the elo_peak for the requesting clan if necessary
-if ($new_elo_demandeur > $elo_peaks[$id_clan_demandeur]) {
-    $sql_update_peak = "UPDATE clans SET elo_peak = ? WHERE id_clan = ?";
-    $stmt_update_peak = $conn->prepare($sql_update_peak);
-    $stmt_update_peak->bind_param("ii", $new_elo_demandeur, $id_clan_demandeur);
-    $stmt_update_peak->execute();
-}
-
-// Update the elo_peak for the receiving clan if necessary
-if ($new_elo_receveur > $elo_peaks[$id_clan_receveur]) {
-    $sql_update_peak = "UPDATE clans SET elo_peak = ? WHERE id_clan = ?";
-    $stmt_update_peak = $conn->prepare($sql_update_peak);
-    $stmt_update_peak->bind_param("ii", $new_elo_receveur, $id_clan_receveur);
-    $stmt_update_peak->execute();
-}
-
-$stmt_peak->close();
-$stmt_update_peak->close();
+$stmt_update_top->close();
 $stmt_update->close();
 $stmt_tournoi->close();
 $stmt_delete->close();

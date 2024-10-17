@@ -3,6 +3,8 @@ include "../APIBrawlhalla/security.php";
 include "../bddConnexion/bddConnexion.php";
 include "../bddConnexion/loadData.php";
 include "../bddConnexion/data_clan.php";
+include "../bddConnexion/search_clanTop.php";
+include "../bddConnexion/traitement_addTop.php";
 ?>
 <!-- https://www.youtube.com/watch?v=fmttOmYMm6Q&list=RDcr5kbp7Fu3w&index=13 Masterclass ahky -->
 <!DOCTYPE html>
@@ -11,6 +13,7 @@ include "../bddConnexion/data_clan.php";
         <meta charset="UTF-8" />
         <title>Ranked CrewBattle - Admin Panel</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="stylesheet" href="../assets/styles/style.css" />
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
@@ -146,7 +149,7 @@ include "../bddConnexion/data_clan.php";
                             <div class="cards-header-date" style="display:flex;">
                                 <h3>Clan Asakai</h3> <span style="margin-left:8px;">->  
                                 <?php echo $data["elo_rating"];?> elo</span>
-                                <span style="margin-left:45vw;">Top 158</span>
+                                <span style="margin-left:45vw;"> Top  <?php echo $data_clan_top["top"];?></span>
                             </div>
                         </div>
                         <div class="cards card">
