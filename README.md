@@ -1,6 +1,6 @@
 # Ranked Crew Battle
 
-![Logo](../assets/img/mini-logo-2.png)
+![Logo](/assets/img/mini-logo-2.png)
 
 ## Introduction
 
@@ -49,4 +49,4 @@ To run this project locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ranked-crew-battle.git
+   git clone https://github.com/Anton1P/OrganizedCrewBattle.git
