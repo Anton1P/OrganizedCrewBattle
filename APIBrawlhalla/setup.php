@@ -12,12 +12,26 @@ if (!isset($_SESSION['brawlhalla_data']['name'])) {
     $data = file_get_contents($url);
     $result = json_decode($data, true);
 
+    // Vérifier si la requête API a réussi
+    if (!$result || !isset($result["data"]["brawlhalla_id"])) {
+        // Redirection si l'API échoue ou si les données sont manquantes
+        header("Location: error.html");
+        exit();
+    }
+
     $name = $result["data"]["name"];
     $brawlhalla_id = $result["data"]["brawlhalla_id"];
     
     $url = "https://brawlhalla.fly.dev/v1/stats/id?brawlhalla_id=".$brawlhalla_id;
     $data = file_get_contents($url);
     $result = json_decode($data, true);
+    
+    // Vérifier si la deuxième requête API a réussi
+    if (!$result || !isset($result["data"]["name"])) {
+        // Redirection si l'API échoue ou si les données sont manquantes
+        header("Location: error.html");
+        exit();
+    }
     
     $name = $result["data"]["name"];
     
