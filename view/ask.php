@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../assets/styles/ask.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 
@@ -64,14 +66,35 @@
         <!-- Tournament format selection (hidden by default) -->
         <div id="formatComponent" class="hidden">
             <h2>Select Tournament Format</h2>
-            <label for="format">Format:</label>
-            <select id="format" name="format" required>
-                <option disabled selected value="">--Select a format--</option>
-                <option value="1">CrewBattle Bo3</option>
-                <option value="2">CrewBattle Bo5</option>
-                <option value="3">French CrewBattle</option>
-            </select>
-            <button type="button" id="formatNext" disabled>Confirm</button>
+            <div class="select-container">
+                <ul id="sortable" class="sortable-list">
+                    <li data-value="crew_battle" data-order="1">
+                        <div class="handle"></div>
+                        <span>Crew Battle</span>
+                        <span class="bo-label">BO</span>
+                        <input type="number" class="number-input" name="format_number[]" min="1" max="7" step="2" value="1">
+                        <input type="hidden" name="format[]" value="crew_battle">
+                        <span class="trash-icon" onclick="removeItem(this)">🗑️</span>
+                    </li>
+                    <li data-value="2v2" data-order="2">
+                        <div class="handle"></div>
+                        <span>2v2</span>
+                        <span class="bo-label">BO</span>
+                        <input type="number" class="number-input" name="format_number[]" min="1" max="7" step="2" value="1">
+                        <input type="hidden" name="format[]" value="2v2">
+                        <span class="trash-icon" onclick="removeItem(this)">🗑️</span>
+                    </li>
+                    <li data-value="1v1" data-order="3">
+                        <div class="handle"></div>
+                        <span>1v1</span>
+                        <span class="bo-label">BO</span>
+                        <input type="number" class="number-input" name="format_number[]" min="1" max="7" step="2" value="1">
+                        <input type="hidden" name="format[]" value="1v1">
+                        <span class="trash-icon" onclick="removeItem(this)">🗑️</span>
+                    </li>
+                </ul>
+                <button type="button" id="formatNext">Confirm</button>
+            </div>
         </div>
 
         <!-- Date selection (hidden by default) -->
@@ -87,24 +110,6 @@
         <input type="hidden" name="joueurs[]" id="joueurs_ids"> <!-- To store the selected players -->
     </form>
 </div>
-
-<script>
-    // Obtenez des références aux éléments
-    const formatSelect = document.getElementById('format');
-    const formatNextButton = document.getElementById('formatNext');
-
-    // Fonction pour vérifier si une option valide est sélectionnée
-    function checkSelection() {
-        // Activez le bouton si une option valide est sélectionnée
-        formatNextButton.disabled = formatSelect.value === "";
-    }
-
-    // Écoutez les changements sur le select
-    formatSelect.addEventListener('change', checkSelection);
-
-    // Vérifiez la sélection initiale
-    checkSelection();
-</script>
 
 <script>
     $(document).ready(function() {
@@ -159,7 +164,7 @@
 
         // Format confirmation
         $('#formatNext').on('click', function() {
-            recapFormat = $('#format option:selected').text();
+            recapFormat = $('#sortable li').length ? 'Formats sélectionnés' : ''; // Met à jour le format sélectionné
             updateRecap();
 
             $('#formatComponent').addClass('hidden');
@@ -199,6 +204,49 @@
         $('#suggestion_criteria').on('change', function() {
             loadClanSuggestions($(this).val());
         });
+
+        // Fonction pour vérifier si la liste sortable a des éléments
+        function checkSelection() {
+            if ($('#sortable li').length === 0) {
+                $('#formatNext').prop('disabled', true);
+            } else {
+                $('#formatNext').prop('disabled', false);
+            }
+        }
+
+        // Suppression d'un format
+        window.removeItem = function(element) {
+            $(element).closest('li').remove(); // Remove the list item
+            checkSelection(); // Vérifie la sélection après la suppression
+        };
+
+        // Make the list sortable
+        $('#sortable').sortable({
+            handle: '.handle',
+            stop: checkSelection // Check selection after sorting
+        });
+
+        // Collect and send data with order on form submission
+        $('#tournamentForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            var orderArray = [];
+            $('#sortable li').each(function() {
+                orderArray.push($(this).data('order')); // Collect data-order values
+            });
+
+            // Add the order array to the form data
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'format_order',
+                value: JSON.stringify(orderArray) // Send as JSON string
+            }).appendTo('#tournamentForm');
+
+            this.submit(); // Submit the form
+        });
+
+        // Initial check for the sortable list
+        checkSelection();
     });
 </script>
 

@@ -30,7 +30,6 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         // Retrieve variables from the URL
         $id_tournoi = $_GET['id_tournoi'];
         $date_rencontre = $_GET['date_rencontre'];
-        $format = $_GET['format'];
         $id_clan_demandeur = $_GET['id_clan_demandeur'];
         $id_clan_receveur = $_GET['id_clan_receveur'];
         $brawlhalla_room = $_GET['brawlhalla_room'];
@@ -70,7 +69,7 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 
         // If no results have been reported yet, display the tournament details
         echo "<h2>Tournament Details</h2>";
-        echo "<p>Format: " . $tournamentFormats[$format] . "</p>";
+        echo "<p>Format: " . $tournamentFormats[$id_tournoi] . "</p>";
         echo "<p>Requester Clan: " . $clanTranslations[$id_clan_demandeur] . "</p>";
         echo "<p>Receiver Clan: " . $clanTranslations[$id_clan_receveur] . "</p>";
         echo "<p>Brawlhalla Room: #" . htmlspecialchars($brawlhalla_room) . "</p>";

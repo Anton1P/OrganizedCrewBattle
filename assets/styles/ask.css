@@ -261,3 +261,111 @@ button:hover {
         padding: 10px;
     }
 }
+
+.select-container {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.sortable-list {
+    list-style: none;
+    padding: 0;
+}
+
+.sortable-list li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #292929;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.handle {
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    margin-right: 10px;
+    cursor: grab; /* Curseur grab pour les déplacements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.handle:hover {
+    cursor: pointer; /* Curseur de main survolé */
+}
+
+.handle::before {
+    content: '⋮⋮';
+    font-size: 18px;
+}
+
+.trash-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #f00;
+    margin-left: 10px;
+}
+
+.number-input {
+    width: 50px;
+    margin-left: 10px;
+}
+
+.error-message {
+    color: red;
+    display: none;
+    margin-top: 10px;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.bo-label {
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Règles responsive pour les écrans plus petits */
+@media (max-width: 600px) {
+    .select-container {
+        width: 95%; /* Ajuste la largeur pour les écrans plus petits */
+    }
+
+    .sortable-list li {
+        padding: 8px; /* Réduit le padding pour les petits écrans */
+    }
+
+    .handle {
+        width: 16px; /* Réduit la taille de la poignée */
+        height: 16px; /* Réduit la taille de la poignée */
+    }
+
+    .handle::before {
+        font-size: 16px; /* Réduit la taille de l'icône */
+    }
+
+    .number-input {
+        width: 40px; /* Réduit la largeur de l'input numéraire */
+    }
+
+    .bo-label {
+        font-size: 12px; /* Réduit la taille de la police pour les petits écrans */
+    }
+}
+
+/* Règles supplémentaires pour les écrans très petits */
+@media (max-width: 400px) {
+    .sortable-list li {
+        flex-direction: column; /* Empile les éléments sur des écrans très petits */
+        align-items: flex-start; /* Aligne à gauche */
+    }
+
+    .trash-icon {
+        font-size: 16px; /* Réduit la taille de l'icône de suppression */
+    }
+}

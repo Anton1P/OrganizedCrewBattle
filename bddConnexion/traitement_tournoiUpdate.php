@@ -98,7 +98,6 @@ if ($result->num_rows > 0) {
                 // Send tournament information to the session
                 $_SESSION['tournoi_id'] = $row['id_tournoi'];
                 $_SESSION['date_rencontre'] = $row['date_rencontre'];
-                $_SESSION['format'] = $row['format'];
                 $_SESSION['id_clan_demandeur'] = $row['id_clan_demandeur'];
                 $_SESSION['id_clan_receveur'] = $row['id_clan_receveur'];
                 $_SESSION['brawlhalla_room'] = $row['brawlhalla_room'];

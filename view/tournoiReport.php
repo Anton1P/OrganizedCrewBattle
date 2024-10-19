@@ -47,14 +47,12 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $id_tournoi = $row['id_tournoi'];
         $date_rencontre = $row['date_rencontre'];
-        $format = $row['format'];
         $id_clan_demandeur = $row['id_clan_demandeur'];
         $id_clan_receveur = $row['id_clan_receveur'];
         $brawlhalla_room = $row['brawlhalla_room'];
 
         $_SESSION['id_tournoi'] = $id_tournoi;
         $_SESSION['date_rencontre'] = $date_rencontre;
-        $_SESSION['format'] = $format ;
         $_SESSION['id_clan_demandeur'] = $id_clan_demandeur;
         $_SESSION['id_clan_receveur'] = $id_clan_receveur ;
         $_SESSION['brawlhalla_room'] = $brawlhalla_room ;
@@ -180,12 +178,11 @@ if ($result->num_rows > 0) {
                                 </button>
                             </div>';
                     echo "<h4>Tournament Details :</h4> <br>";
-                    echo "<p>Format: " . $tournamentFormats[$format] . "</p>";
+                    echo "<p>Format: " . $tournamentFormats[$id_tournoi] . "</p>";
                     echo "<p>Brawlhalla Room: #" . htmlspecialchars($brawlhalla_room) . "</p> <br>";
                     echo '<div id="response-container">Nobody reported the match yet</div>';
                     echo '<a class="checkin-button"  href="resultReport.php?id_tournoi=' . $id_tournoi .
                     '&date_rencontre=' . urlencode($date_rencontre->format('Y-m-d H:i:s')) .
-                    '&format=' . $format .
                     '&id_clan_demandeur=' . $id_clan_demandeur .
                     '&id_clan_receveur=' . $id_clan_receveur .
                     '&brawlhalla_room=' . $brawlhalla_room .

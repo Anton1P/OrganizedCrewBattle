@@ -51,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérifiez si des fichiers ont été téléchargés
     if (isset($_FILES['images'])) {
         // Limiter à 5 fichiers maximum
-        if (count($_FILES['images']['name']) > 5) {
-            $_SESSION['notification'] = "Error: You can only upload a maximum of 5 images.";
+        if (count($_FILES['images']['name']) > 21) {
+            $_SESSION['notification'] = "Error: You can only upload a maximum of 21 images.";
             header("Location: ../view/AdminPanel.php");
             exit();
         }

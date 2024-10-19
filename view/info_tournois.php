@@ -38,7 +38,7 @@ if ($result_tournaments->num_rows > 0) {
         
         echo "<div class='info-today'> <h3>". $clanTranslations[$row['id_clan_demandeur']] ." Vs ".  $clanTranslations[$row['id_clan_receveur']]  ."</h3>";
         echo  $formatted_date . "<br>";
-        echo  $tournamentFormats[$row['format']] . "<br>";
+        echo  $tournamentFormats[$row['id_tournoi']] . "<br>";
         echo "Brawlhalla room: #" . $row['brawlhalla_room'];
 
         // Check if the tournament is in verif_match table

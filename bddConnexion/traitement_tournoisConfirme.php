@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_tournoi = $_POST['id_tournoi'];
     $action = $_POST['action'];
 
-    if ($action === 'Accepter') {
+    if ($action === 'Accept') {
         //? Update the tournament status in the database to "accepted"
         $sql_update = "UPDATE tournoi SET accepted = 1 WHERE id_tournoi = $id_tournoi";
         if ($conn->query($sql_update) === TRUE) {
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['notification'] = "Error while accepting the tournament.";
         }
-    } elseif ($action === 'Refuser') {
+    } elseif ($action === 'Deny') {
         //? Update the tournament status in the database to "refused"
         $sql_update = "DELETE FROM tournoi WHERE id_tournoi = $id_tournoi";
         if ($conn->query($sql_update) === TRUE) {

@@ -90,13 +90,16 @@ if ($result_demande->num_rows > 0) {
             <?php
             if (!empty($tournois_recus)) {
                 foreach ($tournois_recus as $tournoi) {
+                    $date_rencontre = $tournoi['date_rencontre'];
+                    $date_formatee = date("d/m/Y H:i", strtotime($date_rencontre));
+                    
                     echo "<li>";
                     if ($tournoi['accepted'] == 1) {
                         echo "Tournament already accepted with clan " . $clanTranslations[$tournoi['id_clan_demandeur']];
                     } else {
                         echo "<a style='color: #4255d3; text-decoration: none;' target='_blank' href='https://corehalla.com/stats/clan/" . $tournoi['id_clan_demandeur'] . "'>" . $clanTranslations[$tournoi['id_clan_demandeur']] . "</a> invites you<br>
-                              Date: " . htmlspecialchars($tournoi['date_rencontre']) . ", <br>  
-                              Format: " . $tournamentFormats[$tournoi['format']] . " <br>";
+                              Date: " . $date_formatee . ", <br>  
+                              Format: " . $tournamentFormats[$tournoi['id_tournoi']] . " <br>";
                        
                         // Form to accept the tournament
                         echo "<form action='../bddConnexion/traitement_tournoisConfirme.php' method='post' style='display:inline;' id='form-accept-" . $tournoi['id_tournoi'] . "'>";
@@ -143,9 +146,12 @@ if ($result_demande->num_rows > 0) {
             <?php
             if (!empty($tournois_demandes)) {
                 foreach ($tournois_demandes as $tournoi) {
+                    $date_rencontre = $tournoi['date_rencontre'];
+                    $date_formatee = date("d/m/Y H:i", strtotime($date_rencontre));
+
                     $accepted = $tournoi['accepted'] ? "Accepted" : "Waiting for a response.";
                     echo "<li>Clan: <a style='color: #4255d3; text-decoration: none;' target='_blank' href='https://corehalla.com/stats/clan/" . $tournoi['id_clan_receveur'] . "'>" . $clanTranslations[$tournoi['id_clan_receveur']] . "</a><br> 
-                          Date: " . htmlspecialchars($tournoi['date_rencontre']) . "<br> 
+                          Date: " .$date_formatee. "<br> 
                           Status: " . $accepted . "</li>";
                     
                     // Check if the tournament can be deleted

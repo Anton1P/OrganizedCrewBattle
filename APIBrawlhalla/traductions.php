@@ -1,5 +1,5 @@
 <?php
-
+  $tournamentId = 0;
 include "../bddConnexion/bddConnexion.php";
 
 function getClanTranslations($conn) {
@@ -13,19 +13,40 @@ function getClanTranslations($conn) {
     
     return $translations;
 }
-
 function getTournamentFormats($conn) {
-    
-    $formats = [
-        1 => 'Crew Battle 1',
-        2 => 'Crew Battle 2',
-        3 => 'Crew Battle 3',
-        4 => 'Crew Battle 4',
-        5 => 'Crew Battle 5'
-    ];
-       
-    return $formats;
+    $formats = []; // Tableau associatif pour stocker les formats de chaque tournoi
+
+    // Obtenir tous les tournois
+    $sql = "SELECT id_tournoi, crew_battle_format, two_vs_two_format, one_vs_one_format, crew_battle_format_order, two_vs_two_format_order, one_vs_one_format_order FROM tournoi";
+    $result = $conn->query($sql);
+
+    while ($tournoi = $result->fetch_assoc()) {
+        // Tableau pour stocker les formats avec leur ordre
+        $orderedFormats = [];
+
+        // Ajouter les formats selon leur ordre
+        if ($tournoi['crew_battle_format'] > 0 && $tournoi['crew_battle_format_order'] !== null) {
+            $orderedFormats[$tournoi['crew_battle_format_order']] = "Crew Battle Bo" . $tournoi['crew_battle_format'];
+        }
+
+        if ($tournoi['two_vs_two_format'] > 0 && $tournoi['two_vs_two_format_order'] !== null) {
+            $orderedFormats[$tournoi['two_vs_two_format_order']] = "2v2 Bo" . $tournoi['two_vs_two_format'];
+        }
+
+        if ($tournoi['one_vs_one_format'] > 0 && $tournoi['one_vs_one_format_order'] !== null) {
+            $orderedFormats[$tournoi['one_vs_one_format_order']] = "1v1 Bo" . $tournoi['one_vs_one_format'];
+        }
+
+        // Trier les formats par ordre et construire la chaîne formatée
+        ksort($orderedFormats); // Trie par clé (ordre)
+
+        // Joindre les formats avec " -> "
+        $formats[$tournoi['id_tournoi']] = implode(' -> ', $orderedFormats);
+    }
+
+    return $formats; // Retourner le tableau associatif
 }
+
 
 function getPlayerNames($conn) {
     $sql = "SELECT id_player, player_name FROM players";

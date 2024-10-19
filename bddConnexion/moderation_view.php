@@ -35,14 +35,14 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         // Retrieve the IDs of the requesting and receiving clans
         $id_clan_demandeur = $tournoi['id_clan_demandeur'];
         $id_clan_receveur = $tournoi['id_clan_receveur'];
-        $format_tournoi = $tournoi['format']; 
+        $format_tournoi_id = $tournoi['id_tournoi']; 
 
         // Display tournament images
         $dir = "../assets/images/" . $id_tournoi . "/";
         $images = scandir($dir);
 
         echo "<h1>Tournament ID: " . htmlspecialchars($id_tournoi) . "</h1>";
-        echo "<h2>Tournament Format: " . $tournamentFormats[$format_tournoi] . "</h2>"; // Display tournament format
+        echo "<h2>Tournament Format: " . $tournamentFormats[$format_tournoi_id] . "</h2>"; // Display tournament format
         echo "<h2>Tournament Images:</h2>";
 
         echo "<ul style='display:flex; list-style-type: none; '>";
