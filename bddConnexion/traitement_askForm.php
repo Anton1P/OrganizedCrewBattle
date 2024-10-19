@@ -68,67 +68,91 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../view/ask.php");
                     exit(); 
                 } else {
-                    // Check if the receiving clan exists in the database
-                    $sql_check_clan = "SELECT * FROM clans WHERE id_clan = ?";
+
+                    $sql_check_clan = "
+                    SELECT * 
+                    FROM tournoi_results 
+                    WHERE 
+                        (id_winner = ? AND id_loser = ? OR id_winner = ? AND id_loser = ?)
+                        AND DATEDIFF(NOW(), date_finish) < 3";
+                        
                     $stmt_check_clan = $conn->prepare($sql_check_clan);
-                    $stmt_check_clan->bind_param("i", $askedClan_id);
+                    $stmt_check_clan->bind_param("iiii", $askedClan_id, $askClan_id, $askClan_id, $askedClan_id);
                     $stmt_check_clan->execute();
-                    $result_clan = $stmt_check_clan->get_result();
+                    $result_date_finish = $stmt_check_clan->get_result();
+                    
+                    // Check if a result is found
+                    if ($result_date_finish->num_rows > 0) {
+                        // The tournament exists and the date_finish is less than 3 days ago
+                        $_SESSION['notification'] = "Error: Your last encounter against this clan was no more than 3 days ago."; // Translated text
+                        $_SESSION['from_treatment'] = true; 
+                        header("Location: ../view/ask.php");
+                        exit(); 
+                    } 
+                    else {
+                      
+                        // Check if the receiving clan exists in the database
+                        $sql_check_clan = "SELECT * FROM clans WHERE id_clan = ?";
+                        $stmt_check_clan = $conn->prepare($sql_check_clan);
+                        $stmt_check_clan->bind_param("i", $askedClan_id);
+                        $stmt_check_clan->execute();
+                        $result_clan = $stmt_check_clan->get_result();
 
-                    if ($result_clan->num_rows > 0) {
-                        // Check if the clan has already made a tournament request
-                        $sql_check_previous_request = "SELECT * FROM tournoi WHERE id_clan_demandeur = ?";
-                        $stmt_check_previous_request = $conn->prepare($sql_check_previous_request);
-                        $stmt_check_previous_request->bind_param("i", $askClan_id);
-                        $stmt_check_previous_request->execute();
-                        $result_previous_request = $stmt_check_previous_request->get_result();
+                        if ($result_clan->num_rows > 0) {
+                            // Check if the clan has already made a tournament request
+                            $sql_check_previous_request = "SELECT * FROM tournoi WHERE id_clan_demandeur = ?";
+                            $stmt_check_previous_request = $conn->prepare($sql_check_previous_request);
+                            $stmt_check_previous_request->bind_param("i", $askClan_id);
+                            $stmt_check_previous_request->execute();
+                            $result_previous_request = $stmt_check_previous_request->get_result();
 
-                        if ($result_previous_request->num_rows > 0) { 
-                            // Tournament requests found for this clan
-                            while ($previous_data = $result_previous_request->fetch_assoc()) {
-                                $previous_date = new DateTime($previous_data['date_rencontre']);
-                                $new_date = new DateTime($date_rencontre);
-                                $diff = $new_date->diff($previous_date);  
-                                // Check if the new date is at least 1 hour later
-                                if ($diff->h < 1 && $diff->days == 0) { // Less than one hour but on the same day
-                                    $_SESSION['notification'] = "Error: You have already requested a tournament on the same day with less than one hour between."; // Translated text
-                                    $_SESSION['from_treatment'] = true; 
-                                    header("Location: ../view/ask.php");
-                                    exit();
+                            if ($result_previous_request->num_rows > 0) { 
+                                // Tournament requests found for this clan
+                                while ($previous_data = $result_previous_request->fetch_assoc()) {
+                                    $previous_date = new DateTime($previous_data['date_rencontre']);
+                                    $new_date = new DateTime($date_rencontre);
+                                    $diff = $new_date->diff($previous_date);  
+                                    // Check if the new date is at least 1 hour later
+                                    if ($diff->h < 1 && $diff->days == 0) { // Less than one hour but on the same day
+                                        $_SESSION['notification'] = "Error: You have already requested a tournament on the same day with less than one hour between."; // Translated text
+                                        $_SESSION['from_treatment'] = true; 
+                                        header("Location: ../view/ask.php");
+                                        exit();
+                                    }
                                 }
                             }
-                        }
 
-                        // Prepare the tournament insertion
-                        $sql_insert = "INSERT INTO tournoi (id_clan_demandeur, id_clan_receveur, date_rencontre, accepted, crew_battle_format, two_vs_two_format, one_vs_one_format, crew_battle_format_order, two_vs_two_format_order, one_vs_one_format_order) 
-                                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        $stmt_insert = $conn->prepare($sql_insert);
+                            // Prepare the tournament insertion
+                            $sql_insert = "INSERT INTO tournoi (id_clan_demandeur, id_clan_receveur, date_rencontre, accepted, crew_battle_format, two_vs_two_format, one_vs_one_format, crew_battle_format_order, two_vs_two_format_order, one_vs_one_format_order) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            $stmt_insert = $conn->prepare($sql_insert);
 
-                        // Initialize the format counts
-                        $crew_battle_format = (int)($format_numbers[array_search('crew_battle', $formats)] ?? 0);
-                        $two_vs_two_format = (int)($format_numbers[array_search('2v2', $formats)] ?? 0);
-                        $one_vs_one_format = (int)($format_numbers[array_search('1v1', $formats)] ?? 0);
+                            // Initialize the format counts
+                            $crew_battle_format = (int)($format_numbers[array_search('crew_battle', $formats)] ?? 0);
+                            $two_vs_two_format = (int)($format_numbers[array_search('2v2', $formats)] ?? 0);
+                            $one_vs_one_format = (int)($format_numbers[array_search('1v1', $formats)] ?? 0);
 
-                        // Bind parameters to the query
-                        $stmt_insert->bind_param("iisssiiiii", $askClan_id, $askedClan_id, $date_rencontre, $accepted, $crew_battle_format, $two_vs_two_format, $one_vs_one_format, $crew_battle_format_order, $two_vs_two_format_order, $one_vs_one_format_order);
+                            // Bind parameters to the query
+                            $stmt_insert->bind_param("iisssiiiii", $askClan_id, $askedClan_id, $date_rencontre, $accepted, $crew_battle_format, $two_vs_two_format, $one_vs_one_format, $crew_battle_format_order, $two_vs_two_format_order, $one_vs_one_format_order);
 
-                        // Execute the query and check
-                        if ($stmt_insert->execute()) {
-                            $_SESSION['notification'] = "Tournament request made."; // Translated text
+                            // Execute the query and check
+                            if ($stmt_insert->execute()) {
+                                $_SESSION['notification'] = "Tournament request made."; // Translated text
+                            } else {
+                                echo "Error creating the tournament: " . $stmt_insert->error; // Translated text
+                            }
+
+                            // Close the insertion statement
+                            $stmt_insert->close();
+                            header("Location: ../view/AdminPanel.php");
+                            exit(); 
                         } else {
-                            echo "Error creating the tournament: " . $stmt_insert->error; // Translated text
+                            echo "The receiving clan does not exist."; // Translated text
                         }
 
-                        // Close the insertion statement
-                        $stmt_insert->close();
-                        header("Location: ../view/AdminPanel.php");
-                        exit(); 
-                    } else {
-                        echo "The receiving clan does not exist."; // Translated text
+                        // Close the query for checking the receiving clan
+                        $stmt_check_clan->close();
                     }
-
-                    // Close the query for checking the receiving clan
-                    $stmt_check_clan->close();
                 }
 
                 // Close the query for checking the combination of the two clans

@@ -112,7 +112,7 @@ $stmt_delete->bind_param("i", $id_tournoi);
 $stmt_delete->execute();
 
 // Insert results into the tournament_results table
-$sql_insert_result = "INSERT INTO tournoi_results (id_tournoi, id_winner, id_loser) VALUES (?, ?, ?)";
+$sql_insert_result = "INSERT INTO tournoi_results (id_tournoi, id_winner, id_loser, date_finish) VALUES (?, ?, ?, NOW())";
 $stmt_insert_result = $conn->prepare($sql_insert_result);
 
 // Determine who is the winner and who is the loser, then insert

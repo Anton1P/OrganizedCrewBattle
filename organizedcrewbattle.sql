@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 19 oct. 2024 à 12:52
+-- Généré le : sam. 19 oct. 2024 à 18:43
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -57,22 +57,14 @@ CREATE TABLE `clans` (
 --
 
 INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`, `elo_peak`, `top`) VALUES
-(2161882, 'Asakai', 4, 4, 1180, 1242, 12),
-(2434590, 'SmurfLand', 0, 0, 1200, 1200, 5),
-(4474747, 'LesMiaou', 0, 0, 1150, 1200, 16),
-(5275542, 'LeCronningDeLanimal(rebecca)', 255, 12, 1171, 2001, 14),
-(12344535, 'Asakouille', 0, 0, 1200, 1200, 8),
-(12345378, 'Asakouille', 0, 1, 1185, 1200, 11),
-(47744747, 'Asakouille', 1, 0, 1214, 1214, 3),
-(52575542, 'LeCronningDeLanimal(rebecca)', 255, 12, 1171, 2001, 13),
-(74414538, 'LesMiaou', 0, 0, 1200, 1200, 4),
-(216481882, 'Asakai', 5, 0, 1255, 1255, 1),
-(243448590, 'SmurfLand', 0, 0, 1200, 1200, 9),
-(445374747, 'LesMiaou', 0, 0, 1150, 1200, 15),
-(477447248, 'LesMiaou', 0, 0, 1250, 1200, 2),
-(744417835, 'LesMiaou', 0, 0, 1200, 1200, 7),
-(744738378, 'LesMiaou', 0, 0, 1200, 1200, 6),
-(1234114532, 'Asakouille', 0, 1, 1185, 1200, 10);
+(2161882, 'Asakai', 4, 5, 1165, 1242, 6),
+(2434590, 'SmurfLand', 1, 0, 1214, 1200, 4),
+(4474747, 'LesMiaou', 0, 0, 2000, 1200, 1),
+(12344535, 'Asakouille', 0, 0, 1680, 1200, 2),
+(12345378, 'Asakouille', 0, 1, 1391, 1200, 3),
+(47744747, 'Asakouille', 1, 0, 1200, 1214, 5),
+(243448590, 'SmurfLand', 0, 0, 911, 1200, 7),
+(1234114532, 'Asakouille', 0, 1, 200, 1200, 8);
 
 -- --------------------------------------------------------
 
@@ -197,13 +189,6 @@ CREATE TABLE `tournoi` (
   `one_vs_one_format_order` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `tournoi`
---
-
-INSERT INTO `tournoi` (`id_tournoi`, `id_clan_demandeur`, `id_clan_receveur`, `date_rencontre`, `accepted`, `brawlhalla_room`, `crew_battle_format`, `two_vs_two_format`, `one_vs_one_format`, `crew_battle_format_order`, `two_vs_two_format_order`, `one_vs_one_format_order`) VALUES
-(2161921, 2161882, 1234114532, '2024-10-19 12:39:00.000000', 1, 0, 1, 1, 1, 1, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -214,16 +199,16 @@ CREATE TABLE `tournoi_results` (
   `id_results` int(11) NOT NULL,
   `id_tournoi` int(11) NOT NULL,
   `id_winner` int(11) NOT NULL,
-  `id_loser` int(11) NOT NULL
+  `id_loser` int(11) NOT NULL,
+  `date_finish` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `tournoi_results`
 --
 
-INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`) VALUES
-(21, 2161905, 216481882, 2161882),
-(22, 2161906, 47744747, 2161882);
+INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`, `date_finish`) VALUES
+(23, 2161922, 2434590, 2161882, '2024-10-19 18:25:08');
 
 -- --------------------------------------------------------
 
@@ -340,7 +325,7 @@ ALTER TABLE `verif_report`
 -- AUTO_INCREMENT pour la table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT pour la table `moderation_access`
@@ -352,13 +337,13 @@ ALTER TABLE `moderation_access`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=2161922;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=2161923;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi_results`
 --
 ALTER TABLE `tournoi_results`
-  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `verif_match`
@@ -370,7 +355,7 @@ ALTER TABLE `verif_match`
 -- AUTO_INCREMENT pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- Contraintes pour les tables déchargées
