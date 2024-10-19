@@ -80,7 +80,7 @@ function loadMembers(page, sortField, order) {
                 
                 tbody.append(`
                     <tr class="${rowClass}">
-                        <td><a href="https://corehalla.com/stats/player/${member.brawlhalla_id}">${truncatedName}</a></td>
+                        <td><a target="_blank" href="https://corehalla.com/stats/player/${member.brawlhalla_id}">${truncatedName}</a></td>
                         <td style="color: ${getRankColor(member.rank)};">${member.rank}</td>
                         <td><span style="color: ${calculateColor(member.xp, maxXP)};">${member.xp}</span></td>
                         <td><span style="color: ${calculateDateColor(joinDate, minDate, maxDate)};">${joinDate}</span></td>

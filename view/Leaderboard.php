@@ -74,6 +74,17 @@ $result = $conn->query($query);
                     </svg>
                     Leaderboard
                 </a>
+                
+                <?php
+                if ($rank === 'Leader' || $rank === 'Officer') {
+                    echo '<a class="header-link" href="../view/ask.php">
+                    <svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C21.4816 5.82475 21.7706 6.69989 21.8985 8" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M18 8L15.8411 9.79908C14.0045 11.3296 13.0861 12.0949 12 12.0949C11.3507 12.0949 10.7614 11.8214 10 11.2744M6 8L6.9 8.75L7.8 9.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    Ask for a clan battle
+                    </a>'; } ?>
+
                 <a class="header-link" href="../view/documentation.html">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="20" height="20">
                         <rect x="8" y="4" width="40" height="56" fill="none" stroke="WHITE" stroke-width="2"/>
@@ -86,35 +97,6 @@ $result = $conn->query($query);
                     </svg>
                     Documentation
                 </a>
-                <?php
-                if ($rank === 'Leader' || $rank === 'Officer') {
-                    echo '<a class="header-link" href="http://localhost/OrganizedCrewBattle/view/ask.php">
-                    <svg viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 12C22 15.7712 22 17.6569 20.8284 18.8284C19.6569 20 17.7712 20 14 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2 17.6569 2 15.7712 2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C21.4816 5.82475 21.7706 6.69989 21.8985 8" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="M18 8L15.8411 9.79908C14.0045 11.3296 13.0861 12.0949 12 12.0949C11.3507 12.0949 10.7614 11.8214 10 11.2744M6 8L6.9 8.75L7.8 9.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                    Ask for a clan battle
-                    </a>
-                    <div class="notification-wrapper">
-                        <div class="notification-icon" id="notificationIcon">
-                            <!-- White bell icon in SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
-                                <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2zM18 8V11C18 12.5 18.8 13.8 20 14.5V17H4V14.5C5.2 13.8 6 12.5 6 11V8C6 5.2 8.2 3 11 3H13C15.8 3 18 5.2 18 8ZM12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22Z" />
-                            </svg>
-                            <div class="ping" id="notificationPing">1</div>
-                        </div>
-
-                        <div class="notification-list" id="notificationList">
-                            <ul>
-                                <!-- Notifications will be generated here -->
-                                <?php include "../bddConnexion/researchNotifications.php";?>
-                            </ul>
-                        </div>
-                    </div>
-                    ';
-                }
-                ?>
-
             </div>
 
             <!-- Clan Leaderboard -->

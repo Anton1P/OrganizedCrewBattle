@@ -26,9 +26,8 @@ if ($result_received->num_rows > 0) {
         }
         $tournois_recus[] = $row; 
     }
-    if (!$has_pending_tournaments && !isset($_SESSION['notification_sent'])) {
+    if ($has_pending_tournaments == false) {
         $_SESSION['notification'] = "You have pending tournaments!"; 
-        $_SESSION['notification_sent'] = true; 
     }
 }
 

@@ -210,7 +210,7 @@ document.getElementById('language-toggle').addEventListener('click', function() 
         if (section6Title) section6Title.innerText = translations["Comment envoyer des preuves"];
 
         const paragraph18 = document.querySelector('.content p:nth-of-type(18)');
-        if (paragraph18) paragraph18.innerText = translations["Pour soumettre des preuves, il vous suffit de vous rendre sur la page dédiée (voir images ci-dessous). Vous pourrez y télécharger jusqu'à cinq images pour appuyer votre victoire ou défaite."];
+        if (paragraph18) paragraph18.innerText = translations["Pour soumettre des preuves, il vous suffit de vous rendre sur la page dédiée (voir images ci-dessous). Vous pourrez y télécharger jusqu'à 21 images pour appuyer votre victoire ou défaite."];
 
         const paragraph19 = document.querySelector('.content p:nth-of-type(19)');
         if (paragraph19) paragraph19.innerText = translations["Seuls certains types d'images seront acceptés. Les formats attendus sont soit les résultats du podium juste après le match, soit ceux fournis via le replay. Si vous fournissez des preuves via le replay, assurez-vous que les pseudos des joueurs soient clairement visibles. Un exemple est visible ci-dessous."];
@@ -448,7 +448,7 @@ document.getElementById('language-toggle').addEventListener('click', function() 
         if (section6Title) section6Title.innerText = "Comment envoyer des preuves";
 
         const paragraph18 = document.querySelector('.content p:nth-of-type(18)');
-        if (paragraph18) paragraph18.innerText = "Pour soumettre des preuves, il vous suffit de vous rendre sur la page dédiée (voir images ci-dessous). Vous pourrez y télécharger jusqu'à cinq images pour appuyer votre victoire ou défaite.";
+        if (paragraph18) paragraph18.innerText = "Pour soumettre des preuves, il vous suffit de vous rendre sur la page dédiée (voir images ci-dessous). Vous pourrez y télécharger jusqu'à 21 images pour appuyer votre victoire ou défaite.";
 
         const paragraph19 = document.querySelector('.content p:nth-of-type(19)');
         if (paragraph19) paragraph19.innerText = "Seuls certains types d'images seront acceptés. Les formats attendus sont soit les résultats du podium juste après le match, soit ceux fournis via le replay. Si vous fournissez des preuves via le replay, assurez-vous que les pseudos des joueurs soient clairement visibles. Un exemple est visible ci-dessous.";
