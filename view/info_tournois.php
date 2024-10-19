@@ -2,12 +2,6 @@
 
 include "../bddConnexion/bddConnexion.php";
 
-//! Security check
-if (!isset($_SESSION['brawlhalla_data']['clan_id'])) { 
-    header("Location: ../APIBrawlhalla/routes.php");
-    exit(); 
-}
-
 $id_clan = $_SESSION['brawlhalla_data']['clan_id'];
 $date_actuelle = new DateTime();
 $date_today = $date_actuelle->format('Y-m-d'); // Format the current date

@@ -112,7 +112,6 @@ function loadMembers(page, sortField, order) {
         },
         error: function(xhr, status, error) {
             console.error(`Erreur : ${status} - ${error}`);
-            alert('Erreur lors du chargement des membres.');
         }
     });
 }
