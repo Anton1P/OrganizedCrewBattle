@@ -211,6 +211,43 @@ include "../bddConnexion/traitement_addTop.php";
 
 <script src="../assets/script/script.js"></script>
 
+
+<script>
+function checkTournamentStatus() {
+    $.ajax({
+        url: '../bddConnexion/verifier_tournoiAccept.php',
+        type: 'POST',
+        success: function(response) {
+            let data = JSON.parse(response);
+
+            if (data.status === 'success') {
+                let tournamentId = data.id_tournoi.toString(); // Convertir en chaîne de caractères
+
+                // Vérifier si ce tournoi a déjà été traité
+                let storedTournamentId = localStorage.getItem('handled_tournament');
+
+                if (storedTournamentId !== tournamentId) {
+                    // Sauvegarder l'ID du tournoi traité dans le localStorage
+                    localStorage.setItem('handled_tournament', tournamentId);
+
+                    // Rafraîchir la page si un nouveau tournoi est trouvé
+                    location.reload();
+                }
+            }
+        },
+        error: function() {
+            console.error('Erreur lors de la vérification du tournoi.');
+        }
+    });
+}
+
+// Lancer la vérification toutes les 10 secondes (10000 ms)
+setInterval(checkTournamentStatus, 2000);
+
+
+</script>
+
+
 <script>
 const ctx = document.getElementById('myChart').getContext('2d');
 

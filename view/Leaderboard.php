@@ -27,7 +27,8 @@ $result = $conn->query($query);
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Ranked CrewBattle - Admin Panel</title>
+    <title>Ranked CrewBattle - Leaderboard</title>
+    <link rel="icon" href="../assets/img/mini-logo-2.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
     <link rel="stylesheet" href="../assets/styles/style.css" />
     <link rel="stylesheet" href="../assets/styles/leaderboard.css" />
