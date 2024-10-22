@@ -1,5 +1,14 @@
-# steamConnexion/
-# bddConnexion.php
-# *.sql
-# *.xml
-# *.htaccess
+# Ignorer le dossier steamConnexion et tout son contenu
+steamConnexion/
+
+# Ignorer le fichier bddConnexion.php
+bddConnexion.php
+
+# Ignorer tous les fichiers .sql
+*.sql
+
+# Ignorer tous les fichiers .xml
+*.xml
+
+# Ignorer tous les fichiers .htaccess
+*.htaccess
