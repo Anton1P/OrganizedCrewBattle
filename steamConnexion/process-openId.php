@@ -38,29 +38,27 @@ $result = file_get_contents('https://steamcommunity.com/openid/login', false, $c
 if(preg_match("#is_valid\s*:\s*true#i", $result)){
     preg_match('#^https://steamcommunity.com/openid/id/([0-9]{17,25})#', $_GET['openid_claimed_id'], $matches);
     $steamID64 = is_numeric($matches[1]) ? $matches[1] : 0;
-    echo 'request has been validated by open id, returning the client id (steam id) of: ' . $steamID64;    
 
+    $steam_api_key = 'B693C671505408662C82BB3B3086655B'; 
+
+    $response = file_get_contents('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key='.$steam_api_key.'&steamids='.$steamID64);
+    $response = json_decode($response,true);
+
+
+    $userData = $response['response']['players'][0];
+
+    $_SESSION['logged_in'] = true;
+    $_SESSION['userData'] = [
+        'steam_id'=>$userData['steamid'],
+        'name'=>$userData['personaname'],
+        'avatar'=>$userData['avatarmedium'],
+        'rname'=>$userData['realname'],
+    ];
+
+    $redirect_url = "../APIBrawlhalla/routes.php";
+    header("Location: $redirect_url"); 
+    exit();
 }else{
     echo 'error: unable to validate your request';
     exit();
 }
-
-$steam_api_key = '1EDC0D204A7716E809F0B2DABE207BE7';
-
-$response = file_get_contents('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key='.$steam_api_key.'&steamids='.$steamID64);
-$response = json_decode($response,true);
-
-
-$userData = $response['response']['players'][0];
-
-$_SESSION['logged_in'] = true;
-$_SESSION['userData'] = [
-    'steam_id'=>$userData['steamid'],
-    'name'=>$userData['personaname'],
-    'avatar'=>$userData['avatarmedium'],
-    'rname'=>$userData['realname'],
-];
-
-$redirect_url = "../APIBrawlhalla/routes.php";
-header("Location: $redirect_url"); 
-exit();
