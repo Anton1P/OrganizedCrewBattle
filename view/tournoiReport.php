@@ -241,14 +241,86 @@ if ($result->num_rows > 0) {
 
 
 
+<script>
+    // Récupérer l'ID du tournoi soit depuis POST soit depuis GET
+    const idTournoi = "<?php echo isset($id_tournoi) && !empty($id_tournoi) ? $id_tournoi : (isset($_POST['id_tournoi']) && !empty($_POST['id_tournoi']) ? $_POST['id_tournoi'] : (isset($_GET['id_tournoi']) ? $_GET['id_tournoi'] : '')); ?>";
 
+    // Vérifier que l'ID du tournoi n'est pas vide avant d'exécuter la vérification de check-in
+    if (idTournoi) {
+        // Variable pour stocker l'ID de l'intervalle
+        let checkinInterval;
 
+        // Récupérer les `id_checkin` déjà traités depuis `localStorage`
+        let processedCheckins = JSON.parse(localStorage.getItem('processedCheckins')) || [];
+        const storedRoomNumber = localStorage.getItem('roomNumber'); // Récupère le numéro de la room stocké
 
+        // Fonction pour vérifier les check-ins via AJAX
+        function checkCheckin() {
+            const checkedInUsers = JSON.parse(localStorage.getItem('checkedInUsers')) || [];
 
+            $.ajax({
+                url: '../bddConnexion/verifier_checkin.php', // Mise à jour de l'URL correcte
+                type: 'POST',
+                data: { id_tournoi: idTournoi },
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    console.log("Réponse du serveur : ", data);
 
+                    // Vérifier si cet `id_checkin` a déjà été traité
+                    if (data.id_checkin && !processedCheckins.includes(data.id_checkin)) {
+                        // Vérifier si un check-in est détecté pour le clan demandeur
+                        if (data.checkin_demandeur) {
+                            const checkinInfo = `${data.id_checkin}-${data.id_clan_demandeur}`; // Concaténation
+                            if (!checkedInUsers.includes(checkinInfo)) { // Vérifie si l'info de check-in n'est pas déjà stockée
+                                checkedInUsers.push(checkinInfo);
+                                localStorage.setItem('checkedInUsers', JSON.stringify(checkedInUsers));
+                                location.reload(); 
+                            }
+                        }
 
+                        // Vérifier si un check-in est détecté pour le clan receveur
+                        if (data.checkin_receveur) {
+                            const checkinInfo = `${data.id_checkin}-${data.id_clan_receveur}`; // Concaténation
+                            if (!checkedInUsers.includes(checkinInfo)) { // Vérifie si l'info de check-in n'est pas déjà stockée
+                                checkedInUsers.push(checkinInfo);
+                                localStorage.setItem('checkedInUsers', JSON.stringify(checkedInUsers));
+                                  location.reload(); 
+                            }
+                        }
+                    }
 
+                    const roomStatus = data.brawlhalla_room; 
 
+                    // Vérifiez si le numéro de la room est déjà stocké
+                    if (roomStatus !== 0 && storedRoomNumber !== roomStatus.toString()) {
+                        localStorage.setItem('roomNumber', roomStatus); // Stocke le numéro de la room
+                        console.log("La room est différente de 0. Rechargement de la page.");
+                        location.reload(); 
+                        return; // Arrête l'exécution de la fonction après rechargement
+                    }
+
+                    // Si les deux clans ont check-in et que la room est valide
+                    if (data.checkin_demandeur && data.checkin_receveur && data.id_checkin && roomStatus !== 0 && storedRoomNumber !== roomStatus.toString()) {
+                        processedCheckins.push(data.id_checkin);
+                        localStorage.setItem('processedCheckins', JSON.stringify(processedCheckins));
+                        console.log("Les deux clans ont check-in. Arrêt de la vérification.");
+                        clearInterval(checkinInterval)
+                        return; // Arrête l'exécution de la fonction
+                    }
+                },
+                error: function() {
+                    console.error("Erreur lors de la vérification du check-in.");
+                }
+            });
+        }
+
+        // Lancer la vérification des check-ins toutes les 3 secondes
+        checkinInterval = setInterval(checkCheckin, 3000);
+
+    } else {
+        console.error("ID du tournoi manquant.");
+    }
+</script>
 
 
 
@@ -325,25 +397,6 @@ mettreAJourCompteur();
     }
 }
 
-function verifierCheckin(tournoiID) {
-    // Appel AJAX pour vérifier si les deux équipes ont fait leur check-in
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "../bddConnexion/verifier_checkin.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            let response = JSON.parse(xhr.responseText);
-            if (response.checkin_demandeur == 0 || response.checkin_receveur == 0) {
-                // Si l'une des équipes n'a pas check-in, supprimer le tournoi
-                supprimerTournoi(tournoiID);
-            }
-            if(response.checkin_demandeur == 1 || response.checkin_receveur == 1){
-                location.reload(); 
-            }
-        }
-    };
-    xhr.send("id_tournoi=" + tournoiID);
-}
 
 function supprimerTournoi(tournoiID) {
     // Appel AJAX pour supprimer le tournoi
@@ -418,7 +471,7 @@ function supprimerTournoi(tournoiID) {
         // Ensuite, exécuter la requête chaque seconde
         setInterval(function() {
             checkReport();
-        }, 1000); // Toutes les secondes
+        }, 2000); // Toutes les secondes
     }
 
     // Démarrer la fonction
