@@ -83,7 +83,9 @@ if ($result_demande->num_rows > 0) {
     <div class="card-title">
         <h3>Received battles</h3>      
         <button class="rounded-button" onclick="toggleTournamentList()">Show</button>
-    </div>
+    </div>  <?php
+            if (!empty($tournois_recus)) {echo "You have received somes requests." ;}
+                ?>
     <div id="tournament-list" class="tournament-list" style="display: none; width: 65%;">
         <ul>
             <?php
@@ -139,7 +141,9 @@ if ($result_demande->num_rows > 0) {
         <h3>Requested battles</h3>      
         <button class="rounded-button" onclick="toggleDemandedTournamentList()">Show</button>
     </div>
-
+    <?php
+            if (!empty($tournois_demandes)) {echo "You have sent somes requests." ;}
+                ?>
     <div id="demanded-tournament-list" class="tournament-list" style="display: none; width: 65%;">
         <ul>
             <?php
