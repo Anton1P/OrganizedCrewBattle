@@ -57,7 +57,7 @@ if (mysqli_num_rows($result) > 0) {
     // Si les deux rapports sont soumis
     if ($clan_demandeur_report == 1 && $clan_receveur_report == 1) {
         // Si les résultats ne sont pas identiques, on redirige vers matchVerif.php avec les informations du tournoi
-        if ($clan_demandeur_result != $clan_receveur_result) {
+        if ($clan_demandeur_result == $clan_receveur_result) {
             // Ajouter un message à la session
             $_SESSION['notification'] = "The opposing clan has reported the same result as you. Please submit your match result proof in accordance with the site rules.";
             
