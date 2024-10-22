@@ -404,3 +404,49 @@ new Chart(ctx, {
             nav.classList.toggle('active');
         }
     </script>
+<script>
+$(document).ready(function() {
+    var checkVerification = setInterval(function() {
+        console.log("Envoi de la requête AJAX pour vérifier les rapports...");
+
+        $.ajax({
+            url: '../bddConnexion/verifier_reported.php', 
+            type: 'POST',
+            success: function(response) {
+                try {
+                    var data = JSON.parse(response); // On essaie de convertir la réponse en JSON
+                    console.log("Réponse reçue après parsing : ", data);
+
+                    // Vérification de la condition de redirection
+                    if (data.status === 'redirect') {
+                        console.log("Condition de redirection remplie. Redirection vers matchVerif.php");
+
+                        // Utilisation de l'URL déjà fournie dans la réponse JSON
+                        window.location.href = data.url;
+                        clearInterval(checkVerification); 
+                    } 
+                    // Vérification de la condition de rechargement
+                    else if (data.status === 'reload') {
+                        console.log("Condition de reload remplie. Rechargement de la page...");
+                        clearInterval(checkVerification); 
+                        location.reload();
+                    } 
+                    // Si aucune action n'est requise ou si l'état est 'stop'
+                    else if (data.status === 'continue') {
+                        console.log("Aucune action requise. Statut : continue");
+                    } else if (data.status === 'stop') {
+                        console.log("Arrêt des vérifications AJAX. Statut : stop");
+                        clearInterval(checkVerification); // Arrêter l'interval
+                    }
+                } catch (e) {
+                    console.log("Erreur lors du parsing de la réponse JSON : ", e);
+                    console.log("Réponse brute : ", response);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Erreur lors de la requête AJAX : ", error);
+            }
+        });
+    }, 5000); // Intervalle de 5 secondes
+});
+</script>

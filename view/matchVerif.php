@@ -11,6 +11,7 @@ if (empty($id_clan_demandeur) && empty($id_clan_receveur) && empty($id_tournoi))
     $id_clan_demandeur =  $_GET['id_clan_demandeur'];
     $id_clan_receveur =  $_GET['id_clan_receveur'];
     $id_tournoi =  $_GET['id_tournoi'];
+    
 }
 if (empty($id_clan_demandeur) && empty($id_clan_receveur) && empty($id_tournoi)) {
     $_SESSION['notification'] = "You can't do this.";
@@ -138,11 +139,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <div class="container">
-<?php 
+<?php
         if (isset($_SESSION['notification']) && isset($_SESSION['from_treatment'])) {
             echo '<div class="notification">' . $_SESSION['notification'] . '</div>';
             unset($_SESSION['notification']); // Remove the notification after displaying it
-        }
+        }elseif (isset($_GET['message'])){   echo '<div class="notification">' . $_GET['message'] . '</div>';}
     ?>
     
     <title>Match Verification</title>
