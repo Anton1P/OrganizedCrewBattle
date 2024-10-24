@@ -5,41 +5,69 @@ include '../bddConnexion/bddConnexion.php'; // Votre fichier de connexion MySQLi
 // Obtenir l'ID du clan connecté (à ajuster selon votre logique)
 $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
 
+// Fonction pour récupérer la région du clan connecté
+function getClanRegion($conn, $clan_id) {
+    $regions = [];
+    $query = "SELECT us_e, eu, sea, brz, aus, us_w, jpn, sa, me FROM region WHERE id_clan = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $clan_id);
+    
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            // Vérifie quelles régions sont sélectionnées
+            foreach ($row as $key => $value) {
+                if ($value == 1) {
+                    $regions[] = $key; // Ajouter le nom de la région à la liste
+                }
+            }
+        }
+    }
+    $stmt->close();
+    
+    return $regions;
+}
+
 // Fonction pour récupérer les suggestions de clans en fonction du critère
 function getSuggestedClans($conn, $clan_id, $criteria = 'elo') {
     $clans = [];
-    
+    $regions = getClanRegion($conn, $clan_id); // Obtenir les régions du clan connecté
+    $regionCondition = !empty($regions) ? "AND r." . implode(" = 1 OR r.", $regions) . " = 1" : ""; // Créer des conditions de région
+
     // Requêtes SQL selon le critère sélectionné
     switch ($criteria) {
         case 'elo':
             // Clans dans la même gamme d'Elo (+/- 100 Elo)
-            $query = "SELECT id_clan, nom_clan, elo_rating 
-                      FROM clans 
-                      WHERE ABS(elo_rating - (SELECT elo_rating FROM clans WHERE id_clan = ?)) <= 100 
-                      AND id_clan != ? 
-                      ORDER BY elo_rating DESC";
+            $query = "SELECT c.id_clan, c.nom_clan, c.elo_rating 
+                      FROM clans c
+                      JOIN region r ON c.id_clan = r.id_clan
+                      WHERE ABS(c.elo_rating - (SELECT elo_rating FROM clans WHERE id_clan = ?)) <= 100 
+                      AND c.id_clan != ? $regionCondition
+                      ORDER BY c.elo_rating DESC";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('ii', $clan_id, $clan_id);
             break;
 
         case 'elo_higher':
             // Clans avec environ 100 Elo de plus
-            $query = "SELECT id_clan, nom_clan, elo_rating 
-                      FROM clans 
-                      WHERE elo_rating > (SELECT elo_rating FROM clans WHERE id_clan = ?) + 100
-                      AND id_clan != ? 
-                      ORDER BY elo_rating DESC";
+            $query = "SELECT c.id_clan, c.nom_clan, c.elo_rating 
+                      FROM clans c
+                      JOIN region r ON c.id_clan = r.id_clan
+                      WHERE c.elo_rating > (SELECT elo_rating FROM clans WHERE id_clan = ?) + 100
+                      AND c.id_clan != ? $regionCondition
+                      ORDER BY c.elo_rating DESC";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('ii', $clan_id, $clan_id);
             break;
 
         case 'elo_lower':
             // Clans avec environ 100 Elo de moins
-            $query = "SELECT id_clan, nom_clan, elo_rating 
-                      FROM clans 
-                      WHERE elo_rating < (SELECT elo_rating FROM clans WHERE id_clan = ?) - 100
-                      AND id_clan != ? 
-                      ORDER BY elo_rating DESC";
+            $query = "SELECT c.id_clan, c.nom_clan, c.elo_rating 
+                      FROM clans c
+                      JOIN region r ON c.id_clan = r.id_clan
+                      WHERE c.elo_rating < (SELECT elo_rating FROM clans WHERE id_clan = ?) - 100
+                      AND c.id_clan != ? $regionCondition
+                      ORDER BY c.elo_rating DESC";
             $stmt = $conn->prepare($query);
             $stmt->bind_param('ii', $clan_id, $clan_id);
             break;

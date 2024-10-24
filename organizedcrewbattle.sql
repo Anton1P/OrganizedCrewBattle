@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 19 oct. 2024 à 18:43
+-- Généré le : jeu. 24 oct. 2024 à 15:26
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `checkin` (
 --
 
 CREATE TABLE `clans` (
-  `id_clan` int(8) NOT NULL COMMENT 'Identifiant unique du clan',
+  `id_clan` int(11) NOT NULL COMMENT 'Identifiant unique du clan',
   `nom_clan` varchar(30) NOT NULL COMMENT 'Nom du clan',
   `wins` int(8) NOT NULL COMMENT 'Nombre de victoires',
   `loses` int(8) NOT NULL COMMENT '	Nombre de défaites',
@@ -57,14 +57,13 @@ CREATE TABLE `clans` (
 --
 
 INSERT INTO `clans` (`id_clan`, `nom_clan`, `wins`, `loses`, `elo_rating`, `elo_peak`, `top`) VALUES
-(2161882, 'Asakai', 4, 5, 1165, 1242, 6),
-(2434590, 'SmurfLand', 1, 0, 1214, 1200, 4),
+(2161882, 'Asakai', 5, 5, 1193, 1242, 5),
 (4474747, 'LesMiaou', 0, 0, 2000, 1200, 1),
-(12344535, 'Asakouille', 0, 0, 1680, 1200, 2),
+(12344535, 'Asakouille', 0, 1, 1651, 1200, 2),
 (12345378, 'Asakouille', 0, 1, 1391, 1200, 3),
-(47744747, 'Asakouille', 1, 0, 1200, 1214, 5),
-(243448590, 'SmurfLand', 0, 0, 911, 1200, 7),
-(1234114532, 'Asakouille', 0, 1, 200, 1200, 8);
+(47744747, 'Asakouille', 1, 0, 1200, 1214, 4),
+(243448590, 'SmurfLand', 0, 0, 1140, 1200, 6),
+(1234114532, 'Asakouille', 0, 1, 200, 1200, 7);
 
 -- --------------------------------------------------------
 
@@ -119,6 +118,7 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (9558549, 'twitch.tv/mahebh', 2161882),
 (9757291, 'zBlackneight Prime', 2161882),
 (10080900, '✮ N-M', 2161882),
+(10352807, 'Doku', 2161882),
 (29757637, 'SpoopyCode <3', 2161882),
 (30072746, 'Maaxis szn', 2161882),
 (32542183, 'Goliath', 2161882),
@@ -126,13 +126,13 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (37524179, 'SwizzleMcDizzle', 2161882),
 (42026463, '4000H On FORNITE', 2161882),
 (43349428, 'scrawny james', 2161882),
+(44862529, 'Le KAYOU', 2161882),
 (45750120, 'Dr.Love', 2161882),
 (53572692, 'LTPKiller', 2161882),
 (53965041, 'Chigga', 2161882),
 (55347075, 'Azur.', 2161882),
 (57452641, 'ReinerGOAT', 2161882),
 (57734993, 'ComboTopaz', 2161882),
-(59935374, 'Rebecc&ce', 2434590),
 (63072326, 'larafy', 2161882),
 (63114984, 'Yuh Madda Bwoyfren Izziiiツ', 2161882),
 (65320761, 'INA', 2161882),
@@ -150,12 +150,9 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 (98341473, 'ABP | MTH', 2161882),
 (102326446, 'iDrxp!?', 2161882),
 (102779605, 'T4RZ4N', 2161882),
-(103888044, 'CaiuX', 2434590),
-(105448424, 'im gay wlh', 2434590),
 (105693481, 'Pizza Hawaïenne', 2161882),
 (108499902, 'Sucre', 2161882),
-(117003562, 'Tilen', 2161882),
-(120712302, 'France Power', 2434590);
+(117003562, 'Tilen', 2161882);
 
 -- --------------------------------------------------------
 
@@ -166,6 +163,26 @@ INSERT INTO `players` (`id_player`, `player_name`, `id_clan`) VALUES
 CREATE TABLE `player_tournoi` (
   `id_tournoi` int(8) NOT NULL,
   `id_player` int(8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `region`
+--
+
+CREATE TABLE `region` (
+  `id_region` int(11) NOT NULL,
+  `id_clan` int(11) NOT NULL,
+  `us_e` tinyint(1) NOT NULL,
+  `eu` tinyint(1) NOT NULL,
+  `sea` tinyint(1) NOT NULL,
+  `brz` tinyint(1) NOT NULL,
+  `aus` tinyint(1) NOT NULL,
+  `us_w` tinyint(1) NOT NULL,
+  `jpn` tinyint(1) NOT NULL,
+  `sa` tinyint(1) NOT NULL,
+  `me` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -189,6 +206,13 @@ CREATE TABLE `tournoi` (
   `one_vs_one_format_order` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `tournoi`
+--
+
+INSERT INTO `tournoi` (`id_tournoi`, `id_clan_demandeur`, `id_clan_receveur`, `date_rencontre`, `accepted`, `brawlhalla_room`, `crew_battle_format`, `two_vs_two_format`, `one_vs_one_format`, `crew_battle_format_order`, `two_vs_two_format_order`, `one_vs_one_format_order`) VALUES
+(2161939, 2161882, 243448590, '2024-10-24 15:21:00.000000', 0, 0, 1, 1, 1, 1, 2, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -208,7 +232,7 @@ CREATE TABLE `tournoi_results` (
 --
 
 INSERT INTO `tournoi_results` (`id_results`, `id_tournoi`, `id_winner`, `id_loser`, `date_finish`) VALUES
-(23, 2161922, 2434590, 2161882, '2024-10-19 18:25:08');
+(24, 2161935, 2161882, 12344535, '2024-10-22 21:59:02');
 
 -- --------------------------------------------------------
 
@@ -283,6 +307,13 @@ ALTER TABLE `player_tournoi`
   ADD KEY `id_joueur` (`id_player`);
 
 --
+-- Index pour la table `region`
+--
+ALTER TABLE `region`
+  ADD PRIMARY KEY (`id_region`),
+  ADD KEY `id_clan` (`id_clan`);
+
+--
 -- Index pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
@@ -325,7 +356,7 @@ ALTER TABLE `verif_report`
 -- AUTO_INCREMENT pour la table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id_checkin` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT pour la table `moderation_access`
@@ -337,25 +368,25 @@ ALTER TABLE `moderation_access`
 -- AUTO_INCREMENT pour la table `tournoi`
 --
 ALTER TABLE `tournoi`
-  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=2161923;
+  MODIFY `id_tournoi` int(8) NOT NULL AUTO_INCREMENT COMMENT 'Identifiant unique de la demande\r\n', AUTO_INCREMENT=2161940;
 
 --
 -- AUTO_INCREMENT pour la table `tournoi_results`
 --
 ALTER TABLE `tournoi_results`
-  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_results` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT pour la table `verif_match`
 --
 ALTER TABLE `verif_match`
-  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id_verification` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT pour la table `verif_report`
 --
 ALTER TABLE `verif_report`
-  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id_verifReport` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- Contraintes pour les tables déchargées
@@ -381,6 +412,12 @@ ALTER TABLE `players`
 ALTER TABLE `player_tournoi`
   ADD CONSTRAINT `player_tournoi_ibfk_2` FOREIGN KEY (`id_player`) REFERENCES `players` (`id_player`),
   ADD CONSTRAINT `player_tournoi_ibfk_3` FOREIGN KEY (`id_tournoi`) REFERENCES `tournoi` (`id_tournoi`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `region`
+--
+ALTER TABLE `region`
+  ADD CONSTRAINT `region_ibfk_1` FOREIGN KEY (`id_clan`) REFERENCES `clans` (`id_clan`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `tournoi`

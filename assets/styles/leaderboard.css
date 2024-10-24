@@ -15,7 +15,6 @@
     position: relative;
 }
 
-
 .pagination-controls button {
     padding: 10px 20px;
     margin: 0 5px;
@@ -104,6 +103,26 @@ tbody tr:hover {
 }
 
 .pagination-controls button.active-page:hover {
+    background-color: #834c95; /* Couleur pour la page active */
+    font-weight: bold;
+}
+
+.region-filters button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.region-filters button.active-page {
+    background-color: #d27bee; /* Couleur pour la page active */
+    font-weight: bold;
+}
+
+.region-filters button.active-page:hover {
     background-color: #834c95; /* Couleur pour la page active */
     font-weight: bold;
 }

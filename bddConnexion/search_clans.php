@@ -7,12 +7,39 @@ if (isset($_POST['search'])) {
     
     // Get the connected clan's ID to exclude it from the search
     $clan_id = $_SESSION['brawlhalla_data']['clan_id'];
-    
+
+    // Retrieve the region of the connected clan
+    $sql_region = "SELECT us_e, eu, sea, brz, aus, us_w, jpn, sa, me 
+                   FROM region 
+                   WHERE id_clan = ?";
+    $stmt_region = $conn->prepare($sql_region);
+    $stmt_region->bind_param('i', $clan_id);
+    $stmt_region->execute();
+    $result_region = $stmt_region->get_result();
+
+    $region = null;
+    if ($result_region->num_rows > 0) {
+        $region_data = $result_region->fetch_assoc();
+        // Check which region the connected clan belongs to
+        foreach ($region_data as $key => $value) {
+            if ($value == 1) {
+                $region = $key; // Store the region key
+                break;
+            }
+        }
+    }
+
     // SQL query to search for clans matching the input text, sorted by clan name, and exclude the connected clan
     $query = "SELECT id_clan, nom_clan 
               FROM clans 
               WHERE nom_clan LIKE '%$search%' 
               AND id_clan != ? 
+              AND EXISTS (
+                  SELECT 1 
+                  FROM region r 
+                  WHERE r.id_clan = clans.id_clan 
+                  AND r.$region = 1
+              )
               ORDER BY nom_clan ASC 
               LIMIT 10"; // Limit to 10 results and sort alphabetically
 
@@ -33,6 +60,7 @@ if (isset($_POST['search'])) {
     }
 
     $stmt->close();
+    $stmt_region->close();
 }
 
 $conn->close();

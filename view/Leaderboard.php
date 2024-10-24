@@ -9,6 +9,9 @@ $clans_per_page = 25;
 // Check if the current page is specified in the URL, otherwise default to 1
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
+// Check if a region filter is specified, default to 'ALL'
+$selected_region = isset($_GET['region']) ? $_GET['region'] : 'ALL';
+
 // Calculate the offset for the SQL query
 $offset = ($current_page - 1) * $clans_per_page;
 
@@ -18,8 +21,17 @@ $total_result = $conn->query($total_query);
 $total_row = $total_result->fetch_assoc();
 $total_clans = $total_row['total'];
 
-// Retrieve clans sorted by ELO
-$query = "SELECT nom_clan, id_clan, elo_rating, elo_peak, wins, loses FROM clans ORDER BY elo_rating DESC LIMIT $clans_per_page OFFSET $offset";
+// Modify query based on selected region
+if ($selected_region === 'ALL') {
+    $query = "SELECT nom_clan, id_clan, elo_rating, elo_peak, wins, loses FROM clans ORDER BY elo_rating DESC LIMIT $clans_per_page OFFSET $offset";
+} else {
+    // Adjust the SQL query to join with the region table
+    $query = "SELECT c.nom_clan, c.id_clan, c.elo_rating, c.elo_peak, c.wins, c.loses 
+              FROM clans c
+              JOIN region r ON c.id_clan = r.id_clan 
+              WHERE r.$selected_region = 1 
+              ORDER BY c.elo_rating DESC LIMIT $clans_per_page OFFSET $offset";
+}
 $result = $conn->query($query);
 ?>
 
@@ -99,22 +111,35 @@ $result = $conn->query($query);
                     Documentation
                 </a>
             </div>
-
-            <!-- Clan Leaderboard -->
+            
             <h1>Clan Leaderboard</h1>
+
+            <div class="region-filters">
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=ALL'" <?php if ($selected_region === 'ALL') echo 'class="active-page"'; ?>>All</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=us_e'" <?php if ($selected_region === 'us_e') echo 'class="active-page"'; ?>>US-E</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=eu'" <?php if ($selected_region === 'eu') echo 'class="active-page"'; ?>>EU</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=sea'" <?php if ($selected_region === 'sea') echo 'class="active-page"'; ?>>SEA</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=brz'" <?php if ($selected_region === 'brz') echo 'class="active-page"'; ?>>BRZ</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=aus'" <?php if ($selected_region === 'aus') echo 'class="active-page"'; ?>>AUS</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=us_w'" <?php if ($selected_region === 'us_w') echo 'class="active-page"'; ?>>US-W</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=jpn'" <?php if ($selected_region === 'jpn') echo 'class="active-page"'; ?>>JPN</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=sa'" <?php if ($selected_region === 'sa') echo 'class="active-page"'; ?>>SA</button>
+                <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=me'" <?php if ($selected_region === 'me') echo 'class="active-page"'; ?>>ME</button>
+            </div>
+
             <div class="pagination-controls">
                 <?php
                 $total_pages = ceil($total_clans / $clans_per_page);
                 
                 // Previous button
                 if ($current_page > 1): ?>
-                    <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page - 1; ?>'">Previous</button>
+                    <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page - 1; ?>&region=<?php echo $selected_region; ?>'">Previous</button>
                 <?php endif; ?>
                 
                 <!-- Pagination buttons for each page -->
                 <?php for ($page = 1; $page <= $total_pages; $page++): ?>
                     <button 
-                        onclick="location.href='Leaderboard.php?page=<?php echo $page; ?>'" 
+                        onclick="location.href='Leaderboard.php?page=<?php echo $page; ?>&region=<?php echo $selected_region; ?>'" 
                         <?php if ($page == $current_page) echo 'class="active-page"'; ?>>
                         <?php echo $page; ?>
                     </button>
@@ -122,7 +147,7 @@ $result = $conn->query($query);
                 
                 <!-- Next button -->
                 <?php if ($current_page < $total_pages): ?>
-                    <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page + 1; ?>'">Next</button>
+                    <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page + 1; ?>&region=<?php echo $selected_region; ?>'">Next</button>
                 <?php endif; ?>
             </div>
 
@@ -174,44 +199,6 @@ $result = $conn->query($query);
 $conn->close();
 ?>
 
-<script>
-    const notificationIcon = document.getElementById('notificationIcon');
-    const notificationList = document.getElementById('notificationList');
-    const notificationPing = document.getElementById('notificationPing');
-
-    // Show/Hide the notification list
-    notificationIcon.addEventListener('click', () => {
-        if (notificationList.style.display === 'none' || notificationList.style.display === '') {
-            notificationList.style.display = 'block';
-        } else {
-            notificationList.style.display = 'none';
-        }
-    });
-
-    // Show the red dot if there are notifications
-    <?php if (!empty($_SESSION['notification'])): ?>
-        notificationPing.style.display = 'block';
-    <?php else: ?>
-        notificationPing.style.display = 'none';
-    <?php endif; ?>
-
-    // Remove the notification when the user clicks on it
-    document.querySelectorAll('#notificationIcon').forEach(notification => {
-        notification.addEventListener('click', () => {
-            fetch('../bddConnexion/clear_notification.php') // Call the script to delete the notification
-                .then(response => {
-                    if (response.ok) {
-                        notificationPing.style.display = 'none'; // Hide the red dot
-                    } else {
-                        console.error('Error while deleting the notification');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-    });
-</script>
 <script>
     document.querySelectorAll('.winrate-cell').forEach(function(cell) {
         const winrate = parseFloat(cell.textContent); // Get the winrate as a number
