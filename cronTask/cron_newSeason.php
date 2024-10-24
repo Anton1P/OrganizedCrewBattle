@@ -2,7 +2,17 @@
 //! CRON TASK 1/day
 include "../bddConnexion/bddConnexion.php";
 
+// Chemin vers le fichier de log
+$log_file = 'logs/cron_suppressionTables.log';
 
+// Fonction pour écrire dans le log
+function log_message($message, $log_file) {
+    $timestamp = date('Y-m-d H:i:s'); // Format de timestamp
+    $formatted_message = "[$timestamp] $message" . PHP_EOL; // Format du message
+    file_put_contents($log_file, $formatted_message, FILE_APPEND); // Écrire dans le fichier de log
+}
+
+// Définir la date limite de suppression
 $date_limite = '2024-12-31';  //! Date de fin de saison
 $date_actuelle = date('Y-m-d');  
 
@@ -13,7 +23,8 @@ if ($date_actuelle >= $date_limite) {
 
     // Vérifier la connexion
     if ($conn->connect_error) {
-        die("Connexion échouée: " . $conn->connect_error);
+        log_message("Connexion échouée: " . $conn->connect_error, $log_file);
+        die("Erreur de connexion à la base de données.");
     }
 
     // SQL pour supprimer le contenu des tables
@@ -26,15 +37,15 @@ if ($date_actuelle >= $date_limite) {
     ";
 
     // Exécution de la requête
-    if ($conn->multi_query($sql) === TRUE) {
-        echo "Le contenu de toutes les tables a été supprimé avec succès.";
+    if ($conn->multi_query($sql)) {
+        log_message("Le contenu de toutes les tables a été supprimé avec succès.", $log_file);
     } else {
-        echo "Erreur lors de la suppression du contenu des tables: " . $conn->error;
+        log_message("Erreur lors de la suppression du contenu des tables: " . $conn->error, $log_file);
     }
 
     // Fermer la connexion
     $conn->close();
 } else {
-    echo "La date actuelle est inférieure à la date limite. Aucune suppression n'a été effectuée.";
+    log_message("La date actuelle est inférieure à la date limite. Aucune suppression n'a été effectuée.", $log_file);
 }
 ?>
