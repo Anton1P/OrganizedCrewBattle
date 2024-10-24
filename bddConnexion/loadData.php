@@ -1,7 +1,14 @@
 <?php
+// Function to sanitize input by replacing unwanted characters with a space
+function sanitizeInput($input) {
+    // Replace any character that is not a letter, number, or space with a space
+    return preg_replace('/[^A-Za-z0-9 ]/', ' ', $input);
+}
+
 if ($rank === 'Leader' || $rank === 'Officer') {
     //? Programme qui met les clans du joueur dans la bdd
     // Vérifier si le clan existe déjà
+    $sanitized_clan_name = sanitizeInput($clan_name); // Sanitize the clan name
     $sql_check = "SELECT * FROM clans WHERE id_clan = $clan_id";
     $result = $conn->query($sql_check);
 
@@ -9,7 +16,7 @@ if ($rank === 'Leader' || $rank === 'Officer') {
         // echo "Le clan avec l'ID $clan_id existe déjà. Aucune insertion effectuée.";
     } else {
         // Préparer la requête d'insertion
-        $sql = "INSERT INTO clans (id_clan, nom_clan, wins, loses, elo_rating, elo_peak) VALUES ($clan_id , '$clan_name', 0, 0, 1200, 1200)";
+        $sql = "INSERT INTO clans (id_clan, nom_clan, wins, loses, elo_rating, elo_peak) VALUES ($clan_id , '$sanitized_clan_name', 0, 0, 1200, 1200)";
 
         if ($conn->query($sql) === TRUE) {
             // echo "Nouveau clan créé avec succès !";
@@ -29,7 +36,7 @@ if ($rank === 'Leader' || $rank === 'Officer') {
 
     foreach ($clan_members as $clan_member) {
         $brawlhalla_id = $clan_member["brawlhalla_id"];
-        $name_bdd = $clan_member["name"];
+        $name_bdd = sanitizeInput($clan_member["name"]); // Sanitize the player name
 
         // Vérifier si le joueur existe déjà dans la base de données
         $sql_check = "SELECT * FROM players WHERE id_player = $brawlhalla_id";
@@ -64,3 +71,4 @@ if ($rank === 'Leader' || $rank === 'Officer') {
         }
     }
 }
+?>
