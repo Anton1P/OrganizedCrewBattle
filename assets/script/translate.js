@@ -29,7 +29,7 @@
             "Pour vous aider à choisir quels clans vous pouvez affronter sans trop de difficulté, des suggestions sont créées en fonction de l'ELO de votre clan, qui est par défaut fixé à 1200. Une suggestion fait apparaître le nom de 5 clans aléatoires dans la liste des clans, accompagnés de leur ELO.": "To help you choose which clans you can face without too much difficulty, suggestions are created based on your clan's ELO, which is by default set to 1200. A suggestion shows the names of 5 random clans in the list of clans, along with their ELO.",
             "Si les 5 noms de clans proposés ne vous disent rien, vous pouvez appuyer sur F5 pour rafraîchir la page, ce qui vous donnera 5 autres noms de clans à considérer !": "If the 5 suggested clan names don't seem familiar, you can press F5 to refresh the page, which will give you 5 other clan names to consider!",
             "Dates et formats": "Dates and formats",
-            "Une fois le clan choisi, vous aurez à choisir les formats. Ces formats sont pré-définis en fonction des formats utilisés habituellement en crew battle Brawlhalla. Une fois le format choisi, choisissez la date de votre rencontre. Un historique de votre demande s'affichera alors en haut.": "Once the clan is chosen, you will need to select the formats. These formats are predefined based on the formats commonly used in Brawlhalla crew battles. Once the format is selected, choose the date of your meeting. A history of your request will then appear at the top.",
+            "Une fois le format choisi, choisissez la date de votre rencontre. Un historique de votre demande s'affichera alors en haut.": "Once the format is selected, choose the date of your meeting. A history of your request will then appear at the top.",
             "Règle spéciales - Heures de demandes": "Special Rules - Request Times",
             "Vous ne pouvez pas choisir la même date et heure pour deux demandes de tournois différentes, vous avez besoin d'une heure entre les deux heures de demande. Par exemple, nous sommes le 31 décembre. Si je choisis d'affronter le clan se nommant LeCronningDeLanimal ce jour même à midi, alors que j'ai déjà demandé à un autre clan le 31 décembre à midi, un message d'erreur apparaîtra. En revanche, je pourrais très bien demander à LeCronningDeLanimal une crew battle le même jour, mais à 13h au lieu de 12h. Cela évite une situation où vous avez une crew battle au même moment avec 2 clans, une chose imprévue par le site.": "You cannot choose the same date and time for two different tournament requests; you need an hour between the two request times. For example, if today is December 31st, and I choose to face the clan named LeCronningDeLanimal at noon on the same day while I have already requested another clan for December 31st at noon, an error message will appear. However, I could very well request a crew battle with LeCronningDeLanimal on the same day but at 1 PM instead of 12 PM. This avoids a situation where you have a crew battle at the same time with two clans, which is something not anticipated by the site.",
             "Comment valider une demande": "How to validate a request",
@@ -158,7 +158,7 @@ document.getElementById('language-toggle').addEventListener('click', function() 
         if (dateFormatsTitle) dateFormatsTitle.innerText = translations["Dates et formats"];
 
         const paragraph7 = document.querySelector('.content p:nth-of-type(7)');
-        if (paragraph7) paragraph7.innerText = translations["Une fois le clan choisi, vous aurez à choisir les formats. Ces formats sont pré-définis en fonction des formats utilisés habituellement en crew battle Brawlhalla. Une fois le format choisi, choisissez la date de votre rencontre. Un historique de votre demande s'affichera alors en haut."];
+        if (paragraph7) paragraph7.innerText = translations["Une fois le format choisi, choisissez la date de votre rencontre. Un historique de votre demande s'affichera alors en haut."];
         
         const specialRules = document.querySelector('.content strong p');
         if (specialRules) specialRules.innerText = translations["Règle spéciales - Heures de demandes"];
@@ -387,7 +387,7 @@ document.getElementById('language-toggle').addEventListener('click', function() 
         if (dateFormatsTitle) dateFormatsTitle.innerText = "Dates et formats";
 
         const paragraph7 = document.querySelector('.content p:nth-of-type(7)');
-        if (paragraph7) paragraph7.innerText = "Une fois le clan choisi, vous aurez à choisir les formats. Ces formats sont pré-définis en fonction des formats utilisés habituellement en crew battle Brawlhalla. Une fois le format choisi, choisissez la date de votre rencontre. Un historique de votre demande s'affichera alors en haut.";
+        if (paragraph7) paragraph7.innerText = "Une fois le format choisi, choisissez la date de votre rencontre. Un historique de votre demande s'affichera alors en haut.";
 
         const specialRules = document.querySelector('.content strong p');
         if (specialRules) specialRules.innerText = "Règle spéciales - Heures de demandes";

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandeau Défilant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            position: relative;
+            height: 50px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .marquee {
+            width: 100vw;
+            white-space: nowrap;
+            position: absolute;
+            font-size: 24px;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%); /* Démarre hors de l'écran à droite */
+            }
+            100% {
+                transform: translateX(-100%); /* Défile jusqu'à disparaître à gauche */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="marquee-container">
+    <div class="marquee" id="marqueeText">
+        last season : Asakai TOP 1 | Asakai TOP 2 | Asakai TOP 3 | Asakai TOP 1 | Asakai TOP 1 | Asakai TOP 1 | Asakai TOP 1 | Asakai TOP 1 | Asakai TOP 1 | Asakai TOP 1 |
+    </div>
+</div>
+
+<script>
+    // Récupérer la largeur de l'élément de texte
+    const marquee = document.getElementById('marqueeText');
+    const container = document.querySelector('.marquee-container');
+
+    // Cloner le texte pour l'effet de défilement
+    const clone = marquee.cloneNode(true);
+    container.appendChild(clone);
+
+    // Calculer la largeur totale pour le défilement
+    const totalWidth = marquee.offsetWidth;
+    const containerWidth = container.offsetWidth;
+
+    // Définir la durée de l'animation en fonction de la largeur
+    const duration = (totalWidth + containerWidth) / 300; // Vitesse ajustable
+    marquee.style.animationDuration = `${duration}s`;
+    clone.style.animationDuration = `${duration}s`;
+</script>
+
+</body>
+</html>

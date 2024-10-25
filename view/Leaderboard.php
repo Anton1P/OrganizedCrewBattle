@@ -111,9 +111,9 @@ $result = $conn->query($query);
                     Documentation
                 </a>
             </div>
-            
-            <h1>Clan Leaderboard</h1>
 
+            <h1>Clan Leaderboard</h1>
+            
             <div class="region-filters">
                 <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=ALL'" <?php if ($selected_region === 'ALL') echo 'class="active-page"'; ?>>All</button>
                 <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=us_e'" <?php if ($selected_region === 'us_e') echo 'class="active-page"'; ?>>US-E</button>
