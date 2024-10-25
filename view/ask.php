@@ -66,7 +66,7 @@
 
         <!-- Tournament format selection (hidden by default) -->
         <div id="formatComponent" class="hidden">
-            <h2>Select Tournament Format</h2>
+            <h2>Select Format</h2>
             <div class="select-container">
                 <ul id="sortable" class="sortable-list">
                     <li data-value="crew_battle" data-order="1">

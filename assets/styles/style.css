@@ -1362,3 +1362,28 @@ td a:hover{
 .cards-header-date p{
   margin-left: 20px;
 }
+
+.left2-side {
+  background-color: rgb(0 0 0 / 10%);
+  width: 6rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 40px 0 40px;
+  -webkit-animation: left 1s var(--delay) both;
+          animation: left 1s var(--delay) both;
+}
+.left2-side svg {
+  width: 24px;
+  cursor: pointer;
+}
+.left2-side svg + svg {
+  margin-top: 34px;
+}
+.left2-side a:last-child {
+  margin-top: auto;
+}
+.left2-side svg.active, .left-side svg:hover {
+  color: #4255d4;
+}

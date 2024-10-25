@@ -52,6 +52,30 @@ if ($result_tournaments->num_rows > 0) {
     
 } else {
     echo "<h3>No clan battles today</h3>";
+
+    // SQL to retrieve upcoming tournaments for the connected clan
+    $sql_upcoming_tournaments = "SELECT * FROM tournoi WHERE (id_clan_demandeur = ? OR id_clan_receveur = ?) AND DATE(date_rencontre) > ? AND accepted = 1 ORDER BY date_rencontre ASC";
+    $stmt_upcoming = $conn->prepare($sql_upcoming_tournaments);
+    $stmt_upcoming->bind_param("iis", $id_clan, $id_clan, $date_today);
+    $stmt_upcoming->execute();
+    $result_upcoming = $stmt_upcoming->get_result();
+
+    // Check if there are upcoming tournaments
+    if ($result_upcoming->num_rows > 0) {
+        echo "<h4 style='margin-bottom: 5px;margin-top: 10px;'>Upcoming Clan Battles</h4>";
+        
+        while ($row = $result_upcoming->fetch_assoc()) {
+            $match_date = new DateTime($row['date_rencontre']);
+            $formatted_date = $match_date->format('d/m/Y at H\hi');
+
+            echo "<div class='info-upcoming'> <h4 style='margin: auto;'>". $clanTranslations[$row['id_clan_demandeur']] ." Vs ".  $clanTranslations[$row['id_clan_receveur']]  ."</h4>";
+            echo  $formatted_date . "<br>";
+            echo  $tournamentFormats[$row['id_tournoi']] . "<br>";
+            echo "<br> </div>";
+        }
+    } else {
+        echo "<h3>No upcoming clan battles</h3>";
+    }
 }
 
 ?>

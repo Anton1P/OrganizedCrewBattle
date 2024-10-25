@@ -1,8 +1,31 @@
 <?php
+
 //! CRON TASK 1/day
 include "../bddConnexion/bddConnexion.php";
 
-// Chemin vers le fichier de log
+if (!isset($conn) || $conn->connect_error) {
+    $connectionFile = '/homez.1951/crewbas/www/bddConnexion/bddConnexion.php';
+    include $connectionFile; // Inclure la connexion
+}
+if (!isset($conn) || $conn->connect_error) {
+    $connectionFile = '/home/crewbas/www/bddConnexion/bddConnexion.php';
+    include $connectionFile; // Inclure la connexion
+}
+if (!isset($conn) || $conn->connect_error) {
+    $servername = "crewbasantonin.mysql.db"; // ou l'adresse de ton serveur de base de données
+    $username = "crewbasantonin"; // ton nom d'utilisateur
+    $password = "Organizedcrewbattle76"; // ton mot de passe
+    $dbname = "crewbasantonin"; // le nom de ta base de données
+    
+    // Création de la connexion
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    
+    // Vérification de la connexion
+    if ($conn->connect_error) {
+        die("Échec de la connexion : " . $conn->connect_error);
+    }  
+}
+
 $log_file = 'logs/cron_suppressionTables.log';
 
 // Fonction pour écrire dans le log
@@ -16,10 +39,8 @@ function log_message($message, $log_file) {
 $date_limite = '2024-12-31';  //! Date de fin de saison
 $date_actuelle = date('Y-m-d');  
 
-// Comparer la date limite avec la date actuelle
 if ($date_actuelle >= $date_limite) {
-    // Création de la connexion
-    $conn = new mysqli($servername, $username, $password, $dbname);
+   
 
     // Vérifier la connexion
     if ($conn->connect_error) {
