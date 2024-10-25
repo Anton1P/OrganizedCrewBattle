@@ -113,7 +113,7 @@ $result = $conn->query($query);
             </div>
 
             <h1>Clan Leaderboard</h1>
-            
+
             <div class="region-filters">
                 <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=ALL'" <?php if ($selected_region === 'ALL') echo 'class="active-page"'; ?>>All</button>
                 <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page; ?>&region=us_e'" <?php if ($selected_region === 'us_e') echo 'class="active-page"'; ?>>US-E</button>
@@ -150,6 +150,37 @@ $result = $conn->query($query);
                     <button onclick="location.href='Leaderboard.php?page=<?php echo $current_page + 1; ?>&region=<?php echo $selected_region; ?>'">Next</button>
                 <?php endif; ?>
             </div>
+
+            <?php
+                // Query to get the latest season's id and end date
+                $sql_saison = "SELECT id_saison, date_fin FROM saison ORDER BY id_saison DESC LIMIT 1";
+                $result_saison = $conn->query($sql_saison);
+
+                if ($result_saison->num_rows > 0) {
+                    // Fetch the latest season's ID and end date
+                    $row = $result_saison->fetch_assoc();
+                    $endDate = new DateTime($row['date_fin']);
+                    $seasonId = $row['id_saison'];
+
+                    // Current date
+                    $currentDate = new DateTime();
+
+                    // Calculate the difference in days
+                    $interval = $currentDate->diff($endDate);
+
+                    // Display the result with season ID
+                    if ($interval->invert == 1) {
+                        echo "<p>The season $seasonId has ended.</p>";
+                    } else {
+                        echo "<h4>Season $seasonId  </h4>";
+                        echo "<p>Days remaining until the end of season: " . $interval->days . " days</p>";
+                    }
+                } else {
+                    echo "<p>No season information found.</p>";
+                }
+            ?>
+
+
 
             <!-- Clan table -->
             <table border="1">
