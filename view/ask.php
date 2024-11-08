@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranked CrewBattle - Tournament Request</title>
+    <title>Tournament Request - Ranked CrewBattle</title>
     <link rel="icon" href="../assets/img/mini-logo-2.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
     <link rel="stylesheet" href="../assets/styles/ask.css">

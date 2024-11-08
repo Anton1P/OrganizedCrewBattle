@@ -42,7 +42,7 @@ $result_saison = $conn->query($sql_saison);
 
 if ($result_saison->num_rows > 0) {
     $row = $result_saison->fetch_assoc();
-    $date_limite = $row['date_fin']; 
+    $date_limite = $row['date_fin'];
 } else {
     log_message("Aucune saison trouvée dans la base de données. Tâche annulée.", $log_file);
     exit(); // Arrêter le script si aucune saison n'est trouvée
@@ -51,6 +51,54 @@ if ($result_saison->num_rows > 0) {
 $date_actuelle = date('Y-m-d');
 
 if ($date_actuelle >= $date_limite) {
+    // Récupérer le top 10 des clans basé sur elo_rating
+    $sql_top_clans = "SELECT id_clan, elo_rating, elo_peak FROM clans ORDER BY elo_rating DESC LIMIT 10";
+    $result_top_clans = $conn->query($sql_top_clans);
+
+    if ($result_top_clans->num_rows > 0) {
+        $top_clans = $result_top_clans->fetch_all(MYSQLI_ASSOC);
+    
+        // Si moins de 10 clans, remplir le reste avec des valeurs NULL
+        while (count($top_clans) < 10) {
+            $top_clans[] = ['id_clan' => null, 'elo_rating' => null, 'elo_peak' => null];
+        }
+    
+        // Préparer l'insertion dans la table leaderboard pour la nouvelle saison
+        $sql_insert_leaderboard = "
+            INSERT INTO leaderboard 
+            (id_saison, un, best_elo_un, elo_un, deux, best_elo_deux, elo_deux, trois, best_elo_trois, elo_trois, quatre, best_elo_quatre, elo_quatre, 
+            cinq, best_elo_cinq, elo_cinq, six, best_elo_six, elo_six, sept, best_elo_sept, elo_sept, huit, best_elo_huit, elo_huit, 
+            neufs, best_elo_neufs, elo_neufs, dix, best_elo_dix, elo_dix) 
+            VALUES 
+            ((SELECT id_saison FROM saison ORDER BY id_saison DESC LIMIT 1), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $conn->prepare($sql_insert_leaderboard);
+    
+        // Associer les valeurs de chaque position du top 10 des clans, y compris les valeurs NULL si présentes
+        $stmt->bind_param("iiiiiiiiiiiiiiiiiiiiiiiiiiiiii", 
+            $top_clans[0]['id_clan'], $top_clans[0]['elo_peak'], $top_clans[0]['elo_rating'],
+            $top_clans[1]['id_clan'], $top_clans[1]['elo_peak'], $top_clans[1]['elo_rating'],
+            $top_clans[2]['id_clan'], $top_clans[2]['elo_peak'], $top_clans[2]['elo_rating'],
+            $top_clans[3]['id_clan'], $top_clans[3]['elo_peak'], $top_clans[3]['elo_rating'],
+            $top_clans[4]['id_clan'], $top_clans[4]['elo_peak'], $top_clans[4]['elo_rating'],
+            $top_clans[5]['id_clan'], $top_clans[5]['elo_peak'], $top_clans[5]['elo_rating'],
+            $top_clans[6]['id_clan'], $top_clans[6]['elo_peak'], $top_clans[6]['elo_rating'],
+            $top_clans[7]['id_clan'], $top_clans[7]['elo_peak'], $top_clans[7]['elo_rating'],
+            $top_clans[8]['id_clan'], $top_clans[8]['elo_peak'], $top_clans[8]['elo_rating'],
+            $top_clans[9]['id_clan'], $top_clans[9]['elo_peak'], $top_clans[9]['elo_rating']
+        );
+    
+        if ($stmt->execute()) {
+            log_message("Top 10 des clans ajouté au leaderboard avec succès.", $log_file);
+        } else {
+            log_message("Erreur lors de l'ajout des clans dans le leaderboard : " . $stmt->error, $log_file);
+        }
+    
+        $stmt->close();
+    } else {
+        log_message("Aucun clan n'a été trouvé pour le leaderboard.", $log_file);
+    }
+
     // SQL pour supprimer le contenu des tables
     $sql = "
     DELETE FROM verif_match;
@@ -65,7 +113,6 @@ if ($date_actuelle >= $date_limite) {
     // Exécution de la requête de suppression et gestion des résultats
     if ($conn->multi_query($sql)) {
         do {
-            // Stocke les résultats et libère la connexion pour les prochaines requêtes
             if ($result = $conn->store_result()) {
                 $result->free();
             }
@@ -89,9 +136,9 @@ if ($date_actuelle >= $date_limite) {
         log_message("Erreur lors de la suppression du contenu des tables: " . $conn->error, $log_file);
     }
 
-    // Fermer la connexion
     $conn->close();
 } else {
     log_message("La date actuelle est inférieure à la date limite. Aucune suppression n'a été effectuée.", $log_file);
 }
+
 ?>

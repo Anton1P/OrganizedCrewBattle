@@ -1,0 +1,137 @@
+
+
+  .tabs {
+    margin: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    background-color: #333;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #aaa;
+  }
+
+  .tab.active {
+    background-color: #555;
+    color: #fff;
+  }
+
+  .podium {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+
+  .podium-item {
+    background-color: #1a2157;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 150px;
+    position: relative;
+    transition: transform 0.3s;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+
+  .podium-item.gold {
+    transform: translateY(-20px);
+    box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.5); /* Gold halo */
+  }
+
+  .podium-item.silver {
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px 5px rgba(192, 192, 192, 0.5); /* Silver halo */
+  }
+
+  .podium-item.bronze {
+    box-shadow: 0 0 20px 5px rgba(205, 127, 50, 0.5); /* Bronze halo */
+  }
+  
+  .podium-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+  .podium-item h2 {
+    color:rgb(255, 255, 255);
+    margin: 10px 0;
+    font-size: 18px;
+  }
+  
+  .podium-item p {
+    margin: 5px 0;
+  }
+
+  .date-countdown {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #aaa;
+    display: flex;
+    justify-content: center;
+  }
+
+  .rank-message {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 5px;
+    text-align: center;
+  }
+
+  .leaderboard-list {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #1a2157;
+    border-radius: 8px;
+    margin: 5px 0;
+    transition: background-color 0.2s;
+    width: 60vw;
+  }
+
+  .leaderboard-item:hover {
+    background-color: #333;
+  }
+
+  .leaderboard-item .place,
+  .leaderboard-item .username,
+  .leaderboard-item .points {
+    font-size: 16px;
+  }
+
+  .place { width: 50px; text-align: center; }
+  .username { flex-grow: 1; padding-left: 10px; }
+  .points { width: 60px; text-align: right; }
+
+p {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+}
+p  a{
+    color:#ffffff;
+    text-decoration: none;
+}
+h2  a{
+    color:#ffffff;
+    text-decoration: none;
+}
+a:hover {
+    color: rgb(78, 69, 206);
+}

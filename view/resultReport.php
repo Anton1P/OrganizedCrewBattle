@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranked CrewBattle - Tournament Result</title>
+    <title>Tournament Result - Ranked CrewBattle</title>
     <link rel="icon" href="../assets/img/mini-logo-2.png" type="image/x-icon">
     <link rel="stylesheet" href="../assets/styles/ask.css">
     <script>
