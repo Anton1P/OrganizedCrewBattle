@@ -6,15 +6,20 @@ Voici comment installer et lancer la nouvelle version du projet sur votre machin
 
 *   **Node.js** (Version 18 ou supérieure recommandée). Télécharger sur [nodejs.org](https://nodejs.org/).
 
-## 2. Installation
+## 2. Installation et Configuration
 
-Ouvrez un terminal dans ce dossier (`ranked-crew-battle-next`) et lancez :
+1.  **Installation des dépendances :**
+    Ouvrez un terminal dans ce dossier (`ranked-crew-battle-next`) et lancez :
+    ```bash
+    npm install
+    ```
 
-```bash
-npm install
-```
+2.  **Configuration des variables d'environnement :**
+    Renommez le fichier `.env.example` en `.env`.
+    *   Sous Windows : `ren .env.example .env`
+    *   Sous Mac/Linux : `mv .env.example .env`
 
-Cela va télécharger toutes les librairies nécessaires (Next.js, React, Prisma, etc.).
+    *Ce fichier contient la clé API Steam (pour les tests) et le chemin vers la base de données locale.*
 
 ## 3. Base de Données (SQLite)
 
@@ -58,6 +63,20 @@ Cela ouvrira une page web où vous pourrez voir vos tables (`Clan`, `User`, `Tou
     npx prisma migrate reset
     ```
     *(Attention, cela efface toutes les données !)*
+
+## Dépannage Windows
+
+### Erreur "L'exécution de scripts est désactivée" (PowerShell)
+Si vous voyez une erreur rouge mentionnant `PSSecurityException` ou `UnauthorizedAccess` dans PowerShell :
+
+**Solution 1 (Recommandée) : Utiliser l'Invite de Commandes (CMD)**
+Fermez PowerShell et ouvrez "Invite de commandes" (tapez `cmd` dans la barre de recherche Windows). Les commandes `npm` fonctionneront sans problème.
+
+**Solution 2 : Autoriser les scripts dans PowerShell**
+1. Ouvrez PowerShell en tant qu'**Administrateur** (Clic droit > Exécuter en tant qu'administrateur).
+2. Tapez : `Set-ExecutionPolicy RemoteSigned`
+3. Tapez `O` (ou `Y`) pour confirmer.
+4. Relancez votre commande `npm install`.
 
 ## Structure du Projet
 
