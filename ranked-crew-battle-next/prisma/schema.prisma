@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  steamId       String?   @unique
+  role          String    @default("USER") // "USER", "ADMIN" (Site Admin)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Application specific models
+
+model Clan {
+  id        Int      @id // Brawlhalla Clan ID
+  name      String
+  wins      Int      @default(0)
+  loses     Int      @default(0)
+  elo       Int      @default(1200)
+  eloPeak   Int      @default(1200)
+  top       Int?     // Current ranking position
+
+  players   Player[]
+
+  tournamentsAsRequester Tournament[] @relation("Requester")
+  tournamentsAsReceiver  Tournament[] @relation("Receiver")
+  tournamentsWon         Tournament[] @relation("Winner")
+  tournamentsLost        Tournament[] @relation("Loser")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Player {
+  id        Int    @id // Brawlhalla Player ID
+  name      String
+
+  // Link to Steam User (Optional, if they logged in)
+  steamId   String? @unique
+
+  // Clan Role
+  rank      String @default("Member") // "Leader", "Officer", "Member", "Recruit"
+
+  clanId    Int
+  clan      Clan   @relation(fields: [clanId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tournament {
+  id            Int      @id @default(autoincrement())
+  dateRencontre DateTime
+  isAccepted    Boolean  @default(false)
+  isFinished    Boolean  @default(false)
+
+  // Participants
+  requesterId   Int
+  receiverId    Int
+  requester     Clan     @relation("Requester", fields: [requesterId], references: [id])
+  receiver      Clan     @relation("Receiver", fields: [receiverId], references: [id])
+
+  // Results
+  winnerId      Int?
+  loserId       Int?
+  winner        Clan?    @relation("Winner", fields: [winnerId], references: [id])
+  loser         Clan?    @relation("Loser", fields: [loserId], references: [id])
+
+  // Format Details (Stored simply as counts/orders)
+  crewBattleCount Int    @default(0)
+  twoVsTwoCount   Int    @default(0)
+  oneVsOneCount   Int    @default(0)
+
+  crewBattleOrder Int?
+  twoVsTwoOrder   Int?
+  oneVsOneOrder   Int?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
